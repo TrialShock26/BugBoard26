@@ -7,12 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Sezione riservata agli utenti DEV: scelta del progetto (menu a tendina) e,
- * a cascata, del team a cui partecipare all'interno di quel progetto (secondo
- * menu a tendina, popolato con i team indicati dall'amministratore per il
- * progetto selezionato).
- */
+
 public class ChooseProjectScreen extends BaseFrame {
 
     private JComboBox<ProjectItem> projectCombo;
@@ -37,7 +32,7 @@ public class ChooseProjectScreen extends BaseFrame {
         }
     }
 
-    // ================= TOP BAR =================
+    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -85,7 +80,7 @@ public class ChooseProjectScreen extends BaseFrame {
         return panel;
     }
 
-    // ================= SIDEBAR =================
+    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -174,7 +169,7 @@ public class ChooseProjectScreen extends BaseFrame {
         }
     }
 
-    // ================= CONTENT =================
+    //  CONTENT
     private JPanel createContent() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));

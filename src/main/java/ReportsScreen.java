@@ -8,11 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Point 17: "Administrators must be able to view monthly reports on team activity,
- * containing metrics (number of bugs opened/handled, average resolution time, etc.)
- * aggregated and broken down per user." Extended to also report per Team.
- */
+
 public class ReportsScreen extends BaseFrame {
 
     private JComboBox<Integer> monthCombo;
@@ -36,7 +32,7 @@ public class ReportsScreen extends BaseFrame {
         }
     }
 
-    // ================= TOP BAR =================
+    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -84,7 +80,7 @@ public class ReportsScreen extends BaseFrame {
         return panel;
     }
 
-    // ================= SIDEBAR =================
+    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -171,7 +167,7 @@ public class ReportsScreen extends BaseFrame {
         }
     }
 
-    // ================= CONTENT =================
+    //  CONTENT
     private JPanel createContent() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));

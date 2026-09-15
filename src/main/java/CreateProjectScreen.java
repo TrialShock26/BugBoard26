@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Admin-only section: create a project specifying which Teams participate in it.
- */
 public class CreateProjectScreen extends BaseFrame {
 
     private JTextField nameField;
@@ -17,7 +14,7 @@ public class CreateProjectScreen extends BaseFrame {
     private JPanel teamsContainer;
     private DefaultTableModel projectsModel;
 
-    /** Numero massimo di campi "team" che l'admin puo' aggiungere per un progetto. */
+    /* Numero massimo di campi "team" che l'admin puo' aggiungere per un progetto. */
     private static final int MAX_TEAMS = 6;
 
     public CreateProjectScreen() {
@@ -35,7 +32,7 @@ public class CreateProjectScreen extends BaseFrame {
         }
     }
 
-    // ================= TOP BAR =================
+    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -83,7 +80,7 @@ public class CreateProjectScreen extends BaseFrame {
         return panel;
     }
 
-    // ================= SIDEBAR =================
+    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -170,7 +167,7 @@ public class CreateProjectScreen extends BaseFrame {
         }
     }
 
-    // ================= CONTENT =================
+    //  CONTENT
     private JPanel createContent() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));

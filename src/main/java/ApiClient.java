@@ -19,6 +19,7 @@ import java.util.Map;
  * di rete (Sezione 3.2 della traccia): nessuna classe del front-end accede
  * direttamente a Db/Issue/User del back-end.
  */
+
 public class ApiClient {
 
     // Indirizzo del back-end: puo' essere sovrascritto con -Dbugboard.api=http://host:porta
@@ -59,7 +60,7 @@ public class ApiClient {
         }
     }
 
-    // ==================== Punto 1: autenticazione e utenti ====================
+    //autenticazione
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> login(String email, String password) {
@@ -81,7 +82,7 @@ public class ApiClient {
         return (Map<String, Object>) call(req);
     }
 
-    // ==================== Punti 2 e 3: issue ====================
+    //  Punti 2 e 3: issue
 
     @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> listIssues(String type, String status, String priority, String createdAt, String sort) {
@@ -121,7 +122,7 @@ public class ApiClient {
     }
 
     /**
-     * Punto 14: verifica se l'utente loggato ha il carico di lavoro minimo tra tutti
+     * Punto 14: verifica se l'utente loggato ha il carico di lavoro minimo (?) tra tutti
      * gli utenti; se si', restituisce anche l'elenco delle issue disponibili.
      * Risposta: { eligible: bool, myWorkload: n, availableIssues: [...] }
      */
@@ -138,7 +139,7 @@ public class ApiClient {
         return (Map<String, Object>) call(req);
     }
 
-    // ==================== Punti 7 e 17: dashboard e report ====================
+    //  Punti 7 e 17: dashboard e report
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> dashboard() {
@@ -152,7 +153,7 @@ public class ApiClient {
         return (Map<String, Object>) call(req);
     }
 
-    // ==================== Create Project (admin) ====================
+    //  Create Project (admin)
 
     @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> listProjects() {
@@ -167,7 +168,7 @@ public class ApiClient {
         return (Map<String, Object>) call(req);
     }
 
-    // ==================== Choose Project (DEV) ====================
+    //  Choose Project (DEV)
 
     /** Progetti a cui l'utente loggato partecipa, con il relativo team. */
     @SuppressWarnings("unchecked")

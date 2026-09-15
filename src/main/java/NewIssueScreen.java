@@ -10,13 +10,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Punto 2: "Tutti gli utenti autenticati possono segnalare una issue indicando almeno
- * un titolo e una descrizione. Alcuni utenti potrebbero voler specificare anche una
- * priorita' e sarebbe gradita la possibilita' di allegare un'immagine. Le issue possono
- * essere di diverso tipo: question, bug, documentation, feature. Le issue create sono
- * inizialmente nello stato 'todo'."
- */
+
 public class NewIssueScreen extends BaseFrame {
 
     private JTextField titleField;
@@ -37,7 +31,7 @@ public class NewIssueScreen extends BaseFrame {
         add(createFormContent(), BorderLayout.CENTER);
     }
 
-    // ================= SIDEBAR (same structure as the other screens) =================
+    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -124,7 +118,7 @@ public class NewIssueScreen extends BaseFrame {
         }
     }
 
-    // ================= TOP BAR =================
+    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -134,7 +128,6 @@ public class NewIssueScreen extends BaseFrame {
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));
         userPanel.setBackground(Color.WHITE);
 
-        // Logo BugBoard26 accanto al titolo/info utente, in ogni schermata
         JLabel brand;
         ImageIcon topBarLogoIcon = AppLogo.icon(28);
         if (topBarLogoIcon != null) {
@@ -162,7 +155,7 @@ public class NewIssueScreen extends BaseFrame {
         return topBar;
     }
 
-    // ================= FORM =================
+    //  FORM
     private JPanel createFormContent() {
         JPanel content = new JPanel(new BorderLayout());
         content.setBackground(new Color(243, 244, 246));
@@ -203,8 +196,7 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(descScroll);
         formCard.add(Box.createVerticalStrut(18));
 
-        // Issue type (bug, question, documentation, feature) — mandatory: the first
-        // entry is a placeholder that must be actively changed before submitting.
+        // Issue type
         JPanel typeRow = new JPanel();
         typeRow.setLayout(new BoxLayout(typeRow, BoxLayout.Y_AXIS));
         typeRow.setBackground(Color.WHITE);
@@ -228,7 +220,7 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(priorityRow);
         formCard.add(Box.createVerticalStrut(18));
 
-        // Labels (point 10, optional already at creation time)
+        // Labels
         formCard.add(fieldLabel("Labels (comma-separated, optional)"));
         labelsField = new JTextField();
         styleTextComponent(labelsField);

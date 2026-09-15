@@ -13,6 +13,7 @@ import java.util.Map;
  * script di build), con cache delle versioni ridimensionate per evitare
  * di rileggere/riscalare l'immagine ad ogni apertura di schermata.
  */
+
 public final class AppLogo {
 
     private static BufferedImage fullLogo;
@@ -23,12 +24,12 @@ public final class AppLogo {
 
     private AppLogo() { }
 
-    /** Logo completo (icona + scritta "BugBoard26"), ridimensionato all'altezza indicata. */
+    // Logo completo (icona + scritta "BugBoard26")
     public static ImageIcon full(int height) {
         return scaled("full", loadFull(), height);
     }
 
-    /** Solo l'icona del bug (senza scritta), utile per spazi compatti come la top bar. */
+    // Solo l'icona del bug (senza scritta)
     public static ImageIcon icon(int height) {
         return scaled("icon", loadIcon(), height);
     }

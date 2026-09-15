@@ -1,8 +1,4 @@
-/**
- * Stato dell'utente attualmente autenticato sul client (punto 1).
- * Tenuto in memoria lato front-end: il back-end resta comunque l'unica fonte
- * di verita' (il token viene validato ad ogni richiesta REST).
- */
+
 public class Session {
 
     private static String token;

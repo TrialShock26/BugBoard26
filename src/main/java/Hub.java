@@ -16,7 +16,7 @@ public class Hub extends BaseFrame {
         add(createDashboardContent(), BorderLayout.CENTER);
     }
 
-    // ================= SIDEBAR =================
+    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -134,7 +134,7 @@ public class Hub extends BaseFrame {
         }
     }
 
-    // ================= CONTENUTO =================
+    //  CONTENUTO
     private JPanel createDashboardContent() {
         JPanel content = new JPanel(new BorderLayout(20, 20));
         content.setBackground(new Color(243, 244, 246));
@@ -200,13 +200,6 @@ public class Hub extends BaseFrame {
         return content;
     }
 
-    /**
-     * Point 14 (revised): the system does NOT list or suggest specific bugs. If the
-     * back-end confirms that the logged-in user has, compared to all other users,
-     * the minimum workload, the Dashboard only shows a generic notice inviting them
-     * to go to the Issues screen and take on more issues to balance the team's
-     * overall workload. Not applicable to admins.
-     */
     private JPanel buildSuggestionBanner() {
         if (!"DEV".equals(Session.getRole())) return null;
 
@@ -298,7 +291,6 @@ public class Hub extends BaseFrame {
 
         String priority = (String) issue.get("priority");
 
-        // Titolo e priorita' sullo stesso livello (stessa riga), non piu' su righe separate
         JPanel titleRow = new JPanel(new BorderLayout());
         titleRow.setBackground(Color.WHITE);
         titleRow.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -338,7 +330,7 @@ public class Hub extends BaseFrame {
         infoPanel.add(assigneeInfo);
         infoPanel.add(typeLabel);
 
-        // Punto 10: etichette personalizzabili, mostrate come "chip"
+        // Punto 10: etichette personalizzabili "chip"
         @SuppressWarnings("unchecked")
         List<String> labels = (List<String>) issue.get("labels");
         JPanel labelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 2));

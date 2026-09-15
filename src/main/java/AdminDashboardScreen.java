@@ -7,15 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Point 7: "An admin dashboard is required, showing aggregated information about
- * bugs, such as the number of open bugs, those assigned per user, the average
- * resolution time (aggregated and per user) and other useful data." Extended to
- * also report per Team.
- *
- * Point 1: creating new user accounts (email, password, DEV/ADMIN role) is an
- * operation reserved to administrators, so it lives on this screen.
- */
 public class AdminDashboardScreen extends BaseFrame {
 
     private JLabel openLabel, ongoingLabel, resolvedLabel, totalLabel, avgLabel;

@@ -27,7 +27,7 @@ public class IssuesListScreen extends BaseFrame {
         reloadIssues();
     }
 
-    // ================= SIDEBAR =================
+    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -117,7 +117,7 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    // ================= TOP BAR =================
+    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -155,7 +155,7 @@ public class IssuesListScreen extends BaseFrame {
         return topBar;
     }
 
-    // ================= CONTENUTO =================
+    //  CONTENUTO
     private JPanel createIssuesContent() {
         JPanel container = new JPanel(new BorderLayout(0, 15));
         container.setBackground(new Color(243, 244, 246));
@@ -177,8 +177,6 @@ public class IssuesListScreen extends BaseFrame {
         return container;
     }
 
-    /** Point 3: "ability to filter or sort results by criteria such as type, status,
-     * priority or other relevant parameters". */
     private JPanel createFilterBar() {
         JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         bar.setBackground(Color.WHITE);
@@ -280,7 +278,7 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    // ================= CARD ISSUE =================
+    //  CARD ISSUE
     @SuppressWarnings("unchecked")
     private JPanel createIssueCard(Map<String, Object> issue) {
         String id = (String) issue.get("id");
@@ -418,8 +416,7 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    // ================= ACTIONS =================
-
+    //  ACTIONS
     private void openStatusDialog(String issueId, String currentStatus) {
         String[] options = {"TODO", "ONGOING", "RESOLVED"};
         String chosen = (String) JOptionPane.showInputDialog(this, "New status for " + issueId + ":",
@@ -434,7 +431,6 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    /** Point 10: adding a variable number of custom labels. */
     private void openAddLabelDialog(String issueId) {
         String label = JOptionPane.showInputDialog(this, "New label (e.g. frontend, urgent, security):",
                 "Add label", JOptionPane.PLAIN_MESSAGE);
@@ -448,7 +444,6 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    /** JComboBox entry with an internal value (used for the API) and a displayed label. */
     private static class ComboItem {
         final String value;
         final String label;
