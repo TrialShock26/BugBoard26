@@ -1,25 +1,32 @@
 // LoginScreen.java
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 public class LoginScreen extends JFrame {
 
     public LoginScreen() {
         setTitle("BugBoard26 - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 600);
+        setSize(430, 700);
         setLocationRelativeTo(null);
         setResizable(false);
         // Main panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(50, 40, 50, 40));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(35, 40, 35, 40));
 
         // Logo/Title
-        JLabel titleLabel = new JLabel("BugBoard26");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 36));
-        titleLabel.setForeground(new Color(220, 38, 38));
+        JLabel titleLabel;
+        ImageIcon loginLogoIcon = AppLogo.full(150);
+        if (loginLogoIcon != null) {
+            titleLabel = new JLabel(loginLogoIcon);
+        } else {
+            titleLabel = new JLabel("BugBoard26");
+            titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 36));
+            titleLabel.setForeground(new Color(220, 38, 38));
+        }
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel subtitleLabel = new JLabel("Issue Reporting System");
@@ -28,11 +35,11 @@ public class LoginScreen extends JFrame {
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Spacer
-        mainPanel.add(Box.createVerticalStrut(50));
+        mainPanel.add(Box.createVerticalStrut(15));
         mainPanel.add(titleLabel);
         mainPanel.add(Box.createVerticalStrut(10));
         mainPanel.add(subtitleLabel);
-        mainPanel.add(Box.createVerticalStrut(50));
+        mainPanel.add(Box.createVerticalStrut(35));
 
         // Email field
         JLabel emailLabel = new JLabel("Email");
@@ -63,7 +70,7 @@ public class LoginScreen extends JFrame {
         ));
 
         // Login button
-        JButton loginButton = new JButton("Accedi");
+        JButton loginButton = new JButton("Log In");
         loginButton.setMaximumSize(new Dimension(300, 45));
         loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         loginButton.setBackground(new Color(220, 38, 38));
@@ -82,30 +89,56 @@ public class LoginScreen extends JFrame {
             }
         });
 
-        loginButton.addActionListener(e -> {
-
-            String email = emailField.getText();
+        Runnable doLogin = () -> {
+            String email = emailField.getText().trim();
             String password = new String(passwordField.getPassword());
 
-            // Credenziali di default
-            if (email.equals("ciao") && password.equals("ciao")) {
-
-                // Apri schermata Issues
-                new Hub().setVisible(true);
-
-                // Chiudi login
-                dispose();
-
-            } else {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Credenziali non valide!",
-                        "Errore Login",
-                        JOptionPane.ERROR_MESSAGE
-                );
+            if (email.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter email and password.",
+                        "Missing fields", JOptionPane.WARNING_MESSAGE);
+                return;
             }
-        });
 
+            loginButton.setEnabled(false);
+            loginButton.setText("Logging in...");
+
+            // Punto 1: autenticazione reale via back-end REST (email + password)
+            SwingWorker<Map<String, Object>, Void> worker = new SwingWorker<>() {
+                @Override
+                protected Map<String, Object> doInBackground() {
+                    return ApiClient.login(email, password);
+                }
+
+                @Override
+                protected void done() {
+                    loginButton.setEnabled(true);
+                    loginButton.setText("Log In");
+                    try {
+                        Map<String, Object> user = get();
+                        Session.set(
+                                String.valueOf(user.get("token")),
+                                String.valueOf(user.get("email")),
+                                String.valueOf(user.get("name")),
+                                String.valueOf(user.get("role"))
+                        );
+                        new Hub().setVisible(true);
+                        dispose();
+                    } catch (Exception e) {
+                        Throwable cause = e.getCause() != null ? e.getCause() : e;
+                        JOptionPane.showMessageDialog(
+                                LoginScreen.this,
+                                cause.getMessage() != null ? cause.getMessage() : "Invalid credentials!",
+                                "Login Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+            };
+            worker.execute();
+        };
+
+        loginButton.addActionListener(e -> doLogin.run());
+        passwordField.addActionListener(e -> doLogin.run());
 
         // Add components
         mainPanel.add(emailLabel);
@@ -117,14 +150,6 @@ public class LoginScreen extends JFrame {
         mainPanel.add(passwordField);
         mainPanel.add(Box.createVerticalStrut(30));
         mainPanel.add(loginButton);
-
-        // Info panel
-        JPanel infoPanel = new JPanel();
-        infoPanel.setBackground(new Color(243, 244, 246));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        infoPanel.setMaximumSize(new Dimension(300, 80));
-        infoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
 
         add(mainPanel);
     }
