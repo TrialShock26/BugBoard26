@@ -5,24 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AdminDashboardScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ApiClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AppLogo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseFrame.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ChooseProjectScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/CreateProjectScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Hub.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/IssuesListScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/LoginScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewIssueScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ReportsScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Session.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/BackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/BackendApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Db.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Issue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Project.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/json/Json.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,11 +29,18 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -51,7 +52,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/TrialShock26/BugBoard26.git&quot;,
-    &quot;accountId&quot;: &quot;5c67d50b-755a-4316-9469-707198a53b6a&quot;
+    &quot;accountId&quot;: &quot;2445230d-1712-4158-8f6a-292c57a82f3a&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -59,6 +60,9 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="3JVRto8mg9ZF2Od1Xq20H7tbneZ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -67,9 +71,13 @@
   "keyToString": {
     "Application.LoginScreen.executor": "Run",
     "Application.Server.executor": "Run",
+    "Maven.backend [compile].executor": "Run",
+    "Maven.backend [jooq-codegen:generate].executor": "Run",
+    "Maven.backend [org.codehaus.mojo:properties-maven-plugin:1.2.1:read-project-properties].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "backend-luca",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/TrialCock/IdeaProjects/BugBoard26/frontend",
     "node.js.detected.package.eslint": "true",
@@ -85,6 +93,11 @@
       <recent name="C:\Users\TrialCock\IdeaProjects\BugBoard26" />
     </key>
   </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn jooq-codegen:generate" />
+    </option>
+  </component>
   <component name="RunManager">
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="backend" />
@@ -97,8 +110,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
       </set>
     </attachedChunks>
   </component>
@@ -112,6 +125,8 @@
       <updated>1789744466723</updated>
       <workItem from="1789744467891" duration="158000" />
       <workItem from="1789744671493" duration="2524000" />
+      <workItem from="1789825044762" duration="948000" />
+      <workItem from="1789826048954" duration="17294000" />
     </task>
     <servers />
   </component>
