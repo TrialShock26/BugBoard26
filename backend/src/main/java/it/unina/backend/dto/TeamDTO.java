@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamDTO {
-    private Integer id;
+    private Integer teamId;
     private String name;
     private String project;
 }

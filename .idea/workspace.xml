@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="First backend setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/BackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/BackendApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Db.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Issue.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Project.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/json/Json.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/TeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/TeamDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,9 +69,15 @@
     "Maven.backend [compile].executor": "Run",
     "Maven.backend [jooq-codegen:generate].executor": "Run",
     "Maven.backend [org.codehaus.mojo:properties-maven-plugin:1.2.1:read-project-properties].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.BackendApplication.executor": "Run",
     "git-widget-placeholder": "backend-luca",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/TrialCock/IdeaProjects/BugBoard26/frontend",
@@ -126,11 +127,25 @@
       <workItem from="1789744467891" duration="158000" />
       <workItem from="1789744671493" duration="2524000" />
       <workItem from="1789825044762" duration="948000" />
-      <workItem from="1789826048954" duration="17294000" />
+      <workItem from="1789826048954" duration="17405000" />
+      <workItem from="1789891532315" duration="9520000" />
     </task>
+    <task id="LOCAL-00001" summary="First backend setup">
+      <option name="closed" value="true" />
+      <created>1789865751447</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1789865751447</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First backend setup" />
+    <option name="LAST_COMMIT_MESSAGE" value="First backend setup" />
   </component>
 </project>
