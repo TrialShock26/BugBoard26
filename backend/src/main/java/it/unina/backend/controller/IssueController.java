@@ -1,7 +1,10 @@
 package it.unina.backend.controller;
 
+import it.unina.backend.dao.IssueDAO;
 import it.unina.backend.dto.IssueDTO;
+import it.unina.backend.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,8 @@ public class IssueController {
 
     @GetMapping
     public ResponseEntity<List<IssueDTO>> getAllIssues() {
-        return ResponseEntity.ok(dao.getAllIssues());
+        List<IssueDTO> result = dao.getAllIssues(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (result == null || result.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(result);
     }
 }

@@ -75,7 +75,7 @@ public class AuthController {
                 .setSubject(user.getEmail())
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(Date.from(Instant.now().plus(24, ChronoUnit.HOURS)))
+                .setExpiration(Date.from(Instant.now().plus(8, ChronoUnit.HOURS)))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
         user.setHashedPassword("Inaccessible data");

@@ -17,6 +17,7 @@ public class UserJOOQ implements UserDAO {
         this.context = context;
     }
 
+    @Override
     public Optional<UserDTO> login(String email){
         return context.selectFrom(USER_)
                 .where(USER_.EMAIL.eq(email))

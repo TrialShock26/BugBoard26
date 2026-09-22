@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="First backend setup">
+    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="Refactored folders">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/IssueDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/IssueDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/TeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/TeamDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/UserDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,12 +44,12 @@
     &quot;assignee&quot;: &quot;TrialShock26&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/TrialShock26/BugBoard26.git&quot;,
-    &quot;accountId&quot;: &quot;2445230d-1712-4158-8f6a-292c57a82f3a&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/TrialShock26/BugBoard26.git",
+    "accountId": "5c67d50b-755a-4316-9469-707198a53b6a"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 5
@@ -66,6 +66,7 @@
   "keyToString": {
     "Application.LoginScreen.executor": "Run",
     "Application.Server.executor": "Run",
+    "Maven.backend [clean,compile].executor": "Run",
     "Maven.backend [compile].executor": "Run",
     "Maven.backend [jooq-codegen:generate].executor": "Run",
     "Maven.backend [org.codehaus.mojo:properties-maven-plugin:1.2.1:read-project-properties].executor": "Run",
@@ -97,6 +98,7 @@
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn jooq-codegen:generate" />
+      <command value="mvn clean compile" />
     </option>
   </component>
   <component name="RunManager">
@@ -111,8 +113,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
       </set>
     </attachedChunks>
   </component>
@@ -129,6 +131,7 @@
       <workItem from="1789825044762" duration="948000" />
       <workItem from="1789826048954" duration="17405000" />
       <workItem from="1789891532315" duration="9520000" />
+      <workItem from="1790068640995" duration="18403000" />
     </task>
     <task id="LOCAL-00001" summary="First backend setup">
       <option name="closed" value="true" />
