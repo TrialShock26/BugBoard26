@@ -9,9 +9,80 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <exec.mainClass>frontend.gui.LoginScreen</exec.mainClass>
+        <lombok.version>1.18.46</lombok.version>
     </properties>
+
+    <!--
+        Unica dipendenza esterna: Lombok, usato solo in fase di compilazione
+        (scope "provided") per generare getter/setter/costruttori nei DTO.
+        Non finisce nel jar finale e non introduce alcuna dipendenza a runtime:
+        il front-end continua a comunicare con il back-end esclusivamente via
+        java.net.http.HttpClient e il parser JSON interno (frontend.json.Json).
+
+        Target Java 11: e' la versione minima richiesta da java.net.http.HttpClient
+        (usato in ApiClient) ed e' piu' che sufficiente per il resto del codice,
+        che non usa alcuna sintassi introdotta dopo Java 8 (niente record,
+        text block, pattern matching, switch-expression). Se sul tuo sistema hai
+        un JDK piu' recente puoi comunque alzare questo valore (es. 17 o 21)
+        senza alcun impatto sul codice.
+    -->
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Versione recente fissata esplicitamente: alcune installazioni Maven
+                 risolvono altrimenti una versione molto datata del plugin, che non
+                 gestisce correttamente il flag "release" per i JDK piu' recenti. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- Consente di avviare l'app con: mvn compile exec:java -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <mainClass>frontend.gui.LoginScreen</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Produce un jar eseguibile (frontend-1.0-SNAPSHOT.jar) con il Main-Class già impostata -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>frontend.gui.LoginScreen</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
