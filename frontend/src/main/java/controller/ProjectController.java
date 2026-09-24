@@ -1,9 +1,9 @@
-package frontend.controller;
+package controller;
 
-import frontend.config.ApiPaths;
-import frontend.dto.ProjectDTO;
-import frontend.dto.TeamDTO;
-import frontend.json.Json;
+import config.ApiPaths;
+import dto.ProjectDTO;
+import dto.TeamDTO;
+import json.Json;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static frontend.controller.JsonMapping.*;
+import static controller.JsonMapping.*;
 
 public final class ProjectController {
 

@@ -1,6 +1,5 @@
 package gui;
 
-// LoginScreen.java
 import javax.swing.*;
 import java.awt.*;
 import controller.AuthController;
@@ -15,13 +14,11 @@ public class LoginScreen extends JFrame {
         setSize(430, 700);
         setLocationRelativeTo(null);
         setResizable(false);
-        // Main panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(35, 40, 35, 40));
 
-        // Logo/Title
         JLabel titleLabel;
         ImageIcon loginLogoIcon = AppLogo.full(150);
         if (loginLogoIcon != null) {
@@ -38,14 +35,12 @@ public class LoginScreen extends JFrame {
         subtitleLabel.setForeground(new Color(75, 85, 85));
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Spacer
         mainPanel.add(Box.createVerticalStrut(15));
         mainPanel.add(titleLabel);
         mainPanel.add(Box.createVerticalStrut(10));
         mainPanel.add(subtitleLabel);
         mainPanel.add(Box.createVerticalStrut(35));
 
-        // Email field
         JLabel emailLabel = new JLabel("Email");
         emailLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
         emailLabel.setForeground(new Color(75, 85, 85));
@@ -59,7 +54,6 @@ public class LoginScreen extends JFrame {
                 BorderFactory.createEmptyBorder(10, 15, 10, 15)
         ));
 
-        // Password field
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
         passwordLabel.setForeground(new Color(75, 85, 85));
@@ -73,7 +67,6 @@ public class LoginScreen extends JFrame {
                 BorderFactory.createEmptyBorder(10, 15, 10, 15)
         ));
 
-        // Login button
         JButton loginButton = new JButton("Log In");
         loginButton.setMaximumSize(new Dimension(300, 45));
         loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -83,7 +76,6 @@ public class LoginScreen extends JFrame {
         loginButton.setFocusPainted(false);
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover effect
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 loginButton.setBackground(new Color(239, 68, 68));
@@ -106,7 +98,6 @@ public class LoginScreen extends JFrame {
             loginButton.setEnabled(false);
             loginButton.setText("Logging in...");
 
-            // Punto 1: autenticazione reale via back-end REST (email + password)
             SwingWorker<UserDTO, Void> worker = new SwingWorker<>() {
                 @Override
                 protected UserDTO doInBackground() {
@@ -139,7 +130,6 @@ public class LoginScreen extends JFrame {
         loginButton.addActionListener(e -> doLogin.run());
         passwordField.addActionListener(e -> doLogin.run());
 
-        // Add components
         mainPanel.add(emailLabel);
         mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(emailField);

@@ -50,9 +50,7 @@ public class Hub extends BaseFrame {
         menuItems.add(new String[]{"Dashboard", "Dashboard"});
         menuItems.add(new String[]{"Issues", "Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
-        // Admin-only sections are shown only when logged in as admin, so the app
-        // remains fully usable by a regular user, without menu entries leading
-        // to inaccessible screens.
+
         if (Session.isAdmin()) {
             menuItems.add(new String[]{"Admin Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
@@ -142,13 +140,11 @@ public class Hub extends BaseFrame {
         }
     }
 
-    //  CONTENUTO
     private JPanel createDashboardContent() {
         JPanel content = new JPanel(new BorderLayout(20, 20));
         content.setBackground(new Color(243, 244, 246));
         content.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Header
         JPanel header = new JPanel();
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
 
@@ -183,7 +179,6 @@ public class Hub extends BaseFrame {
 
         content.add(header, BorderLayout.NORTH);
 
-        // Board panel: Todo column, fed from the back-end (point 3: summary view)
         JPanel boardPanel = new JPanel(new GridLayout(1, 1, 20, 0));
         boardPanel.setBackground(new Color(243, 244, 246));
 
@@ -198,8 +193,6 @@ public class Hub extends BaseFrame {
         boardPanel.add(createColumn("Todo", new Color(156, 163, 175), todoIssues));
         content.add(boardPanel, BorderLayout.CENTER);
 
-        // Punto 14: sezione suggerimento in fondo alla pagina, alla stessa larghezza
-        // del resto del contenuto (BorderLayout.SOUTH occupa tutta la larghezza).
         JPanel suggestionBanner = buildSuggestionBanner();
         if (suggestionBanner != null) {
             content.add(suggestionBanner, BorderLayout.SOUTH);
@@ -337,7 +330,6 @@ public class Hub extends BaseFrame {
         infoPanel.add(assigneeInfo);
         infoPanel.add(typeLabel);
 
-        // Punto 10: etichette personalizzabili "chip"
         List<String> labels = issue.getLabels();
         JPanel labelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 2));
         labelsPanel.setBackground(Color.WHITE);

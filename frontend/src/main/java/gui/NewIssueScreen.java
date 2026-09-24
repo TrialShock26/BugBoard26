@@ -37,7 +37,6 @@ public class NewIssueScreen extends BaseFrame {
         add(createFormContent(), BorderLayout.CENTER);
     }
 
-    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -124,7 +123,6 @@ public class NewIssueScreen extends BaseFrame {
         }
     }
 
-    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -161,7 +159,6 @@ public class NewIssueScreen extends BaseFrame {
         return topBar;
     }
 
-    //  FORM
     private JPanel createFormContent() {
         JPanel content = new JPanel(new BorderLayout());
         content.setBackground(new Color(243, 244, 246));
@@ -182,14 +179,12 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(header);
         formCard.add(Box.createVerticalStrut(25));
 
-        // Title (required)
         formCard.add(fieldLabel("Title *"));
         titleField = new JTextField();
         styleTextComponent(titleField);
         formCard.add(titleField);
         formCard.add(Box.createVerticalStrut(18));
 
-        // Description (required)
         formCard.add(fieldLabel("Description *"));
         descriptionArea = new JTextArea(5, 20);
         descriptionArea.setLineWrap(true);
@@ -202,7 +197,6 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(descScroll);
         formCard.add(Box.createVerticalStrut(18));
 
-        // Issue type
         JPanel typeRow = new JPanel();
         typeRow.setLayout(new BoxLayout(typeRow, BoxLayout.Y_AXIS));
         typeRow.setBackground(Color.WHITE);
@@ -214,7 +208,6 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(typeRow);
         formCard.add(Box.createVerticalStrut(18));
 
-        // Priority (optional, defaults to NONE)
         JPanel priorityRow = new JPanel();
         priorityRow.setLayout(new BoxLayout(priorityRow, BoxLayout.Y_AXIS));
         priorityRow.setBackground(Color.WHITE);
@@ -226,14 +219,12 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(priorityRow);
         formCard.add(Box.createVerticalStrut(18));
 
-        // Labels
         formCard.add(fieldLabel("Labels (comma-separated, optional)"));
         labelsField = new JTextField();
         styleTextComponent(labelsField);
         formCard.add(labelsField);
         formCard.add(Box.createVerticalStrut(18));
 
-        // Image attachment (optional)
         formCard.add(fieldLabel("Attached image (optional)"));
         JPanel imageRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         imageRow.setBackground(Color.WHITE);
@@ -249,7 +240,6 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(imageRow);
         formCard.add(Box.createVerticalStrut(30));
 
-        // Buttons
         JPanel buttonsRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         buttonsRow.setBackground(Color.WHITE);
         buttonsRow.setAlignmentX(Component.LEFT_ALIGNMENT);

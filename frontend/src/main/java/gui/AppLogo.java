@@ -9,13 +9,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Carica il logo BugBoard26 dalle risorse incluse nel classpath
- * (src/main/resources/frontend/gui/images/logo.png e logo-icon.png,
- * incluse nel jar/nel classpath dal build Maven), con cache delle versioni
- * ridimensionate per evitare di rileggere/riscalare l'immagine ad ogni
- * apertura di schermata.
- */
 
 public final class AppLogo {
 

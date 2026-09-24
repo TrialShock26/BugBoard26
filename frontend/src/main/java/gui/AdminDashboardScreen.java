@@ -86,7 +86,7 @@ public class AdminDashboardScreen extends BaseFrame {
         return panel;
     }
 
-    // ================= SIDEBAR =================
+
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -173,7 +173,6 @@ public class AdminDashboardScreen extends BaseFrame {
         }
     }
 
-    // ================= TABS =================
     private JTabbedPane createTabs() {
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -182,7 +181,6 @@ public class AdminDashboardScreen extends BaseFrame {
         return tabs;
     }
 
-    // ================= OVERVIEW (point 7) =================
     private JPanel createOverviewPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));
@@ -308,7 +306,6 @@ public class AdminDashboardScreen extends BaseFrame {
                         });
                     }
 
-                    // Point 17 (extended): per-team breakdown
                     perTeamModel.setRowCount(0);
                     for (StatisticDTO.TeamStat row : stats.getPerTeam()) {
                         Double teamAvg = row.getAvgResolutionHours();
@@ -328,7 +325,7 @@ public class AdminDashboardScreen extends BaseFrame {
         worker.execute();
     }
 
-    // ================= USERS (point 1) =================
+
     private JPanel createUsersPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));
@@ -344,7 +341,6 @@ public class AdminDashboardScreen extends BaseFrame {
         JTextField nameField = new JTextField(12);
         JTextField emailField = new JTextField(16);
         JPasswordField passwordField = new JPasswordField(10);
-        // I ruoli disponibili sono ADMIN e DEV (niente READONLY)
         JComboBox<String> roleCombo = new JComboBox<>(new String[]{"DEV", "ADMIN"});
         JComboBox<String> teamCombo = new JComboBox<>(new String[]{"FRONTEND", "BACKEND", "MOBILE", "QA"});
         teamCombo.setEnabled(true);

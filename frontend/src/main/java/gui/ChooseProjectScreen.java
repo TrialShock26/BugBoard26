@@ -6,24 +6,22 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import controller.ProjectController;
 import controller.Session;
 import controller.TeamController;
+import dto.ProjectDTO;
 import dto.TeamDTO;
 import exception.ApiException;
 
 
 public class ChooseProjectScreen extends BaseFrame {
 
-    private JComboBox<String> projectCombo;
+    private JComboBox<ProjectItem> projectCombo;
     private JComboBox<TeamItem> teamCombo;
     private DefaultTableModel myProjectsModel;
     private JTable myProjectsTable;
     private final List<String> myTeamIds = new ArrayList<>();
-    /** Team raggruppati per il valore del loro campo "project" (non esiste una tabella Project a sé). */
-    private final Map<String, List<TeamDTO>> teamsByProject = new LinkedHashMap<>();
 
     public ChooseProjectScreen() {
         super("BugBoard26 - Choose Project");
@@ -40,7 +38,6 @@ public class ChooseProjectScreen extends BaseFrame {
         }
     }
 
-    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -50,7 +47,6 @@ public class ChooseProjectScreen extends BaseFrame {
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));
         userPanel.setBackground(Color.WHITE);
 
-        // BugBoard26 logo next to the title/user info, on every screen
         JLabel brand;
         ImageIcon topBarLogoIcon = AppLogo.icon(28);
         if (topBarLogoIcon != null) {
@@ -177,7 +173,6 @@ public class ChooseProjectScreen extends BaseFrame {
         }
     }
 
-    //  CONTENT
     private JPanel createContent() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));
@@ -279,38 +274,48 @@ public class ChooseProjectScreen extends BaseFrame {
         return panel;
     }
 
-    /** Ripopola il menu dei team in base al progetto (etichetta) attualmente selezionato. */
     private void refreshTeamCombo() {
-        teamCombo.removeAllItems();
-        String selectedProject = (String) projectCombo.getSelectedItem();
-        if (selectedProject == null) return;
-        List<TeamDTO> teams = teamsByProject.get(selectedProject);
-        if (teams != null) {
-            for (TeamDTO t : teams) teamCombo.addItem(new TeamItem(t));
+        ProjectItem selected = (ProjectItem) projectCombo.getSelectedItem();
+        if (selected == null) {
+            teamCombo.removeAllItems();
+            return;
         }
-    }
-
-    private void loadProjects() {
         SwingWorker<List<TeamDTO>, Void> worker = new SwingWorker<>() {
             @Override
             protected List<TeamDTO> doInBackground() {
-                return TeamController.listTeams();
+                return ProjectController.listTeams(selected.getId());
             }
 
             @Override
             protected void done() {
                 try {
                     List<TeamDTO> teams = get();
-                    // Non esiste una tabella "Project": raggruppiamo i team per il valore
-                    // condiviso del loro campo "project" (cfr. TeamDTO / procedura add_new_teams).
-                    teamsByProject.clear();
-                    for (TeamDTO t : teams) {
-                        teamsByProject.computeIfAbsent(t.getProject(), k -> new ArrayList<>()).add(t);
-                    }
+                    teamCombo.removeAllItems();
+                    for (TeamDTO t : teams) teamCombo.addItem(new TeamItem(t));
+                } catch (Exception e) {
+                    Throwable cause = e.getCause() != null ? e.getCause() : e;
+                    JOptionPane.showMessageDialog(ChooseProjectScreen.this,
+                            "Error loading teams: " + cause.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+        worker.execute();
+    }
+
+    private void loadProjects() {
+        SwingWorker<List<ProjectDTO>, Void> worker = new SwingWorker<>() {
+            @Override
+            protected List<ProjectDTO> doInBackground() {
+                return ProjectController.listProjects();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    List<ProjectDTO> projects = get();
                     projectCombo.removeAllItems();
-                    for (String project : teamsByProject.keySet()) {
-                        projectCombo.addItem(project);
-                    }
+                    for (ProjectDTO p : projects) projectCombo.addItem(new ProjectItem(p));
                     refreshTeamCombo();
                     loadMyProjects();
                 } catch (Exception e) {
@@ -352,7 +357,7 @@ public class ChooseProjectScreen extends BaseFrame {
     }
 
     private void confirmChoice() {
-        String project = (String) projectCombo.getSelectedItem();
+        ProjectItem project = (ProjectItem) projectCombo.getSelectedItem();
         TeamItem team = (TeamItem) teamCombo.getSelectedItem();
 
         if (project == null) {
@@ -367,10 +372,11 @@ public class ChooseProjectScreen extends BaseFrame {
         }
 
         try {
-            TeamController.joinTeam(team.getId());
+            // PUT /projects/{id}/teams/{id}
+            ProjectController.joinTeam(project.getId(), team.getId());
             loadMyProjects();
             JOptionPane.showMessageDialog(this,
-                    "You joined \"" + project + "\" as part of the " + team.getName() + " team.",
+                    "You joined \"" + project.getName() + "\" as part of the " + team.getName() + " team.",
                     "Choice saved", JOptionPane.INFORMATION_MESSAGE);
         } catch (ApiException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -392,10 +398,17 @@ public class ChooseProjectScreen extends BaseFrame {
         }
     }
 
-    /** Voce del menu team: mostra il nome, ma conserva l'intero DTO (id, project, ...). */
     private static class TeamItem {
         final TeamDTO data;
         TeamItem(TeamDTO data) { this.data = data; }
+        String getId() { return data.getId(); }
+        String getName() { return data.getName(); }
+        @Override public String toString() { return getName(); }
+    }
+
+    private static class ProjectItem {
+        final ProjectDTO data;
+        ProjectItem(ProjectDTO data) { this.data = data; }
         String getId() { return data.getId(); }
         String getName() { return data.getName(); }
         @Override public String toString() { return getName(); }
