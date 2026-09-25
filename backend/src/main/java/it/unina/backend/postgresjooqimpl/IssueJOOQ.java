@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static it.unina.backend.jooq.Tables.ISSUE;
-import static it.unina.backend.jooq.Tables.PROJECT;
+import static it.unina.backend.jooq.Tables.*;
 
 @Repository
 public class IssueJOOQ implements IssueDAO {
@@ -39,7 +38,8 @@ public class IssueJOOQ implements IssueDAO {
                         .in(
                                 context.select(PROJECT.PROJECT_ID)
                                         .from(PROJECT)
-                                        .where(PROJECT.team().user_().EMAIL.eq(email))
+                                        .naturalJoin(TEAM).naturalJoin(COLLABORATION).naturalJoin(USER_)
+                                        .where(USER_.EMAIL.eq(email))
                         )).fetch(issueRecord -> new IssueDTO(
                         issueRecord.get(ISSUE.ISSUE_ID),
                         issueRecord.get(ISSUE.TITLE),

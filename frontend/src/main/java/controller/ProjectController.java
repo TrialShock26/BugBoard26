@@ -19,11 +19,10 @@ public final class ProjectController {
 
     @SuppressWarnings("unchecked")
     public static List<ProjectDTO> listProjects() {
-        // GET /projects
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS).GET().build();
         List<Map<String, Object>> raw = (List<Map<String, Object>>) ApiClient.call(req);
         List<ProjectDTO> out = new ArrayList<>();
-        for (Map<String, Object> m : raw) out.add(new ProjectDTO(str(m, "id"), str(m, "name")));
+        for (Map<String, Object> m : raw) out.add(new ProjectDTO(str(m, "projectId"), str(m, "name")));
         return out;
     }
 
@@ -36,17 +35,14 @@ public final class ProjectController {
 
     @SuppressWarnings("unchecked")
     public static List<TeamDTO> listTeams(String projectId) {
-        // GET /projects/{id}/teams
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS + "/" + projectId + "/teams").GET().build();
         List<Map<String, Object>> raw = (List<Map<String, Object>>) ApiClient.call(req);
         List<TeamDTO> out = new ArrayList<>();
-        for (Map<String, Object> m : raw) out.add(new TeamDTO(str(m, "id"), str(m, "name"), str(m, "project")));
+        for (Map<String, Object> m : raw) out.add(new TeamDTO(str(m, "teamId"), str(m, "name"), str(m, "project")));
         return out;
     }
 
     public static void joinTeam(String projectId, String teamId) {
-        // PUT /projects/{id}/teams/{id}: l'utente si unisce al team indicato,
-        // all'interno del progetto indicato.
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS + "/" + projectId + "/teams/" + teamId)
                 .method("PUT", BodyPublishers.noBody()).build();
         ApiClient.call(req);

@@ -390,7 +390,7 @@ public class IssuesListScreen extends BaseFrame {
         }
 
         boolean canResolve = (Session.isAdmin() || Session.getEmail().equalsIgnoreCase(assignee))
-                && status != IssueStatus.RESOLVED;
+                && status != IssueStatus.DONE;
         if (canResolve) {
             JButton resolveBtn = smallButton("Resolve");
             resolveBtn.addActionListener(e -> resolveIssue(id));
@@ -461,7 +461,7 @@ public class IssuesListScreen extends BaseFrame {
         switch (status) {
             case TODO: return new Color(156, 163, 175);
             case ONGOING: return new Color(59, 130, 246);
-            case RESOLVED: return new Color(34, 197, 94);
+            case DONE: return new Color(34, 197, 94);
             default: return new Color(107, 114, 128);
         }
     }

@@ -24,7 +24,7 @@ public class IssueController {
     @GetMapping
     public ResponseEntity<List<IssueDTO>> getAllIssues() {
         List<IssueDTO> result = dao.getAllIssues(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (result == null || result.isEmpty()) return ResponseEntity.noContent().build();
+        if (result.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(result);
     }
 }

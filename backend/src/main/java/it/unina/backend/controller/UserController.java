@@ -42,12 +42,16 @@ public class UserController {
 
     @GetMapping("/projects")
     public ResponseEntity<List<ProjectDTO>> getProjects() {
-        return ResponseEntity.ok(dao.getProjects());
+        List<ProjectDTO> result = dao.getProjects();
+        if (result.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/projects/{id}/teams")
     public ResponseEntity<List<TeamDTO>> getTeams(@PathVariable int id) {
-        return ResponseEntity.ok(dao.getTeams(id));
+        List<TeamDTO> result = dao.getTeams(id);
+        if (result.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping("/projects/{projectId}/teams/{teamId}")

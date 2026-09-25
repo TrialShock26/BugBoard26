@@ -23,13 +23,12 @@ public final class AuthController {
     }
 
     private static UserDTO toUserDTO(Map<String, Object> m) {
+        Map<String, Object> user = mapOrNull(m, "user");
         return new UserDTO(
-                str(m, "id"),
+                user == null ? null : str(user, "userId"),
                 str(m, "token"),
-                str(m, "email"),
-                str(m, "name"),
-                enumVal(m, "role", UserRole.class),
-                str(m, "team")
+                user == null ? null : str(user, "email"),
+                user == null ? null : enumVal(user, "type", UserRole.class)
         );
     }
 }

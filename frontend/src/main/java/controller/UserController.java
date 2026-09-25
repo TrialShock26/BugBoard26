@@ -26,10 +26,9 @@ public final class UserController {
     }
 
     @SuppressWarnings("unchecked")
-    public static UserDTO createUser(String email, String password, String name, UserRole role, String team) {
+    public static UserDTO createUser(String email, String password, UserRole role) {
         HttpRequest req = ApiClient.request(ApiPaths.USERS)
-                .POST(ApiClient.json(Json.obj(
-                        "email", email, "password", password, "name", name, "role", role, "team", team)))
+                .POST(ApiClient.json(Json.obj("email", email, "password", password, "role", role)))
                 .build();
         Map<String, Object> m = (Map<String, Object>) ApiClient.call(req);
         return toUserDTO(m);
@@ -37,12 +36,10 @@ public final class UserController {
 
     private static UserDTO toUserDTO(Map<String, Object> m) {
         return new UserDTO(
-                str(m, "id"),
+                str(m, "userId"),
                 null,
                 str(m, "email"),
-                str(m, "name"),
-                enumVal(m, "role", UserRole.class),
-                str(m, "team")
+                enumVal(m, "type", UserRole.class)
         );
     }
 }

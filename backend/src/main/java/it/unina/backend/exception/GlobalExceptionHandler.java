@@ -24,7 +24,8 @@ public class GlobalExceptionHandler {
         }
 
         ErrorResponse genericError = new ErrorResponse(
-                "An unexpected database error occurred.",
+                "An unexpected database error occurred.\n" +
+                ex.getMessage(),
                 OffsetDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(genericError);
