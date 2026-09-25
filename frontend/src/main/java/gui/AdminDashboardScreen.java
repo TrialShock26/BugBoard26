@@ -86,7 +86,7 @@ public class AdminDashboardScreen extends BaseFrame {
         return panel;
     }
 
-    // ================= SIDEBAR =================
+
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -341,34 +341,23 @@ public class AdminDashboardScreen extends BaseFrame {
                 BorderFactory.createLineBorder(new Color(229, 231, 235)),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
-        JTextField nameField = new JTextField(12);
         JTextField emailField = new JTextField(16);
         JPasswordField passwordField = new JPasswordField(10);
-        // I ruoli disponibili sono ADMIN e DEV (niente READONLY)
         JComboBox<String> roleCombo = new JComboBox<>(new String[]{"DEV", "ADMIN"});
-        JComboBox<String> teamCombo = new JComboBox<>(new String[]{"FRONTEND", "BACKEND", "MOBILE", "QA"});
-        teamCombo.setEnabled(true);
         JButton createBtn = new JButton("Create user");
         createBtn.setBackground(new Color(220, 38, 38));
         createBtn.setForeground(Color.WHITE);
         createBtn.setFocusPainted(false);
 
-        // Il team ha senso solo per i DEV: disabilitato quando si crea un ADMIN
-        roleCombo.addActionListener(e -> teamCombo.setEnabled("DEV".equals(roleCombo.getSelectedItem())));
-
-        form.add(new JLabel("Name:")); form.add(nameField);
         form.add(new JLabel("Email:")); form.add(emailField);
         form.add(new JLabel("Password:")); form.add(passwordField);
         form.add(new JLabel("Role:")); form.add(roleCombo);
-        form.add(new JLabel("Team:")); form.add(teamCombo);
         form.add(createBtn);
 
         createBtn.addActionListener(e -> {
-            String name = nameField.getText().trim();
             String email = emailField.getText().trim();
             String password = new String(passwordField.getPassword());
             String role = (String) roleCombo.getSelectedItem();
-            String team = "DEV".equals(role) ? (String) teamCombo.getSelectedItem() : null;
 
             if (email.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Email and password are required.",
@@ -377,8 +366,8 @@ public class AdminDashboardScreen extends BaseFrame {
             }
 
             try {
-                UserController.createUser(email, password, name, UserRole.valueOf(role), team);
-                nameField.setText(""); emailField.setText(""); passwordField.setText("");
+                UserController.createUser(email, password, UserRole.valueOf(role));
+                emailField.setText(""); passwordField.setText("");
                 loadUsers();
                 JOptionPane.showMessageDialog(this, "User created successfully.",
                         "User created", JOptionPane.INFORMATION_MESSAGE);
@@ -389,7 +378,7 @@ public class AdminDashboardScreen extends BaseFrame {
 
         panel.add(form, BorderLayout.NORTH);
 
-        String[] columns = {"ID", "Name", "Email", "Role", "Team"};
+        String[] columns = {"ID", "Email", "Role"};
         usersModel = new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
@@ -416,9 +405,7 @@ public class AdminDashboardScreen extends BaseFrame {
                     List<UserDTO> users = get();
                     usersModel.setRowCount(0);
                     for (UserDTO u : users) {
-                        String team = u.getTeam();
-                        usersModel.addRow(new Object[]{u.getId(), u.getName(), u.getEmail(),
-                                u.getRole(), team == null ? "-" : team});
+                        usersModel.addRow(new Object[]{u.getId(), u.getEmail(), u.getRole()});
                     }
                 } catch (Exception e) {
                     Throwable cause = e.getCause() != null ? e.getCause() : e;

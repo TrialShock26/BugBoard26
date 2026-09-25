@@ -59,9 +59,7 @@ public class IssuesListScreen extends BaseFrame {
         menuItems.add(new String[]{"Dashboard", "Dashboard"});
         menuItems.add(new String[]{"Issues", "Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
-        // Admin-only sections are shown only when logged in as admin, so the app
-        // remains fully usable by a regular user, without menu entries leading
-        // to inaccessible screens.
+
         if (Session.isAdmin()) {
             menuItems.add(new String[]{"Admin Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
@@ -124,7 +122,6 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -162,7 +159,6 @@ public class IssuesListScreen extends BaseFrame {
         return topBar;
     }
 
-    //  CONTENUTO
     private JPanel createIssuesContent() {
         JPanel container = new JPanel(new BorderLayout(0, 15));
         container.setBackground(new Color(243, 244, 246));
@@ -202,7 +198,7 @@ public class IssuesListScreen extends BaseFrame {
                 new ComboItem(null, "All statuses"),
                 new ComboItem("TODO", "Todo"),
                 new ComboItem("ONGOING", "Ongoing"),
-                new ComboItem("DONE", "Done")
+                new ComboItem("RESOLVED", "Resolved")
         });
         priorityFilter = new JComboBox<>(new ComboItem[]{
                 new ComboItem(null, "All priorities"),
@@ -328,7 +324,6 @@ public class IssuesListScreen extends BaseFrame {
         dialog.setVisible(true);
     }
 
-    //  CARD ISSUE
     private JPanel createIssueCard(IssueDTO issue) {
         String id = issue.getId();
         IssueStatus status = issue.getStatus();
@@ -365,7 +360,6 @@ public class IssuesListScreen extends BaseFrame {
         topRow.add(tagsPanel, BorderLayout.EAST);
         card.add(topRow);
 
-        // Short description
         String description = String.valueOf(issue.getDescription());
         if (description.length() > 140) description = description.substring(0, 140) + "...";
         JLabel descLabel = new JLabel("<html><body style='width:700px'>" + description + "</body></html>");
@@ -374,7 +368,6 @@ public class IssuesListScreen extends BaseFrame {
         descLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
         card.add(descLabel);
 
-        // Labels (point 10) + assignee
         JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         infoRow.setBackground(Color.WHITE);
         JLabel assigneeLabel = new JLabel(assignee == null ? "Unassigned" : "Assigned to " + assignee);
@@ -386,12 +379,9 @@ public class IssuesListScreen extends BaseFrame {
         }
         card.add(infoRow);
 
-        // Action row
         JPanel actionsRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
         actionsRow.setBackground(Color.WHITE);
 
-        // Point 14: it's the user themselves (with DEV role) who takes an unassigned
-        // bug, not the administrator anymore.
         boolean canHandle = Session.isDev() && type == IssueType.BUG && assignee == null;
         if (canHandle) {
             JButton handleBtn = smallButton("Handle");
@@ -476,7 +466,6 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    //  ACTIONS
     private void openAddLabelDialog(String issueId) {
         String label = JOptionPane.showInputDialog(this, "New label (e.g. frontend, urgent, security):",
                 "Add label", JOptionPane.PLAIN_MESSAGE);

@@ -6,11 +6,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import controller.ProjectController;
 import controller.Session;
-import controller.TeamController;
+import dto.ProjectDTO;
 import dto.TeamDTO;
 import exception.ApiException;
 
@@ -39,7 +38,6 @@ public class CreateProjectScreen extends BaseFrame {
         }
     }
 
-    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -49,7 +47,6 @@ public class CreateProjectScreen extends BaseFrame {
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));
         userPanel.setBackground(Color.WHITE);
 
-        // BugBoard26 logo next to the title/user info, on every screen
         JLabel brand;
         ImageIcon topBarLogoIcon = AppLogo.icon(28);
         if (topBarLogoIcon != null) {
@@ -174,13 +171,11 @@ public class CreateProjectScreen extends BaseFrame {
         }
     }
 
-    //  CONTENT
     private JPanel createContent() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));
         panel.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));
 
-        // Project creation form
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBackground(Color.WHITE);
@@ -242,7 +237,6 @@ public class CreateProjectScreen extends BaseFrame {
 
         panel.add(form, BorderLayout.NORTH);
 
-        // Existing projects table
         JPanel tablePanel = new JPanel(new BorderLayout(0, 8));
         tablePanel.setBackground(new Color(243, 244, 246));
 
@@ -265,7 +259,6 @@ public class CreateProjectScreen extends BaseFrame {
         return panel;
     }
 
-    /** Aggiunge un nuovo campo di testo per un ulteriore team, fino al limite massimo. */
     private void addTeamRow() {
         if (teamFields.size() >= MAX_TEAMS) return;
         JTextField field = new JTextField();
@@ -285,8 +278,7 @@ public class CreateProjectScreen extends BaseFrame {
         rebuildTeamRows();
     }
 
-    /** Ridisegna le righe dei campi team: il pulsante "+" compare solo sull'ultima riga
-     * (finche' non si raggiunge MAX_TEAMS), il pulsante "-" su ogni riga oltre la prima. */
+
     private void rebuildTeamRows() {
         teamsContainer.removeAll();
         for (int i = 0; i < teamFields.size(); i++) {
@@ -343,7 +335,8 @@ public class CreateProjectScreen extends BaseFrame {
         }
 
         try {
-            TeamController.createTeams(name, enteredTeams);
+            // POST /projects
+            ProjectController.createProject(name, enteredTeams);
             nameField.setText("");
             teamFields.clear();
             addTeamRow();
@@ -355,26 +348,39 @@ public class CreateProjectScreen extends BaseFrame {
         }
     }
 
+    /** Coppia progetto + nomi dei suoi team, usata solo per popolare la tabella. */
+    private static final class ProjectRow {
+        final String projectName;
+        final String teamNames;
+        ProjectRow(String projectName, String teamNames) {
+            this.projectName = projectName;
+            this.teamNames = teamNames;
+        }
+    }
+
     private void loadProjects() {
-        SwingWorker<List<TeamDTO>, Void> worker = new SwingWorker<>() {
+        SwingWorker<List<ProjectRow>, Void> worker = new SwingWorker<>() {
             @Override
-            protected List<TeamDTO> doInBackground() {
-                return TeamController.listTeams();
+            protected List<ProjectRow> doInBackground() {
+                // GET /projects, poi GET /projects/{id}/teams per ciascuno.
+                List<ProjectDTO> projects = ProjectController.listProjects();
+                List<ProjectRow> rows = new ArrayList<>();
+                for (ProjectDTO p : projects) {
+                    List<TeamDTO> teams = ProjectController.listTeams(p.getId());
+                    List<String> names = new ArrayList<>();
+                    for (TeamDTO t : teams) names.add(t.getName());
+                    rows.add(new ProjectRow(p.getName(), String.join(", ", names)));
+                }
+                return rows;
             }
 
             @Override
             protected void done() {
                 try {
-                    List<TeamDTO> teams = get();
-                    // Non esiste una tabella "Project": raggruppiamo i team per il valore
-                    // condiviso del loro campo "project" (cfr. TeamDTO / procedura add_new_teams).
-                    Map<String, List<String>> teamNamesByProject = new LinkedHashMap<>();
-                    for (TeamDTO t : teams) {
-                        teamNamesByProject.computeIfAbsent(t.getProject(), k -> new ArrayList<>()).add(t.getName());
-                    }
+                    List<ProjectRow> rows = get();
                     projectsModel.setRowCount(0);
-                    for (Map.Entry<String, List<String>> entry : teamNamesByProject.entrySet()) {
-                        projectsModel.addRow(new Object[]{entry.getKey(), String.join(", ", entry.getValue())});
+                    for (ProjectRow row : rows) {
+                        projectsModel.addRow(new Object[]{row.projectName, row.teamNames});
                     }
                 } catch (Exception e) {
                     Throwable cause = e.getCause() != null ? e.getCause() : e;

@@ -23,6 +23,12 @@ final class JsonMapping {
         return v == null ? null : ((Number) v).intValue();
     }
 
+    @SuppressWarnings("unchecked")
+    static Map<String, Object> mapOrNull(Map<String, Object> m, String key) {
+        Object v = m.get(key);
+        return v instanceof Map ? (Map<String, Object>) v : null;
+    }
+
     static Double doubleOrNull(Map<String, Object> m, String key) {
         Object v = m.get(key);
         return v == null ? null : ((Number) v).doubleValue();

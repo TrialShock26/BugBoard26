@@ -1,4 +1,4 @@
-package dto;
+package it.unina.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamDTO {
-    private String id;
+    private Integer teamId;
     private String name;
-    private String project;
+    private ProjectDTO project;
 }

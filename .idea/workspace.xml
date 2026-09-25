@@ -4,25 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AdminDashboardScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ApiClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AppLogo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BaseFrame.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ChooseProjectScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/CreateProjectScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Hub.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/IssuesListScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/LoginScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NewIssueScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ReportsScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Session.java" beforeDir="false" />
+    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="Fixed folders issue">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/JsonMapping.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/JsonMapping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ProjectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ProjectController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/Session.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/IssuesListScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/IssuesListScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,11 +34,18 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -59,6 +65,9 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="3JVRto8mg9ZF2Od1Xq20H7tbneZ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -67,11 +76,26 @@
   "keyToString": {
     "Application.LoginScreen.executor": "Run",
     "Application.Server.executor": "Run",
+    "Maven.backend [clean,compile].executor": "Run",
+    "Maven.backend [clean,parse].executor": "Run",
+    "Maven.backend [clean].executor": "Run",
+    "Maven.backend [compile].executor": "Run",
+    "Maven.backend [help:effective-pom].executor": "Run",
+    "Maven.backend [jooq-codegen:generate].executor": "Run",
+    "Maven.backend [org.codehaus.mojo:properties-maven-plugin:1.2.1:read-project-properties].executor": "Run",
+    "Maven.backend [package].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.BackendApplication.executor": "Run",
+    "git-widget-placeholder": "backend-luca",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/TrialCock/IdeaProjects/BugBoard26/frontend",
+    "last_opened_file_path": "C:/Users/TrialCock/IdeaProjects/BugBoard26/backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -81,14 +105,26 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\TrialCock\IdeaProjects\BugBoard26\backend\src\main\resources" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\TrialCock\IdeaProjects\BugBoard26" />
     </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn jooq-codegen:generate" />
+      <command value="mvn clean parse" />
+      <command value="mvn clean compile" />
+      <command value="mvn help:effective-pom " />
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="backend" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="it.unina.backend.BackendApplication" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/backend" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -112,10 +148,59 @@
       <updated>1789744466723</updated>
       <workItem from="1789744467891" duration="158000" />
       <workItem from="1789744671493" duration="2524000" />
+      <workItem from="1789825044762" duration="948000" />
+      <workItem from="1789826048954" duration="17405000" />
+      <workItem from="1789891532315" duration="9520000" />
+      <workItem from="1790068640995" duration="18473000" />
+      <workItem from="1790175699327" duration="506000" />
+      <workItem from="1790176219828" duration="5635000" />
+      <workItem from="1790201341381" duration="806000" />
+      <workItem from="1790242986328" duration="19494000" />
+      <workItem from="1790328323665" duration="12974000" />
     </task>
+    <task id="LOCAL-00001" summary="First backend setup">
+      <option name="closed" value="true" />
+      <created>1789865751447</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1789865751447</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Stable version with bare minimum needed (to test)">
+      <option name="closed" value="true" />
+      <created>1790105488746</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1790105488746</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Stabler version to add and join projects">
+      <option name="closed" value="true" />
+      <created>1790265869764</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1790265869764</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fixed folders issue">
+      <option name="closed" value="true" />
+      <created>1790287063475</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1790287063475</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First backend setup" />
+    <MESSAGE value="Stable version with bare minimum needed (to test)" />
+    <MESSAGE value="Stabler version to add and join projects" />
+    <MESSAGE value="Fixed folders issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed folders issue" />
   </component>
 </project>

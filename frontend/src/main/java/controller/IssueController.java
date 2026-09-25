@@ -37,10 +37,10 @@ public final class IssueController {
 
     @SuppressWarnings("unchecked")
     public static IssueDTO createIssue(String title, String description, IssueType type, IssuePriority priority,
-                                        List<String> labels, String imageBase64) {
+                                       List<String> tags, String imageBase64) {
         Map<String, Object> body = Json.obj(
                 "title", title, "description", description, "type", type, "priority", priority,
-                "labels", labels, "imageBase64", imageBase64);
+                "tags", tags, "imageBase64", imageBase64);
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES).POST(ApiClient.json(body)).build();
         Map<String, Object> m = (Map<String, Object>) ApiClient.call(req);
         return toIssueDTO(m);
@@ -97,6 +97,8 @@ public final class IssueController {
     }
 
     private static IssueDTO toIssueDTO(Map<String, Object> m) {
+        Map<String, Object> assignee = mapOrNull(m, "assignee");
+        String assigneeEmail = assignee == null ? null : str(assignee, "email");
         return new IssueDTO(
                 str(m, "id"),
                 str(m, "title"),
@@ -104,8 +106,8 @@ public final class IssueController {
                 enumVal(m, "type", IssueType.class),
                 enumVal(m, "priority", IssuePriority.class),
                 enumVal(m, "status", IssueStatus.class),
-                str(m, "assigneeEmail"),
-                stringList(m, "labels")
+                assigneeEmail,
+                stringList(m, "tags")
         );
     }
 }

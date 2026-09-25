@@ -1,4 +1,4 @@
-package dto;
+package it.unina.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private String id;
-    private String token;
+    private Integer userId;
     private String email;
-    private UserRole role;
-
-    public boolean isAdmin() { return role == UserRole.ADMIN; }
+    private String hashedPassword;
+    private UserType type;
 }

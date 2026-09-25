@@ -36,7 +36,6 @@ public class ReportsScreen extends BaseFrame {
         }
     }
 
-    //  TOP BAR
     private JPanel createTopBar() {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -46,7 +45,6 @@ public class ReportsScreen extends BaseFrame {
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));
         userPanel.setBackground(Color.WHITE);
 
-        // BugBoard26 logo next to the title/user info, on every screen
         JLabel brand;
         ImageIcon topBarLogoIcon = AppLogo.icon(28);
         if (topBarLogoIcon != null) {
@@ -84,7 +82,6 @@ public class ReportsScreen extends BaseFrame {
         return panel;
     }
 
-    //  SIDEBAR
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBackground(Color.WHITE);
@@ -171,7 +168,6 @@ public class ReportsScreen extends BaseFrame {
         }
     }
 
-    //  CONTENT
     private JPanel createContent() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(new Color(243, 244, 246));
@@ -234,7 +230,6 @@ public class ReportsScreen extends BaseFrame {
         JLabel userTableTitle = new JLabel("Statistics per user");
         userTableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        // Point 17 (extended): admin reports also broken down by Team
         String[] teamColumns = {"Team", "Opened", "Resolved", "Avg. resolution time (h)"};
         perTeamModel = new DefaultTableModel(teamColumns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
@@ -313,7 +308,6 @@ public class ReportsScreen extends BaseFrame {
                         });
                     }
 
-                    // Point 17 (extended): per-team breakdown
                     perTeamModel.setRowCount(0);
                     for (ReportDTO.TeamReportStat row : report.getPerTeam()) {
                         Double teamAvg = row.getAvgResolutionHours();

@@ -33,14 +33,7 @@ public class BaseFrame extends JFrame {
         addWindowStateListener(listener);
     }
 
-    /**
-     * Naviga verso una nuova schermata: mostra "next" e chiude questa finestra.
-     * I listener di stato di QUESTA finestra vengono rimossi prima della chiusura,
-     * perche' dispose() puo' generare un evento di cambio-stato (tipicamente verso
-     * lo stato "non massimizzato") che, se intercettato dal listener, sporcherebbe
-     * il flag statico "maximized" e farebbe "saltare" la massimizzazione nelle
-     * schermate aperte successivamente.
-     */
+
     protected void navigateTo(JFrame next) {
         for (WindowStateListener l : getWindowStateListeners()) {
             removeWindowStateListener(l);

@@ -40,8 +40,11 @@ public class ApiClient {
             Object parsed = Json.parse(bodyStr);
             if (resp.statusCode() >= 200 && resp.statusCode() < 300) return parsed;
             String msg = "Errore del server (HTTP " + resp.statusCode() + ")";
-            if (parsed instanceof Map && ((Map<String, Object>) parsed).get("error") != null) {
-                msg = String.valueOf(((Map<String, Object>) parsed).get("error"));
+            if (parsed instanceof Map) {
+                Map<String, Object> errMap = (Map<String, Object>) parsed;
+
+                Object m = errMap.get("message") != null ? errMap.get("message") : errMap.get("error");
+                if (m != null) msg = String.valueOf(m);
             }
             throw new ApiException(resp.statusCode(), msg);
         } catch (IOException | InterruptedException e) {
