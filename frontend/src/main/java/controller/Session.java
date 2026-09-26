@@ -11,8 +11,8 @@ public class Session {
 
     private Session() { }
 
-    public static void set(UserDTO user) {
-        Session.token = user.getToken();
+    public static void set(UserDTO user, String token) {
+        Session.token = token;
         Session.email = user.getEmail();
         Session.role = user.getRole();
     }

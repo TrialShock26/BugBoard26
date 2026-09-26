@@ -1,14 +1,13 @@
 package dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProjectDTO {
+    @JsonProperty("projectId")
     private String id;
     private String name;
 }

@@ -11,8 +11,9 @@
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <exec.mainClass>frontend.gui.LoginScreen</exec.mainClass>
+        <exec.mainClass>gui.LoginScreen</exec.mainClass>
         <lombok.version>1.18.46</lombok.version>
+        <jackson.version>2.18.2</jackson.version>
     </properties>
 
     <dependencies>
@@ -22,13 +23,16 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Versione recente fissata esplicitamente: alcune installazioni Maven
-                 risolvono altrimenti una versione molto datata del plugin, che non
-                 gestisce correttamente il flag "release" per i JDK piu' recenti. -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -44,28 +48,35 @@
                 </configuration>
             </plugin>
 
-            <!-- Consente di avviare l'app con: mvn compile exec:java -->
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
-                    <mainClass>frontend.gui.LoginScreen</mainClass>
+                    <mainClass>gui.LoginScreen</mainClass>
                 </configuration>
             </plugin>
 
-            <!-- Produce un jar eseguibile (frontend-1.0-SNAPSHOT.jar) con il Main-Class già impostata -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.1</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>frontend.gui.LoginScreen</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>gui.LoginScreen</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
