@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import controller.AuthController;
 import controller.Session;
-import dto.UserDTO;
+import dto.LoginResponseDTO;
 
 public class LoginScreen extends JFrame {
 
@@ -98,9 +98,9 @@ public class LoginScreen extends JFrame {
             loginButton.setEnabled(false);
             loginButton.setText("Logging in...");
 
-            SwingWorker<UserDTO, Void> worker = new SwingWorker<>() {
+            SwingWorker<LoginResponseDTO, Void> worker = new SwingWorker<>() {
                 @Override
-                protected UserDTO doInBackground() {
+                protected LoginResponseDTO doInBackground() {
                     return AuthController.login(email, password);
                 }
 
@@ -109,8 +109,8 @@ public class LoginScreen extends JFrame {
                     loginButton.setEnabled(true);
                     loginButton.setText("Log In");
                     try {
-                        UserDTO user = get();
-                        Session.set(user);
+                        LoginResponseDTO resp = get();
+                        Session.set(resp.getUser(), resp.getToken());
                         new Hub().setVisible(true);
                         dispose();
                     } catch (Exception e) {
