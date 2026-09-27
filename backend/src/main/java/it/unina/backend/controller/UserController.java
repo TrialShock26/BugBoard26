@@ -5,12 +5,14 @@ import it.unina.backend.dto.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,10 +20,12 @@ import java.util.Set;
 
 @RestController
 public class UserController {
+    private final PasswordEncoder encoder;
     private UserDAO dao;
 
-    public UserController(UserDAO dao) {
+    public UserController(UserDAO dao, PasswordEncoder encoder) {
         this.dao = dao;
+        this.encoder = encoder;
     }
 
     @Data
@@ -57,6 +61,24 @@ public class UserController {
     @PutMapping("/projects/{projectId}/teams/{teamId}")
     public ResponseEntity<Void> joinTeam(@PathVariable("teamId") int teamId) {
         dao.joinTeam(teamId, SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok().build();
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NewUserDTO {
+        @NotBlank
+        String email;
+        @NotBlank
+        String password;
+        @NotNull
+        UserType type;
+    }
+    @PostMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> newUser(@Valid @RequestBody NewUserDTO request) {
+        dao.newUser(request.getEmail(), encoder.encode(request.getPassword()), request.getType());
         return ResponseEntity.ok().build();
     }
 }

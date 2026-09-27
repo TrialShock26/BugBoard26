@@ -4,24 +4,44 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="Fixed folders issue">
+    <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="Frontend connection with known issues">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/exception/GlobalExceptionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/config/ApiPaths.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/config/ApiPaths.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/JsonMapping.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/JsonMapping.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ProjectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ProjectController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ReportController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/Session.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/TeamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/TeamController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/ErrorResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/ErrorResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssuePriority.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssuePriority.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueType.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/LoginResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/LoginResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/ProjectDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/ProjectDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/ReportDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/ReportDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/StatisticDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/StatisticDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/SuggestionsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/SuggestionsDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/TeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/TeamDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/UserRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/exception/ApiException.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/exception/ApiException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/AppLogo.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/AppLogo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/BaseFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/BaseFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/ChooseProjectScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/ChooseProjectScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/CreateProjectScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/CreateProjectScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/Hub.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/Hub.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/IssuesListScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/IssuesListScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/LoginScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/NewIssueScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/NewIssueScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/ReportsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/ReportsScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +94,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Frontend.executor": "Run",
     "Application.LoginScreen.executor": "Run",
     "Application.Server.executor": "Run",
     "Maven.backend [clean,compile].executor": "Run",
@@ -93,7 +114,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "Spring Boot.BackendApplication.executor": "Run",
-    "git-widget-placeholder": "backend-luca",
+    "git-widget-placeholder": "backend-2-luca",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/TrialCock/IdeaProjects/BugBoard26/backend",
     "node.js.detected.package.eslint": "true",
@@ -120,7 +141,16 @@
       <command value="mvn help:effective-pom " />
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Frontend">
+    <configuration name="Frontend" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-25" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="gui.LoginScreen" />
+      <module name="frontend" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="backend" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="it.unina.backend.BackendApplication" />
@@ -129,6 +159,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Frontend" />
+      <item itemvalue="Spring Boot.BackendApplication" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

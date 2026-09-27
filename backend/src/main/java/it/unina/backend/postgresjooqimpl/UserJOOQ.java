@@ -3,7 +3,6 @@ package it.unina.backend.postgresjooqimpl;
 import it.unina.backend.dao.UserDAO;
 import it.unina.backend.dto.*;
 import it.unina.backend.jooq.Routines;
-import it.unina.backend.jooq.tables.Team;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -41,8 +40,8 @@ public class UserJOOQ implements UserDAO {
     @Override
     public List<TeamDTO> getTeams(int id) {
         return context.select(
-                    TEAM.TEAM_ID,
-                    TEAM.NAME
+                        TEAM.TEAM_ID,
+                        TEAM.NAME
                 )
                 .from(TEAM)
                 .where(PROJECT.PROJECT_ID.eq(id))
@@ -57,6 +56,13 @@ public class UserJOOQ implements UserDAO {
     public void joinTeam(int id, String email) {
         context.insertInto(COLLABORATION)
                 .values(id, context.select(USER_.USER_ID).from(USER_).where(USER_.EMAIL.eq(email)))
+                .execute();
+    }
+
+    @Override
+    public void newUser(String email, String hashedPassword, UserType type) {
+        context.insertInto(USER_, USER_.EMAIL, USER_.HASHED_PASSWORD, USER_.TYPE)
+                .values(email, hashedPassword, it.unina.backend.jooq.enums.UserType.valueOf(type.name()))
                 .execute();
     }
 }

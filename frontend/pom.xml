@@ -11,8 +11,9 @@
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <exec.mainClass>frontend.gui.LoginScreen</exec.mainClass>
+        <exec.mainClass>gui.LoginScreen</exec.mainClass>
         <lombok.version>1.18.46</lombok.version>
+        <jackson.version>2.18.2</jackson.version>
     </properties>
 
     <dependencies>
@@ -21,6 +22,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 
@@ -44,28 +50,43 @@
                 </configuration>
             </plugin>
 
-            <!-- Consente di avviare l'app con: mvn compile exec:java -->
+            <!-- Consente di avviare l'app con: mvn compile exec:java
+                 (usa gia' il classpath Maven completo, Jackson incluso) -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
-                    <mainClass>frontend.gui.LoginScreen</mainClass>
+                    <mainClass>gui.LoginScreen</mainClass>
                 </configuration>
             </plugin>
 
-            <!-- Produce un jar eseguibile (frontend-1.0-SNAPSHOT.jar) con il Main-Class già impostata -->
+            <!-- Ora che c'e' una dipendenza runtime reale (Jackson), il semplice
+                 maven-jar-plugin non basta piu' per un jar eseguibile standalone:
+                 serve un uber-jar con le dipendenze incluse. Produce
+                 target/frontend-1.0-SNAPSHOT.jar eseguibile con "java -jar".
+                 NB: il mainClass era rimasto "frontend.gui.LoginScreen" da prima
+                 dello spostamento dei file fuori dal pacchetto "frontend" (vedi
+                 commit "Fixed folders issue"): corretto in "gui.LoginScreen". -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.1</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>frontend.gui.LoginScreen</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>gui.LoginScreen</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
