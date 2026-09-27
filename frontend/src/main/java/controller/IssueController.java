@@ -31,17 +31,23 @@ public final class IssueController {
     }
 
 
-
-    public static IssueDTO createIssue(String title, String description, IssueType type, IssuePriority priority,
-                                        List<String> tags, String imageBase64) {
+    public static IssueDTO createIssue(String title, String description,
+                                       IssueType type, IssuePriority priority,
+                                       String projectId, List<String> tags,
+                                       String imageBase64) {
         Map<String, Object> body = new HashMap<>();
         body.put("title", title);
         body.put("description", description);
         body.put("type", type);
         body.put("priority", priority);
+        body.put("projectId", projectId);
         body.put("tags", tags);
         body.put("imageBase64", imageBase64);
-        HttpRequest req = ApiClient.request(ApiPaths.ISSUES).POST(ApiClient.json(body)).build();
+
+        HttpRequest req = ApiClient.request(ApiPaths.ISSUES)
+                .POST(ApiClient.json(body))
+                .build();
+
         return ApiClient.call(req, IssueDTO.class);
     }
 
