@@ -184,7 +184,7 @@ public class Hub extends BaseFrame {
 
         List<IssueDTO> todoIssues;
         try {
-            todoIssues = IssueController.listIssues(null, IssueStatus.TODO, null, "createdAt");
+            todoIssues = IssueController.listIssues(null, null, null, "createdAt");
         } catch (ApiException ex) {
             todoIssues = List.of();
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);

@@ -81,4 +81,15 @@ public class UserController {
         dao.newUser(request.getEmail(), encoder.encode(request.getPassword()), request.getType());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/suggestion")
+    public ResponseEntity<Boolean> calculateSuggestions() {
+        List<UserDTO> result = dao.getSuggestion();
+        for (UserDTO user : result) {
+            if (user.getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                return ResponseEntity.ok(true);
+            }
+        }
+        return ResponseEntity.ok(false);
+    }
 }
