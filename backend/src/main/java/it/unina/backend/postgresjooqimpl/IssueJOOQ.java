@@ -39,8 +39,8 @@ public class IssueJOOQ implements IssueDAO {
                         .in(
                                 context.select(PROJECT.PROJECT_ID)
                                         .from(PROJECT)
-                                        .naturalJoin(TEAM).naturalJoin(COLLABORATION).naturalJoin(USER_)
-                                        .where(USER_.EMAIL.eq(email))
+                                        .join(TEAM).using(PROJECT.PROJECT_ID).naturalJoin(COLLABORATION).naturalJoin(USER_)
+                                        .where(USER_.EMAIL.eq(email)).and(ISSUE.STATUS.eq(it.unina.backend.jooq.enums.Status.TODO))
                         )).fetch(issueRecord -> new IssueDTO(
                         issueRecord.get(ISSUE.ISSUE_ID),
                         issueRecord.get(ISSUE.TITLE),

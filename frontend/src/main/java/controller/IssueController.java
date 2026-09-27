@@ -20,6 +20,7 @@ public final class IssueController {
     private IssueController() { }
 
     public static List<IssueDTO> listIssues(IssueType type, IssueStatus status, IssuePriority priority, String sort) {
+
         StringBuilder q = new StringBuilder(ApiPaths.ISSUES + "?");
         if (type != null) q.append("type=").append(type).append("&");
         if (status != null) q.append("status=").append(status).append("&");
@@ -28,6 +29,8 @@ public final class IssueController {
         HttpRequest req = ApiClient.request(q.toString()).GET().build();
         return ApiClient.call(req, new TypeReference<List<IssueDTO>>() { });
     }
+
+
 
     public static IssueDTO createIssue(String title, String description, IssueType type, IssuePriority priority,
                                         List<String> tags, String imageBase64) {

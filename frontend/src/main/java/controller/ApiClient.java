@@ -81,12 +81,10 @@ public final class ApiClient {
         if (body != null && !body.isEmpty()) {
             try {
                 ErrorResponseDTO err = MAPPER.readValue(body, ErrorResponseDTO.class);
-                // Il GlobalExceptionHandler del backend reale risponde con {"message","timestamp"};
-                // gli errori generici di Spring Boot (401, validazione @Valid) usano invece {"error",...}.
+
                 if (err.getMessage() != null) msg = err.getMessage();
                 else if (err.getError() != null) msg = err.getError();
             } catch (JsonProcessingException ignored) {
-                // corpo non-JSON (es. pagina d'errore HTML): teniamo il messaggio generico sopra
             }
         }
         return msg;

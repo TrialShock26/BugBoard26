@@ -11,6 +11,7 @@ public class Session {
 
     private Session() { }
 
+    /** Il token arriva separato dallo UserDTO (vedi LoginResponseDTO: {user, token}). */
     public static void set(UserDTO user, String token) {
         Session.token = token;
         Session.email = user.getEmail();
@@ -24,6 +25,7 @@ public class Session {
     public static String getToken() { return token; }
     public static String getEmail() { return email; }
 
+    /** Il backend non ha un campo "name" per l'utente: usiamo l'email come etichetta visibile. */
     public static String getName() { return email; }
 
     public static UserRole getRole() { return role; }

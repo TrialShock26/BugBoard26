@@ -20,12 +20,15 @@ public final class ProjectController {
     }
 
     public static void createProject(String name, List<String> teamNames) {
+        // POST /projects: crea sia il nuovo progetto sia i team indicati.
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS)
                 .POST(ApiClient.json(Map.of("name", name, "teamNames", teamNames))).build();
         ApiClient.call(req);
     }
 
     public static List<TeamDTO> listTeams(String projectId) {
+        // Il backend attuale restituisce sempre "project": null qui
+        // (vedi UserJOOQ.getTeams), quindi TeamDTO.project resta vuoto.
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS + "/" + projectId + "/teams").GET().build();
         return ApiClient.call(req, new TypeReference<List<TeamDTO>>() { });
     }

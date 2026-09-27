@@ -32,7 +32,9 @@
 
     <build>
         <plugins>
-
+            <!-- Versione recente fissata esplicitamente: alcune installazioni Maven
+                 risolvono altrimenti una versione molto datata del plugin, che non
+                 gestisce correttamente il flag "release" per i JDK piu' recenti. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -48,7 +50,8 @@
                 </configuration>
             </plugin>
 
-
+            <!-- Consente di avviare l'app con: mvn compile exec:java
+                 (usa gia' il classpath Maven completo, Jackson incluso) -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -58,6 +61,13 @@
                 </configuration>
             </plugin>
 
+            <!-- Ora che c'e' una dipendenza runtime reale (Jackson), il semplice
+                 maven-jar-plugin non basta piu' per un jar eseguibile standalone:
+                 serve un uber-jar con le dipendenze incluse. Produce
+                 target/frontend-1.0-SNAPSHOT.jar eseguibile con "java -jar".
+                 NB: il mainClass era rimasto "frontend.gui.LoginScreen" da prima
+                 dello spostamento dei file fuori dal pacchetto "frontend" (vedi
+                 commit "Fixed folders issue"): corretto in "gui.LoginScreen". -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
