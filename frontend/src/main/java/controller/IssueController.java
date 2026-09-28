@@ -6,7 +6,6 @@ import dto.IssueDTO;
 import dto.IssuePriority;
 import dto.IssueStatus;
 import dto.IssueType;
-import dto.SuggestionsDTO;
 import exception.ApiException;
 
 import java.net.http.HttpRequest;
@@ -22,6 +21,7 @@ public final class IssueController {
     public static List<IssueDTO> listIssues(IssueType type, IssueStatus status, IssuePriority priority, String sort) {
 
         StringBuilder q = new StringBuilder(ApiPaths.ISSUES + "?");
+        q.append("assignee=").append("all").append("&");
         if (type != null) q.append("type=").append(type).append("&");
         if (status != null) q.append("status=").append(status).append("&");
         if (priority != null) q.append("priority=").append(priority).append("&");
@@ -32,7 +32,7 @@ public final class IssueController {
 
 
     public static List<IssueDTO> myAssignedIssues() {
-        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/assigned").GET().build();
+        HttpRequest req = ApiClient.request(ApiPaths.ISSUES).GET().build();
         return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
     }
     public static IssueDTO createIssue(String title, String description,
@@ -78,9 +78,9 @@ public final class IssueController {
     }
 
 
-    public static SuggestionsDTO mySuggestions() {
-        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/suggestions").GET().build();
-        return ApiClient.call(req, SuggestionsDTO.class);
+    public static boolean mySuggestions() {
+        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/suggestion").GET().build();
+        return ApiClient.call(req, Boolean.class);
     }
 
     public static IssueDTO addLabel(String issueId, String label) {

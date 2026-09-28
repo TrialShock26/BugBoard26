@@ -12,7 +12,7 @@ public class LoginScreen extends JFrame {
     public LoginScreen() {
         setTitle("BugBoard26 - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(430, 700);
+        setSize(450, 600);
         setLocationRelativeTo(null);
         setResizable(false);
         JPanel mainPanel = new JPanel();
@@ -76,6 +76,7 @@ public class LoginScreen extends JFrame {
         loginButton.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
         loginButton.setFocusPainted(false);
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -118,8 +119,8 @@ public class LoginScreen extends JFrame {
                         Throwable cause = e.getCause() != null ? e.getCause() : e;
                         String message = cause instanceof ApiException
                                 && (((ApiException) cause).status == 401 || ((ApiException) cause).status == 403)
-                                ? "Credenziali errate. Controlla email e password."
-                                : cause.getMessage() != null ? cause.getMessage() : "Errore durante il login.";
+                                ? "Credentials are wrong, please check email and password."
+                                : cause.getMessage() != null ? cause.getMessage() : "Unexpected login error.";
                         JOptionPane.showMessageDialog(
                                 LoginScreen.this,
                                 message,

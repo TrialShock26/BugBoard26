@@ -5,13 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="Frontend connection with known issues">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/StatisticsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/StatisticsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/StatisticsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/StatisticsDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/DashboardDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dto/DashboardDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/StatisticsJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/StatisticsJOOQ.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/IssueDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/IssueDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/SuggestionsDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/ChooseProjectScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/ChooseProjectScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/CreateProjectScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/CreateProjectScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/Hub.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/Hub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/IssuesListScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/IssuesListScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/LoginScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/NewIssueScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/NewIssueScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/ReportsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/ReportsScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,12 +55,12 @@
     &quot;assignee&quot;: &quot;TrialShock26&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/TrialShock26/BugBoard26.git",
-    "accountId": "5c67d50b-755a-4316-9469-707198a53b6a"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/TrialShock26/BugBoard26.git&quot;,
+    &quot;accountId&quot;: &quot;5c67d50b-755a-4316-9469-707198a53b6a&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 5
@@ -115,7 +126,7 @@
       <command value="mvn clean compile" />
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.BackendApplication">
+  <component name="RunManager" selected="Application.Frontend">
     <configuration name="Frontend" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-25" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />

@@ -10,8 +10,6 @@ import controller.IssueController;
 import controller.Session;
 import dto.IssueDTO;
 import dto.IssuePriority;
-import dto.IssueStatus;
-import dto.SuggestionsDTO;
 import exception.ApiException;
 
 public class Hub extends BaseFrame {
@@ -47,8 +45,8 @@ public class Hub extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"HomePage", "HomePage"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
         menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
@@ -108,8 +106,8 @@ public class Hub extends BaseFrame {
             case "Dashboard":
                 next = new Hub();
                 break;
-            case "HomePage": next = new Hub(); break;
-            case "Issues":
+            case "My Issues": next = new Hub(); break;
+            case "List Issues":
                 next = new IssuesListScreen();
                 break;
             case "NewIssue":
@@ -165,7 +163,9 @@ public class Hub extends BaseFrame {
             brand.setForeground(new Color(220, 38, 38));
         }
 
-        String name = Session.getName() != null ? Session.getName() : "User";
+        String name = Session.getName() != null
+                ? Session.getName().substring(0, Session.getName().indexOf("@"))
+                : "User";
         JLabel welcomeLabel = new JLabel("Hi, " + name + " - Today's overview");
         welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         welcomeLabel.setForeground(new Color(17, 24, 39));
@@ -208,8 +208,8 @@ public class Hub extends BaseFrame {
         if (!Session.isDev()) return null;
 
         try {
-            SuggestionsDTO result = IssueController.mySuggestions();
-            if (!result.isEligible()) return null;
+            boolean result = IssueController.mySuggestions();
+            if (!result) return null;
 
             JPanel banner = new JPanel(new BorderLayout(10, 0));
             banner.setBackground(new Color(254, 242, 242));
@@ -219,13 +219,13 @@ public class Hub extends BaseFrame {
             banner.setAlignmentX(Component.LEFT_ALIGNMENT);
             banner.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
 
-            JLabel text = new JLabel("<html><body style='width: 100%'>You have the lowest workload on the team: "
-                    + "go to the Issues screen and take on more issues to balance the team's overall "
+            JLabel text = new JLabel("<html><body style='width: 100%'>You have one of the lowest workload on the team: "
+                    + "go to the List Issues screen and take on more issues to balance the team's overall "
                     + "workload.</body></html>");
             text.setFont(new Font("Segoe UI", Font.PLAIN, 13));
             text.setForeground(new Color(185, 28, 28));
 
-            JButton goBtn = new JButton("Go to Issues");
+            JButton goBtn = new JButton("Go to List Issues");
             goBtn.setBackground(new Color(220, 38, 38));
             goBtn.setForeground(Color.WHITE);
             goBtn.setFocusPainted(false);

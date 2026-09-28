@@ -38,6 +38,13 @@ public class UserJOOQ implements UserDAO {
         return context.selectFrom(PROJECT)
                 .fetchInto(ProjectDTO.class);
     }
+    @Override
+    public List<ProjectDTO> getProjects(String email) {
+        return context.select(PROJECT.fields())
+                .from(PROJECT).join(TEAM).using(PROJECT.PROJECT_ID)
+                .naturalJoin(COLLABORATION).naturalJoin(USER_)
+                .where(USER_.EMAIL.eq(email)).fetchInto(ProjectDTO.class);
+    }
 
     @Override
     public List<TeamDTO> getTeams(int id) {
@@ -46,7 +53,7 @@ public class UserJOOQ implements UserDAO {
                         TEAM.NAME
                 )
                 .from(TEAM)
-                .where(PROJECT.PROJECT_ID.eq(id))
+                .where(TEAM.PROJECT_ID.eq(id))
                 .fetch(teamRecord -> new TeamDTO(
                         teamRecord.get(TEAM.TEAM_ID),
                         teamRecord.get(TEAM.NAME),
@@ -66,19 +73,5 @@ public class UserJOOQ implements UserDAO {
         context.insertInto(USER_, USER_.EMAIL, USER_.HASHED_PASSWORD, USER_.TYPE)
                 .values(email, hashedPassword, it.unina.backend.jooq.enums.UserType.valueOf(type.name()))
                 .execute();
-    }
-
-    @Override
-    public List<UserDTO> getSuggestion() {
-        return context.select(USER_.USER_ID, USER_.EMAIL, count(ISSUE.ISSUE_ID).as("workload"))
-                .from(USER_).leftJoin(ISSUE).on(USER_.USER_ID.eq(ISSUE.ASSIGNEE_ID)).and(ISSUE.STATUS.eq(it.unina.backend.jooq.enums.Status.ONGOING))
-                .where(USER_.USER_ID.ne(0))
-                .groupBy(USER_.USER_ID, USER_.EMAIL)
-                .orderBy(field("workload")).limit(3)
-                .fetch(dataRecord -> new UserDTO(
-                        dataRecord.get(USER_.USER_ID),
-                        dataRecord.get(USER_.EMAIL),
-                        null, null
-                ));
     }
 }

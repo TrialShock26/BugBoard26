@@ -2,6 +2,7 @@ package it.unina.backend.controller;
 
 import it.unina.backend.dao.IssueDAO;
 import it.unina.backend.dto.IssueDTO;
+import it.unina.backend.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class IssueController {
     @GetMapping
     public ResponseEntity<List<IssueDTO>> getAllIssues(@RequestParam Map<String, String> requestParams) {
         List<IssueDTO> result = dao.getAllIssues(SecurityContextHolder.getContext().getAuthentication().getName(), requestParams);
-        //if (result.isEmpty()) return ResponseEntity.noContent().build();
+        if (result.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(result);
     }
 
@@ -55,5 +56,16 @@ public class IssueController {
     @GetMapping("/{id}/image")
     public ResponseEntity<ImageDTO> getIssueImage(@PathVariable int id) {
         return ResponseEntity.ok(new ImageDTO(dao.getImage(id)));
+    }
+
+    @GetMapping("/suggestion")
+    public ResponseEntity<Boolean> calculateSuggestions() {
+        List<UserDTO> result = dao.getSuggestion();
+        for (UserDTO user : result) {
+            if (user.getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                return ResponseEntity.ok(true);
+            }
+        }
+        return ResponseEntity.ok(false);
     }
 }

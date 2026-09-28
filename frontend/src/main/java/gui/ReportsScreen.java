@@ -105,8 +105,8 @@ public class ReportsScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"HomePage", "HomePage"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
         menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
@@ -152,8 +152,8 @@ public class ReportsScreen extends BaseFrame {
         JFrame next = null;
         switch (page) {
             case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
-            case "HomePage": next = new Hub(); break;
-            case "Issues": next = new IssuesListScreen(); break;
+            case "My Issues": next = new Hub(); break;
+            case "List Issues": next = new IssuesListScreen(); break;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
             case "Reports": return; // gia' qui

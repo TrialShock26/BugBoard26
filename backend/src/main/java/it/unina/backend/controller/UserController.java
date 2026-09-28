@@ -45,8 +45,12 @@ public class UserController {
     }
 
     @GetMapping("/projects")
-    public ResponseEntity<List<ProjectDTO>> getProjects() {
-        List<ProjectDTO> result = dao.getProjects();
+    public ResponseEntity<List<ProjectDTO>> getProjects(@RequestParam(required = false) String mine) {
+        List<ProjectDTO> result;
+        if (mine != null && mine.equals("true")) {
+            result = dao.getProjects(SecurityContextHolder.getContext().getAuthentication().getName());
+        }
+        else result = dao.getProjects();
         if (result.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(result);
     }
@@ -80,16 +84,5 @@ public class UserController {
     public ResponseEntity<Void> newUser(@Valid @RequestBody NewUserDTO request) {
         dao.newUser(request.getEmail(), encoder.encode(request.getPassword()), request.getType());
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/suggestion")
-    public ResponseEntity<Boolean> calculateSuggestions() {
-        List<UserDTO> result = dao.getSuggestion();
-        for (UserDTO user : result) {
-            if (user.getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
-                return ResponseEntity.ok(true);
-            }
-        }
-        return ResponseEntity.ok(false);
     }
 }

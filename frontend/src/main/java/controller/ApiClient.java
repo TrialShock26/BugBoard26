@@ -84,7 +84,7 @@ public final class ApiClient {
     }
 
     private static String errorMessage(int status, String body) {
-        String msg = "Errore del server (HTTP " + status + ")";
+        String msg = "Server error (HTTP " + status + ")";
         if (body != null && !body.isEmpty()) {
             try {
                 ErrorResponseDTO err = MAPPER.readValue(body, ErrorResponseDTO.class);
@@ -101,7 +101,7 @@ public final class ApiClient {
         try {
             HttpResponse<byte[]> resp = CLIENT.send(req, HttpResponse.BodyHandlers.ofByteArray());
             if (resp.statusCode() >= 200 && resp.statusCode() < 300) return resp.body();
-            throw new ApiException(resp.statusCode(), "Errore del server (HTTP " + resp.statusCode() + ")");
+            throw new ApiException(resp.statusCode(), "Server error (HTTP " + resp.statusCode() + ")");
         } catch (IOException | InterruptedException e) {
             throw new ApiException(0, "Could not reach the BugBoard26 server (" + BASE_URL + "). "
                     + "Please make sure the back-end is running.");

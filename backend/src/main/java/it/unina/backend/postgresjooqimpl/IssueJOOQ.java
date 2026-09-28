@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import static it.unina.backend.jooq.Tables.*;
+import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 
 @Repository
 public class IssueJOOQ implements IssueDAO {
@@ -133,5 +135,20 @@ public class IssueJOOQ implements IssueDAO {
     @Override
     public byte[] getImage(int id) {
         return context.select(ISSUE.IMAGE).from(ISSUE).where(ISSUE.ISSUE_ID.eq(id)).fetchOneInto(byte[].class);
+    }
+
+    @Override
+    public List<UserDTO> getSuggestion() {
+        return context.select(USER_.USER_ID, USER_.EMAIL, count(ISSUE.ISSUE_ID).as("workload"))
+                .from(USER_).leftJoin(ISSUE).on(USER_.USER_ID.eq(ISSUE.ASSIGNEE_ID))
+                .and(ISSUE.STATUS.eq(it.unina.backend.jooq.enums.Status.ONGOING))
+                .where(USER_.USER_ID.ne(0))
+                .groupBy(USER_.USER_ID, USER_.EMAIL)
+                .orderBy(field("workload")).limit(3)
+                .fetch(dataRecord -> new UserDTO(
+                        dataRecord.get(USER_.USER_ID),
+                        dataRecord.get(USER_.EMAIL),
+                        null, null
+                ));
     }
 }

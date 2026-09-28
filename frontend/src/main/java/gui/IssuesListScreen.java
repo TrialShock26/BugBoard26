@@ -56,8 +56,8 @@ public class IssuesListScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"HomePage", "HomePage"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
         menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
@@ -67,7 +67,7 @@ public class IssuesListScreen extends BaseFrame {
         }
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
-            if (item[1].equals("Issues")) menuItem.setBackground(new Color(254, 242, 242));
+            if (item[1].equals("List Issues")) menuItem.setBackground(new Color(254, 242, 242));
             sidebar.add(menuItem);
             sidebar.add(Box.createVerticalStrut(5));
         }
@@ -103,8 +103,8 @@ public class IssuesListScreen extends BaseFrame {
         JFrame next = null;
         switch (page) {
             case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
-            case "HomePage": next = new Hub(); break;
-            case "Issues": return; // gia' qui
+            case "My Issues": next = new Hub(); break;
+            case "List Issues": return; // gia' qui
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
             case "Reports": next = new ReportsScreen(); break;
