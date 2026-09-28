@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static it.unina.backend.jooq.Tables.*;
+import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 
 @Repository
 public class UserJOOQ implements UserDAO {
@@ -64,5 +66,19 @@ public class UserJOOQ implements UserDAO {
         context.insertInto(USER_, USER_.EMAIL, USER_.HASHED_PASSWORD, USER_.TYPE)
                 .values(email, hashedPassword, it.unina.backend.jooq.enums.UserType.valueOf(type.name()))
                 .execute();
+    }
+
+    @Override
+    public List<UserDTO> getSuggestion() {
+        return context.select(USER_.USER_ID, USER_.EMAIL, count(ISSUE.ISSUE_ID).as("workload"))
+                .from(USER_).leftJoin(ISSUE).on(USER_.USER_ID.eq(ISSUE.ASSIGNEE_ID)).and(ISSUE.STATUS.eq(it.unina.backend.jooq.enums.Status.ONGOING))
+                .where(USER_.USER_ID.ne(0))
+                .groupBy(USER_.USER_ID, USER_.EMAIL)
+                .orderBy(field("workload")).limit(3)
+                .fetch(dataRecord -> new UserDTO(
+                        dataRecord.get(USER_.USER_ID),
+                        dataRecord.get(USER_.EMAIL),
+                        null, null
+                ));
     }
 }

@@ -2,7 +2,6 @@ package it.unina.backend.controller;
 
 import it.unina.backend.dao.IssueDAO;
 import it.unina.backend.dto.IssueDTO;
-import it.unina.backend.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/issues")
@@ -22,9 +22,9 @@ public class IssueController {
     }
 
     @GetMapping
-    public ResponseEntity<List<IssueDTO>> getAllIssues() {
-        List<IssueDTO> result = dao.getAllIssues(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (result.isEmpty()) return ResponseEntity.noContent().build();
+    public ResponseEntity<List<IssueDTO>> getAllIssues(@RequestParam Map<String, String> requestParams) {
+        List<IssueDTO> result = dao.getAllIssues(SecurityContextHolder.getContext().getAuthentication().getName(), requestParams);
+        //if (result.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(result);
     }
 
@@ -36,7 +36,7 @@ public class IssueController {
 
     @PutMapping("/{id}/handle")
     public ResponseEntity<Void> handleIssue(@PathVariable int id) {
-        dao.handleIssue(id, SecurityContextHolder.getContext().getAuthentication().getName());
+        if (!dao.handleIssue(id, SecurityContextHolder.getContext().getAuthentication().getName())) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok().build();
     }
 

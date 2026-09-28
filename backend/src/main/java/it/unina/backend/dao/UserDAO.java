@@ -12,4 +12,5 @@ public interface UserDAO {
     List<TeamDTO> getTeams(int id);
     void joinTeam(int id, String email);
     void newUser(String email, String hashedPassword, UserType type);
+    List<UserDTO> getSuggestion();
 }
