@@ -106,17 +106,15 @@ public class CreateProjectScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         }
-
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
             if (item[1].equals("CreateProject")) menuItem.setBackground(new Color(254, 242, 242));
@@ -154,8 +152,9 @@ public class CreateProjectScreen extends BaseFrame {
     private void handleNavigation(String page) {
         JFrame next = null;
         switch (page) {
-            case "Dashboard": next = new Hub(); break;
-            case "Issues": next = new IssuesListScreen(); break;
+            case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
+            case "My Issues": next = new Hub(); break;
+            case "List Issues": next = new IssuesListScreen(); break;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
             case "Reports": next = new ReportsScreen(); break;
@@ -242,7 +241,14 @@ public class CreateProjectScreen extends BaseFrame {
 
         JLabel tableTitle = new JLabel("Existing projects");
         tableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        tablePanel.add(tableTitle, BorderLayout.NORTH);
+        JPanel tableHeader = new JPanel(new BorderLayout());
+        tableHeader.setBackground(new Color(243, 244, 246));
+        tableHeader.add(tableTitle, BorderLayout.WEST);
+        JButton refreshProjects = new JButton("↻");
+        refreshProjects.setToolTipText("Aggiorna");
+        refreshProjects.addActionListener(e -> loadProjects());
+        tableHeader.add(refreshProjects, BorderLayout.EAST);
+        tablePanel.add(tableHeader, BorderLayout.NORTH);
 
         String[] columns = {"Project", "Teams"};
         projectsModel = new DefaultTableModel(columns, 0) {
@@ -393,3 +399,8 @@ public class CreateProjectScreen extends BaseFrame {
         worker.execute();
     }
 }
+
+
+
+
+

@@ -5,36 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137dd37c-ebeb-4f92-9b6a-a41b0c30ee97" name="Changes" comment="Frontend connection with known issues">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/IssueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/IssueDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/IssueDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/dao/UserDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/IssueJOOQ.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/config/ApiPaths.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/config/ApiPaths.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/it/unina/backend/postgresjooqimpl/UserJOOQ.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ApiClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/IssueController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ProjectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ProjectController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/TeamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/TeamController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/ErrorResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/ErrorResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssuePriority.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssuePriority.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueType.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/IssueType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/LoginResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/LoginResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/ProjectDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/ProjectDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/ReportDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/ReportDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/StatisticDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/StatisticDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/SuggestionsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/SuggestionsDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/TeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/TeamDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/dto/UserRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/exception/ApiException.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/exception/ApiException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/dto/SuggestionsDTO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/AdminDashboardScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/AppLogo.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/AppLogo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/BaseFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/BaseFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/ChooseProjectScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/ChooseProjectScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/CreateProjectScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/CreateProjectScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/java/gui/Hub.java" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/java/gui/Hub.java" afterDir="false" />
@@ -92,39 +73,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Frontend.executor": "Run",
-    "Application.LoginScreen.executor": "Run",
-    "Application.Server.executor": "Run",
-    "Maven.backend [clean,compile].executor": "Run",
-    "Maven.backend [clean,parse].executor": "Run",
-    "Maven.backend [clean].executor": "Run",
-    "Maven.backend [compile].executor": "Run",
-    "Maven.backend [help:effective-pom].executor": "Run",
-    "Maven.backend [jooq-codegen:generate].executor": "Run",
-    "Maven.backend [org.codehaus.mojo:properties-maven-plugin:1.2.1:read-project-properties].executor": "Run",
-    "Maven.backend [package].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "Spring Boot.BackendApplication.executor": "Run",
-    "git-widget-placeholder": "backend-2-luca",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/TrialCock/IdeaProjects/BugBoard26/backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LoginScreen.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [clean,compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [clean,parse].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [help:effective-pom].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [jooq-codegen:generate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [org.codehaus.mojo:properties-maven-plugin:1.2.1:read-project-properties].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [org.jooq:jooq-codegen-maven:3.21.7:generate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [package].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;backend-3-luca&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;S:/Programmi/IntelliJ/Progetti/BugBoard26&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\TrialCock\IdeaProjects\BugBoard26\backend\src\main\resources" />
@@ -135,10 +120,10 @@
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
-      <command value="mvn jooq-codegen:generate" />
       <command value="mvn clean parse" />
-      <command value="mvn clean compile" />
       <command value="mvn help:effective-pom " />
+      <command value="mvn jooq-codegen:generate" />
+      <command value="mvn clean compile" />
     </option>
   </component>
   <component name="RunManager" selected="Application.Frontend">
@@ -191,6 +176,8 @@
       <workItem from="1790201341381" duration="806000" />
       <workItem from="1790242986328" duration="19494000" />
       <workItem from="1790328323665" duration="12974000" />
+      <workItem from="1790513196543" duration="25755000" />
+      <workItem from="1790590725343" duration="10085000" />
     </task>
     <task id="LOCAL-00001" summary="First backend setup">
       <option name="closed" value="true" />

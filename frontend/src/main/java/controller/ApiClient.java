@@ -14,6 +14,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 
 public final class ApiClient {
 
@@ -58,6 +60,11 @@ public final class ApiClient {
         }
     }
 
+    static <T> List<T> callList(HttpRequest req, TypeReference<List<T>> type) {
+        List<T> result = call(req, type);
+        return result == null ? Collections.emptyList() : result;
+    }
+
     static void call(HttpRequest req) {
         send(req);
     }
@@ -77,7 +84,7 @@ public final class ApiClient {
     }
 
     private static String errorMessage(int status, String body) {
-        String msg = "Errore del server (HTTP " + status + ")";
+        String msg = "Server error (HTTP " + status + ")";
         if (body != null && !body.isEmpty()) {
             try {
                 ErrorResponseDTO err = MAPPER.readValue(body, ErrorResponseDTO.class);
@@ -94,7 +101,7 @@ public final class ApiClient {
         try {
             HttpResponse<byte[]> resp = CLIENT.send(req, HttpResponse.BodyHandlers.ofByteArray());
             if (resp.statusCode() >= 200 && resp.statusCode() < 300) return resp.body();
-            throw new ApiException(resp.statusCode(), "Errore del server (HTTP " + resp.statusCode() + ")");
+            throw new ApiException(resp.statusCode(), "Server error (HTTP " + resp.statusCode() + ")");
         } catch (IOException | InterruptedException e) {
             throw new ApiException(0, "Could not reach the BugBoard26 server (" + BASE_URL + "). "
                     + "Please make sure the back-end is running.");

@@ -30,12 +30,8 @@ public class ChooseProjectScreen extends BaseFrame {
         add(createSidebar(), BorderLayout.WEST);
         add(createTopBar(), BorderLayout.NORTH);
 
-        if (Session.isAdmin()) {
-            add(adminNotApplicablePanel(), BorderLayout.CENTER);
-        } else {
-            add(createContent(), BorderLayout.CENTER);
-            loadProjects();
-        }
+        add(createContent(), BorderLayout.CENTER);
+        loadProjects();
     }
 
     private JPanel createTopBar() {
@@ -106,17 +102,15 @@ public class ChooseProjectScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         }
-
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
             if (item[1].equals("ChooseProject")) menuItem.setBackground(new Color(229, 231, 235));
@@ -156,8 +150,9 @@ public class ChooseProjectScreen extends BaseFrame {
     private void handleNavigation(String page) {
         JFrame next = null;
         switch (page) {
-            case "Dashboard": next = new Hub(); break;
-            case "Issues": next = new IssuesListScreen(); break;
+            case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
+            case "My Issues": next = new Hub(); break;
+            case "List Issues": next = new IssuesListScreen(); break;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
             case "Reports": next = new ReportsScreen(); break;
@@ -250,11 +245,17 @@ public class ChooseProjectScreen extends BaseFrame {
         JLabel tableTitle = new JLabel("My projects");
         tableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tableHeader.add(tableTitle, BorderLayout.WEST);
-
+        JButton refreshProjects = new JButton("↻");
+        refreshProjects.setToolTipText("Aggiorna");
+        refreshProjects.addActionListener(e -> loadProjects());
         JButton leaveBtn = new JButton("Leave selected");
         leaveBtn.setFocusPainted(false);
         leaveBtn.addActionListener(e -> leaveSelected());
-        tableHeader.add(leaveBtn, BorderLayout.EAST);
+        JPanel tableActions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        tableActions.setBackground(new Color(243, 244, 246));
+        tableActions.add(refreshProjects);
+        tableActions.add(leaveBtn);
+        tableHeader.add(tableActions, BorderLayout.EAST);
         tablePanel.add(tableHeader, BorderLayout.NORTH);
 
         String[] columns = {"Project", "Team"};
@@ -414,3 +415,11 @@ public class ChooseProjectScreen extends BaseFrame {
         @Override public String toString() { return getName(); }
     }
 }
+
+
+
+
+
+
+
+

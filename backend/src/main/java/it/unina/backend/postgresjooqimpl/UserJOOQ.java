@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static it.unina.backend.jooq.Tables.*;
+import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 
 @Repository
 public class UserJOOQ implements UserDAO {
@@ -36,6 +38,13 @@ public class UserJOOQ implements UserDAO {
         return context.selectFrom(PROJECT)
                 .fetchInto(ProjectDTO.class);
     }
+    @Override
+    public List<ProjectDTO> getProjects(String email) {
+        return context.select(PROJECT.fields())
+                .from(PROJECT).join(TEAM).using(PROJECT.PROJECT_ID)
+                .naturalJoin(COLLABORATION).naturalJoin(USER_)
+                .where(USER_.EMAIL.eq(email)).fetchInto(ProjectDTO.class);
+    }
 
     @Override
     public List<TeamDTO> getTeams(int id) {
@@ -44,7 +53,7 @@ public class UserJOOQ implements UserDAO {
                         TEAM.NAME
                 )
                 .from(TEAM)
-                .where(PROJECT.PROJECT_ID.eq(id))
+                .where(TEAM.PROJECT_ID.eq(id))
                 .fetch(teamRecord -> new TeamDTO(
                         teamRecord.get(TEAM.TEAM_ID),
                         teamRecord.get(TEAM.NAME),

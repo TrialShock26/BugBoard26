@@ -45,8 +45,12 @@ public class UserController {
     }
 
     @GetMapping("/projects")
-    public ResponseEntity<List<ProjectDTO>> getProjects() {
-        List<ProjectDTO> result = dao.getProjects();
+    public ResponseEntity<List<ProjectDTO>> getProjects(@RequestParam(required = false) String mine) {
+        List<ProjectDTO> result;
+        if (mine != null && mine.equals("true")) {
+            result = dao.getProjects(SecurityContextHolder.getContext().getAuthentication().getName());
+        }
+        else result = dao.getProjects();
         if (result.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(result);
     }
