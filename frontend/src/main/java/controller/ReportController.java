@@ -23,7 +23,7 @@ public final class ReportController {
         return ProjectController.listProjects();
     }
 
-    public static ReportDTO monthlyReport(int year, String month, String projectName) {
+    public static ReportDTO monthlyReport(int year, int month, String projectName) {
         String project = URLEncoder.encode(projectName, StandardCharsets.UTF_8);
         HttpRequest req = ApiClient.request(ApiPaths.REPORTS + "?month=" + month + "&year=" + year + "&project=" + project)
                 .GET().build();

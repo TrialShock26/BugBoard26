@@ -307,7 +307,7 @@ public class ReportsScreen extends BaseFrame {
                     "Project required", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String month = (String) monthCombo.getSelectedItem();
+        int month = monthCombo.getSelectedIndex() + 1;
         int year = (Integer) yearSpinner.getValue();
         String projectName = selectedProject.getName();
 
