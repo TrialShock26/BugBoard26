@@ -156,7 +156,7 @@
                 <version>1.2.1</version>
                 <executions>
                     <execution>
-                        <phase>initialize</phase>
+                        <phase>validate</phase>
                         <goals>
                             <goal>read-project-properties</goal>
                         </goals>
@@ -176,7 +176,7 @@
                 <executions>
                     <execution>
                         <id>generate-jooq</id>
-                        <phase>generate-resources</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
