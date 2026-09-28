@@ -11,11 +11,13 @@ import java.util.List;
 import controller.ReportController;
 import controller.Session;
 import dto.ReportDTO;
+import dto.ProjectDTO;
 
 
 public class ReportsScreen extends BaseFrame {
 
-    private JComboBox<Integer> monthCombo;
+    private JComboBox<String> monthCombo;
+    private JComboBox<ProjectDTO> projectCombo;
     private JSpinner yearSpinner;
     private JLabel openedLabel, resolvedLabel, avgLabel;
     private DefaultTableModel perUserModel;
@@ -32,7 +34,7 @@ public class ReportsScreen extends BaseFrame {
             add(accessDeniedPanel(), BorderLayout.CENTER);
         } else {
             add(createContent(), BorderLayout.CENTER);
-            generateReport();
+            loadProjects();
         }
     }
 
@@ -103,17 +105,15 @@ public class ReportsScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
+        menuItems.add(new String[]{"HomePage", "HomePage"});
         menuItems.add(new String[]{"Issues", "Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         }
-
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
             if (item[1].equals("Reports")) menuItem.setBackground(new Color(254, 242, 242));
@@ -151,7 +151,8 @@ public class ReportsScreen extends BaseFrame {
     private void handleNavigation(String page) {
         JFrame next = null;
         switch (page) {
-            case "Dashboard": next = new Hub(); break;
+            case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
+            case "HomePage": next = new Hub(); break;
             case "Issues": next = new IssuesListScreen(); break;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
@@ -180,22 +181,41 @@ public class ReportsScreen extends BaseFrame {
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
         Calendar now = Calendar.getInstance();
-        Integer[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+        String[] months = {"january", "february", "march", "april", "may", "june",
+                "july", "august", "september", "october", "november", "december"};
         monthCombo = new JComboBox<>(months);
-        monthCombo.setSelectedItem(now.get(Calendar.MONTH) + 1);
+        monthCombo.setSelectedIndex(now.get(Calendar.MONTH));
+
+        projectCombo = new JComboBox<>();
+        projectCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                           boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(value instanceof ProjectDTO ? ((ProjectDTO) value).getName() : "Select a project");
+                return this;
+            }
+        });
 
         yearSpinner = new JSpinner(new SpinnerNumberModel(now.get(Calendar.YEAR), 2020, 2100, 1));
         yearSpinner.setEditor(new JSpinner.NumberEditor(yearSpinner, "#"));
 
-        JButton generateBtn = new JButton("Generate report");
-        generateBtn.setBackground(new Color(220, 38, 38));
-        generateBtn.setForeground(Color.WHITE);
+        JButton generateBtn = new JButton("↻");
+        generateBtn.setToolTipText("Update");
         generateBtn.setFocusPainted(false);
         generateBtn.addActionListener(e -> generateReport());
 
+        JButton submitBtn = new JButton("Send");
+        submitBtn.setBackground(new Color(220, 38, 38));
+        submitBtn.setForeground(Color.WHITE);
+        submitBtn.setFocusPainted(false);
+        submitBtn.addActionListener(e -> generateReport());
+
+        selector.add(new JLabel("Project:")); selector.add(projectCombo);
         selector.add(new JLabel("Month:")); selector.add(monthCombo);
         selector.add(new JLabel("Year:")); selector.add(yearSpinner);
         selector.add(generateBtn);
+        selector.add(submitBtn);
 
         panel.add(selector, BorderLayout.NORTH);
 
@@ -281,13 +301,20 @@ public class ReportsScreen extends BaseFrame {
     }
 
     private void generateReport() {
-        int month = (Integer) monthCombo.getSelectedItem();
+        ProjectDTO selectedProject = (ProjectDTO) projectCombo.getSelectedItem();
+        if (selectedProject == null) {
+            JOptionPane.showMessageDialog(this, "Select a project first.",
+                    "Project required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int month = monthCombo.getSelectedIndex() + 1;
         int year = (Integer) yearSpinner.getValue();
+        String projectName = selectedProject.getName();
 
         SwingWorker<ReportDTO, Void> worker = new SwingWorker<>() {
             @Override
             protected ReportDTO doInBackground() {
-                return ReportController.monthlyReport(year, month);
+                return ReportController.monthlyReport(year, month, projectName);
             }
 
             @Override
@@ -326,4 +353,37 @@ public class ReportsScreen extends BaseFrame {
         };
         worker.execute();
     }
+
+    private void loadProjects() {
+        SwingWorker<java.util.List<ProjectDTO>, Void> worker = new SwingWorker<>() {
+            @Override
+            protected java.util.List<ProjectDTO> doInBackground() {
+                return ReportController.projectsForAdmin();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    projectCombo.removeAllItems();
+                    for (ProjectDTO project : get()) projectCombo.addItem(project);
+                    if (projectCombo.getItemCount() == 0) {
+                        JOptionPane.showMessageDialog(ReportsScreen.this,
+                                "You are not assigned to any project.",
+                                "No projects", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    Throwable cause = e.getCause() != null ? e.getCause() : e;
+                    JOptionPane.showMessageDialog(ReportsScreen.this,
+                            "Error loading projects: " + cause.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+        worker.execute();
+    }
 }
+
+
+
+
+

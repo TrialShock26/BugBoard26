@@ -27,21 +27,31 @@ public final class IssueController {
         if (priority != null) q.append("priority=").append(priority).append("&");
         if (sort != null) q.append("sort=").append(sort).append("&");
         HttpRequest req = ApiClient.request(q.toString()).GET().build();
-        return ApiClient.call(req, new TypeReference<List<IssueDTO>>() { });
+        return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
     }
 
 
-
-    public static IssueDTO createIssue(String title, String description, IssueType type, IssuePriority priority,
-                                        List<String> tags, String imageBase64) {
+    public static List<IssueDTO> myAssignedIssues() {
+        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/assigned").GET().build();
+        return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
+    }
+    public static IssueDTO createIssue(String title, String description,
+                                       IssueType type, IssuePriority priority,
+                                       String projectId, List<String> tags,
+                                       String imageBase64) {
         Map<String, Object> body = new HashMap<>();
         body.put("title", title);
         body.put("description", description);
         body.put("type", type);
         body.put("priority", priority);
+        body.put("projectId", projectId);
         body.put("tags", tags);
         body.put("imageBase64", imageBase64);
-        HttpRequest req = ApiClient.request(ApiPaths.ISSUES).POST(ApiClient.json(body)).build();
+
+        HttpRequest req = ApiClient.request(ApiPaths.ISSUES)
+                .POST(ApiClient.json(body))
+                .build();
+
         return ApiClient.call(req, IssueDTO.class);
     }
 
@@ -67,11 +77,6 @@ public final class IssueController {
         }
     }
 
-    public static void deleteIssue(String issueId) {
-        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/" + issueId)
-                .method("DELETE", BodyPublishers.noBody()).build();
-        ApiClient.call(req);
-    }
 
     public static SuggestionsDTO mySuggestions() {
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/suggestions").GET().build();
@@ -84,3 +89,5 @@ public final class IssueController {
         return ApiClient.call(req, IssueDTO.class);
     }
 }
+
+

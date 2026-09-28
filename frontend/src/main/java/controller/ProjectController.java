@@ -16,7 +16,7 @@ public final class ProjectController {
 
     public static List<ProjectDTO> listProjects() {
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS).GET().build();
-        return ApiClient.call(req, new TypeReference<List<ProjectDTO>>() { });
+        return ApiClient.callList(req, new TypeReference<List<ProjectDTO>>() { });
     }
 
     public static void createProject(String name, List<String> teamNames) {
@@ -30,7 +30,7 @@ public final class ProjectController {
         // Il backend attuale restituisce sempre "project": null qui
         // (vedi UserJOOQ.getTeams), quindi TeamDTO.project resta vuoto.
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS + "/" + projectId + "/teams").GET().build();
-        return ApiClient.call(req, new TypeReference<List<TeamDTO>>() { });
+        return ApiClient.callList(req, new TypeReference<List<TeamDTO>>() { });
     }
 
     public static void joinTeam(String projectId, String teamId) {
@@ -39,3 +39,4 @@ public final class ProjectController {
         ApiClient.call(req);
     }
 }
+

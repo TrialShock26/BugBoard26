@@ -5,6 +5,7 @@ import java.awt.*;
 import controller.AuthController;
 import controller.Session;
 import dto.LoginResponseDTO;
+import exception.ApiException;
 
 public class LoginScreen extends JFrame {
 
@@ -115,9 +116,13 @@ public class LoginScreen extends JFrame {
                         dispose();
                     } catch (Exception e) {
                         Throwable cause = e.getCause() != null ? e.getCause() : e;
+                        String message = cause instanceof ApiException
+                                && (((ApiException) cause).status == 401 || ((ApiException) cause).status == 403)
+                                ? "Credenziali errate. Controlla email e password."
+                                : cause.getMessage() != null ? cause.getMessage() : "Errore durante il login.";
                         JOptionPane.showMessageDialog(
                                 LoginScreen.this,
-                                cause.getMessage() != null ? cause.getMessage() : "Invalid credentials!",
+                                message,
                                 "Login Error",
                                 JOptionPane.ERROR_MESSAGE
                         );

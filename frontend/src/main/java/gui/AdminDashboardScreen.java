@@ -108,17 +108,15 @@ public class AdminDashboardScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
+        menuItems.add(new String[]{"HomePage", "HomePage"});
         menuItems.add(new String[]{"Issues", "Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         }
-
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
             if (item[1].equals("Admin")) menuItem.setBackground(new Color(254, 242, 242));
@@ -156,7 +154,8 @@ public class AdminDashboardScreen extends BaseFrame {
     private void handleNavigation(String page) {
         JFrame next = null;
         switch (page) {
-            case "Dashboard": next = new Hub(); break;
+            case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
+            case "HomePage": next = new Hub(); break;
             case "Issues": next = new IssuesListScreen(); break;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": return; // gia' qui
@@ -222,7 +221,8 @@ public class AdminDashboardScreen extends BaseFrame {
 
         JLabel userTableTitle = new JLabel("Statistics per user");
         userTableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        JButton refreshBtn = new JButton("Refresh");
+        JButton refreshBtn = new JButton("↻");
+        refreshBtn.setToolTipText("Aggiorna");
         refreshBtn.setFocusPainted(false);
         refreshBtn.addActionListener(e -> loadDashboard());
 
@@ -387,6 +387,16 @@ public class AdminDashboardScreen extends BaseFrame {
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         JScrollPane tableScroll = new JScrollPane(table);
         tableScroll.setBorder(BorderFactory.createLineBorder(new Color(229, 231, 235)));
+        JPanel usersHeader = new JPanel(new BorderLayout());
+        usersHeader.setBackground(new Color(243, 244, 246));
+        JLabel usersTitle = new JLabel("Users");
+        usersTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        JButton refreshUsers = new JButton("↻");
+        refreshUsers.setToolTipText("Aggiorna");
+        refreshUsers.addActionListener(e -> loadUsers());
+        usersHeader.add(usersTitle, BorderLayout.WEST);
+        usersHeader.add(refreshUsers, BorderLayout.EAST);
+        panel.add(usersHeader, BorderLayout.NORTH);
         panel.add(tableScroll, BorderLayout.CENTER);
 
         return panel;
@@ -418,3 +428,8 @@ public class AdminDashboardScreen extends BaseFrame {
         worker.execute();
     }
 }
+
+
+
+
+
