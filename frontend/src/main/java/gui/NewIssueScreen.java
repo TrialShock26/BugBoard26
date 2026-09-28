@@ -65,18 +65,15 @@ public class NewIssueScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
+        menuItems.add(new String[]{"HomePage", "HomePage"});
         menuItems.add(new String[]{"Issues", "Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
-
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         }
-
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
 
@@ -130,7 +127,7 @@ public class NewIssueScreen extends BaseFrame {
             case "Dashboard":
                 next = new Hub();
                 break;
-
+            case "HomePage": next = new Hub(); break;
             case "Issues":
                 next = new IssuesListScreen();
                 break;
@@ -320,7 +317,17 @@ public class NewIssueScreen extends BaseFrame {
             }
         });
 
-        projectRow.add(projectCombo);
+        JPanel projectSelection = new JPanel(new BorderLayout(8, 0));
+        projectSelection.setBackground(Color.WHITE);
+        projectSelection.add(projectCombo, BorderLayout.CENTER);
+        JButton refreshProjects = new JButton("↻");
+        refreshProjects.setToolTipText("Aggiorna");
+        refreshProjects.addActionListener(e -> {
+            projectCombo.removeAllItems();
+            loadProjects();
+        });
+        projectSelection.add(refreshProjects, BorderLayout.EAST);
+        projectRow.add(projectSelection);
 
         formCard.add(projectRow);
         formCard.add(Box.createVerticalStrut(18));
@@ -351,7 +358,7 @@ public class NewIssueScreen extends BaseFrame {
 
         // LABELS
         formCard.add(fieldLabel(
-                "Labels (comma-separated, optional)"
+                "Tags (comma-separated, optional)"
         ));
 
         labelsField = new JTextField();
@@ -638,3 +645,6 @@ public class NewIssueScreen extends BaseFrame {
         worker.execute();
     }
 }
+
+
+

@@ -47,18 +47,15 @@ public class Hub extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
+        menuItems.add(new String[]{"HomePage", "HomePage"});
         menuItems.add(new String[]{"Issues", "Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
-
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         }
-
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
             sidebar.add(menuItem);
@@ -111,6 +108,7 @@ public class Hub extends BaseFrame {
             case "Dashboard":
                 next = new Hub();
                 break;
+            case "HomePage": next = new Hub(); break;
             case "Issues":
                 next = new IssuesListScreen();
                 break;
@@ -175,6 +173,11 @@ public class Hub extends BaseFrame {
         titleWithLogo.add(brand);
         titleWithLogo.add(welcomeLabel);
         welcomeRow.add(titleWithLogo, BorderLayout.WEST);
+        JButton refreshHome = new JButton("↻");
+        refreshHome.setToolTipText("Aggiorna");
+        refreshHome.setFocusPainted(false);
+        refreshHome.addActionListener(e -> navigateTo(new Hub()));
+        welcomeRow.add(refreshHome, BorderLayout.EAST);
         header.add(welcomeRow);
 
         content.add(header, BorderLayout.NORTH);
@@ -184,13 +187,13 @@ public class Hub extends BaseFrame {
 
         List<IssueDTO> todoIssues;
         try {
-            todoIssues = IssueController.listIssues(null, IssueStatus.TODO, null, "createdAt");
+            todoIssues = IssueController.myAssignedIssues();
         } catch (ApiException ex) {
             todoIssues = List.of();
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
         }
 
-        boardPanel.add(createColumn("Todo", new Color(156, 163, 175), todoIssues));
+        boardPanel.add(createColumn("My issues", new Color(59, 130, 246), todoIssues));
         content.add(boardPanel, BorderLayout.CENTER);
 
         JPanel suggestionBanner = buildSuggestionBanner();
@@ -365,3 +368,11 @@ public class Hub extends BaseFrame {
         }
     }
 }
+
+
+
+
+
+
+
+

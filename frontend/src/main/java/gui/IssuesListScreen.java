@@ -56,18 +56,15 @@ public class IssuesListScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
+        menuItems.add(new String[]{"HomePage", "HomePage"});
         menuItems.add(new String[]{"Issues", "Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
-
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         }
-
         for (String[] item : menuItems) {
             JPanel menuItem = createMenuItem(item[0], item[1]);
             if (item[1].equals("Issues")) menuItem.setBackground(new Color(254, 242, 242));
@@ -105,7 +102,8 @@ public class IssuesListScreen extends BaseFrame {
     private void handleNavigation(String page) {
         JFrame next = null;
         switch (page) {
-            case "Dashboard": next = new Hub(); break;
+            case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
+            case "HomePage": next = new Hub(); break;
             case "Issues": return; // gia' qui
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
@@ -198,7 +196,7 @@ public class IssuesListScreen extends BaseFrame {
                 new ComboItem(null, "All statuses"),
                 new ComboItem("TODO", "Todo"),
                 new ComboItem("ONGOING", "Ongoing"),
-                new ComboItem("RESOLVED", "Resolved")
+                new ComboItem("DONE", "Done")
         });
         priorityFilter = new JComboBox<>(new ComboItem[]{
                 new ComboItem(null, "All priorities"),
@@ -221,7 +219,8 @@ public class IssuesListScreen extends BaseFrame {
         applyBtn.setFocusPainted(false);
         applyBtn.addActionListener(e -> reloadIssues());
 
-        JButton refreshBtn = new JButton("Refresh");
+        JButton refreshBtn = new JButton("↻");
+        refreshBtn.setToolTipText("Aggiorna");
         refreshBtn.setFocusPainted(false);
         refreshBtn.addActionListener(e -> reloadIssues());
 
@@ -290,18 +289,7 @@ public class IssuesListScreen extends BaseFrame {
             reloadIssues();
         }
     }
-
-    private void deleteIssue(String issueId) {
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete issue " + issueId + "? This cannot be undone.",
-                "Delete issue", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if (confirm != JOptionPane.YES_OPTION) return;
-        try {
-            IssueController.deleteIssue(issueId);
-            reloadIssues();
-        } catch (ApiException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+    
 
     private void viewImage(String issueId) {
         byte[] bytes = null;
@@ -405,11 +393,6 @@ public class IssuesListScreen extends BaseFrame {
         labelBtn.addActionListener(e -> openAddLabelDialog(id));
         actionsRow.add(labelBtn);
 
-        if (Session.isAdmin()) {
-            JButton deleteBtn = smallButton("Delete");
-            deleteBtn.addActionListener(e -> deleteIssue(id));
-            actionsRow.add(deleteBtn);
-        }
 
         card.add(actionsRow);
 
@@ -486,3 +469,9 @@ public class IssuesListScreen extends BaseFrame {
         @Override public String toString() { return label; }
     }
 }
+
+
+
+
+
+

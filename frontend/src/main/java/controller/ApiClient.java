@@ -14,6 +14,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 
 public final class ApiClient {
 
@@ -56,6 +58,11 @@ public final class ApiClient {
         } catch (JsonProcessingException e) {
             throw new ApiException(0, "Risposta del server non valida.");
         }
+    }
+
+    static <T> List<T> callList(HttpRequest req, TypeReference<List<T>> type) {
+        List<T> result = call(req, type);
+        return result == null ? Collections.emptyList() : result;
     }
 
     static void call(HttpRequest req) {

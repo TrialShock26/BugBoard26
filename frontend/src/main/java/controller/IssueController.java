@@ -27,10 +27,14 @@ public final class IssueController {
         if (priority != null) q.append("priority=").append(priority).append("&");
         if (sort != null) q.append("sort=").append(sort).append("&");
         HttpRequest req = ApiClient.request(q.toString()).GET().build();
-        return ApiClient.call(req, new TypeReference<List<IssueDTO>>() { });
+        return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
     }
 
 
+    public static List<IssueDTO> myAssignedIssues() {
+        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/assigned").GET().build();
+        return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
+    }
     public static IssueDTO createIssue(String title, String description,
                                        IssueType type, IssuePriority priority,
                                        String projectId, List<String> tags,
@@ -73,11 +77,6 @@ public final class IssueController {
         }
     }
 
-    public static void deleteIssue(String issueId) {
-        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/" + issueId)
-                .method("DELETE", BodyPublishers.noBody()).build();
-        ApiClient.call(req);
-    }
 
     public static SuggestionsDTO mySuggestions() {
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/suggestions").GET().build();
@@ -90,3 +89,5 @@ public final class IssueController {
         return ApiClient.call(req, IssueDTO.class);
     }
 }
+
+
