@@ -64,10 +64,12 @@ public class IssuesListScreen extends BaseFrame {
             menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
+            menuItems.add(new String[]{"Create User", "CreateUser"});
         }
         for (String[] item : menuItems) {
+            if (item[1].equals("Admin")) addAdminSectionDivider(sidebar);
             JPanel menuItem = createMenuItem(item[0], item[1]);
-            if (item[1].equals("List Issues")) menuItem.setBackground(new Color(254, 242, 242));
+            if (item[1].equals("List Issues")) markCurrentPage(menuItem);
             sidebar.add(menuItem);
             sidebar.add(Box.createVerticalStrut(5));
         }
@@ -79,11 +81,23 @@ public class IssuesListScreen extends BaseFrame {
         return sidebar;
     }
 
+    private void addAdminSectionDivider(JPanel sidebar) {
+        sidebar.add(Box.createVerticalStrut(6));
+        JSeparator divider = new JSeparator(SwingConstants.HORIZONTAL);
+        divider.setForeground(new Color(229, 231, 235));
+        divider.setMaximumSize(new Dimension(210, 1));
+        divider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(divider);
+        sidebar.add(Box.createVerticalStrut(6));
+    }
+
     private JPanel createMenuItem(String text, String page) {
         JPanel item = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 12));
         item.setBackground(Color.WHITE);
         item.setMaximumSize(new Dimension(250, 45));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boolean current = page.equals("List Issues");
+        if (current) markCurrentPage(item);
 
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -91,8 +105,8 @@ public class IssuesListScreen extends BaseFrame {
         item.add(label);
 
         item.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) { item.setBackground(new Color(229, 231, 235)); }
-            public void mouseExited(MouseEvent evt) { item.setBackground(Color.WHITE); }
+            public void mouseEntered(MouseEvent evt) { if (!current) item.setBackground(new Color(229, 231, 235)); }
+            public void mouseExited(MouseEvent evt) { if (!current) item.setBackground(Color.WHITE); }
             public void mouseClicked(MouseEvent evt) { handleNavigation(page); }
         });
 
@@ -104,11 +118,12 @@ public class IssuesListScreen extends BaseFrame {
         switch (page) {
             case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
             case "My Issues": next = new Hub(); break;
-            case "List Issues": return; // gia' qui
+            case "List Issues": return;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
             case "Reports": next = new ReportsScreen(); break;
             case "CreateProject": next = new CreateProjectScreen(); break;
+            case "CreateUser": next = new CreateUserScreen(); break;
             case "ChooseProject": next = new ChooseProjectScreen(); break;
             case "Logout":
                 Session.clear();
@@ -129,7 +144,6 @@ public class IssuesListScreen extends BaseFrame {
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));
         userPanel.setBackground(Color.WHITE);
 
-        // Logo BugBoard26 accanto al titolo/info utente, in ogni schermata
         JLabel brand;
         ImageIcon topBarLogoIcon = AppLogo.icon(28);
         if (topBarLogoIcon != null) {
@@ -318,7 +332,7 @@ public class IssuesListScreen extends BaseFrame {
         IssueType type = issue.getType();
         IssuePriority priority = issue.getPriority();
         String assignee = issue.getAssigneeEmail();
-        List<String> labels = issue.getLabels();
+        List<String> tags = issue.getTags();
 
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
@@ -362,8 +376,8 @@ public class IssuesListScreen extends BaseFrame {
         assigneeLabel.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         assigneeLabel.setForeground(new Color(107, 114, 128));
         infoRow.add(assigneeLabel);
-        if (labels != null) {
-            for (String l : labels) infoRow.add(createChip(l));
+        if (tags != null) {
+            for (String tag : tags) infoRow.add(createChip(tag));
         }
         card.add(infoRow);
 
@@ -389,11 +403,6 @@ public class IssuesListScreen extends BaseFrame {
         imageBtn.addActionListener(e -> viewImage(id));
         actionsRow.add(imageBtn);
 
-        JButton labelBtn = smallButton("+ Label");
-        labelBtn.addActionListener(e -> openAddLabelDialog(id));
-        actionsRow.add(labelBtn);
-
-
         card.add(actionsRow);
 
         return card;
@@ -405,6 +414,11 @@ public class IssuesListScreen extends BaseFrame {
         b.setFocusPainted(false);
         b.setMargin(new Insets(3, 8, 3, 8));
         return b;
+    }
+
+    private void markCurrentPage(JPanel item) {
+        item.setBackground(new Color(254, 242, 242));
+        item.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, new Color(220, 38, 38)));
     }
 
     private JLabel createTag(String text, Color color) {
@@ -449,24 +463,11 @@ public class IssuesListScreen extends BaseFrame {
         }
     }
 
-    private void openAddLabelDialog(String issueId) {
-        String label = JOptionPane.showInputDialog(this, "New label (e.g. frontend, urgent, security):",
-                "Add label", JOptionPane.PLAIN_MESSAGE);
-        if (label != null && !label.trim().isEmpty()) {
-            try {
-                IssueController.addLabel(issueId, label.trim());
-                reloadIssues();
-            } catch (ApiException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
     private static class ComboItem {
         final String value;
-        final String label;
-        ComboItem(String value, String label) { this.value = value; this.label = label; }
-        @Override public String toString() { return label; }
+        final String displayText;
+        ComboItem(String value, String displayText) { this.value = value; this.displayText = displayText; }
+        @Override public String toString() { return displayText; }
     }
 }
 

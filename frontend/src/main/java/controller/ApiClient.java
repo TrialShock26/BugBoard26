@@ -84,13 +84,24 @@ public final class ApiClient {
     }
 
     private static String errorMessage(int status, String body) {
-        String msg = "Server error (HTTP " + status + ")";
+        String msg;
+        switch (status) {
+            case 400: msg = "The request contains invalid or incomplete information. Review the fields and try again."; break;
+            case 401: msg = "Your session has expired or you are not signed in. Sign in again and retry."; break;
+            case 403: msg = "You do not have permission to perform this action."; break;
+            case 404: msg = "The requested item could not be found. It may have been removed or the address may be incorrect."; break;
+            case 409: msg = "This action conflicts with existing data. Check for a duplicate or an item that has changed."; break;
+            case 422: msg = "The server could not process the supplied information. Review the fields and try again."; break;
+            case 500: case 502: case 503: case 504:
+                msg = "The server encountered a problem while processing the request. Please try again later."; break;
+            default: msg = "The request failed (HTTP " + status + "). Please try again.";
+        }
         if (body != null && !body.isEmpty()) {
             try {
                 ErrorResponseDTO err = MAPPER.readValue(body, ErrorResponseDTO.class);
 
-                if (err.getMessage() != null) msg = err.getMessage();
-                else if (err.getError() != null) msg = err.getError();
+                if (err.getMessage() != null && !err.getMessage().isBlank()) msg += "\nDetails: " + err.getMessage();
+                else if (err.getError() != null && !err.getError().isBlank()) msg += "\nDetails: " + err.getError();
             } catch (JsonProcessingException ignored) {
             }
         }
@@ -101,7 +112,7 @@ public final class ApiClient {
         try {
             HttpResponse<byte[]> resp = CLIENT.send(req, HttpResponse.BodyHandlers.ofByteArray());
             if (resp.statusCode() >= 200 && resp.statusCode() < 300) return resp.body();
-            throw new ApiException(resp.statusCode(), "Server error (HTTP " + resp.statusCode() + ")");
+            throw new ApiException(resp.statusCode(), errorMessage(resp.statusCode(), ""));
         } catch (IOException | InterruptedException e) {
             throw new ApiException(0, "Could not reach the BugBoard26 server (" + BASE_URL + "). "
                     + "Please make sure the back-end is running.");

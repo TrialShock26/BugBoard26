@@ -53,9 +53,12 @@ public class Hub extends BaseFrame {
             menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
+            menuItems.add(new String[]{"Create User", "CreateUser"});
         }
         for (String[] item : menuItems) {
+            if (item[1].equals("Admin")) addAdminSectionDivider(sidebar);
             JPanel menuItem = createMenuItem(item[0], item[1]);
+            if (item[1].equals("My Issues")) markCurrentPage(menuItem);
             sidebar.add(menuItem);
             sidebar.add(Box.createVerticalStrut(5));
         }
@@ -63,11 +66,20 @@ public class Hub extends BaseFrame {
         sidebar.add(Box.createVerticalGlue());
 
         JPanel logoutItem = createMenuItem("Logout", "Logout");
-        logoutItem.setBackground(new Color(254, 242, 242));
         sidebar.add(logoutItem);
         sidebar.add(Box.createVerticalStrut(20));
 
         return sidebar;
+    }
+
+    private void addAdminSectionDivider(JPanel sidebar) {
+        sidebar.add(Box.createVerticalStrut(6));
+        JSeparator divider = new JSeparator(SwingConstants.HORIZONTAL);
+        divider.setForeground(new Color(229, 231, 235));
+        divider.setMaximumSize(new Dimension(210, 1));
+        divider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(divider);
+        sidebar.add(Box.createVerticalStrut(6));
     }
 
     private JPanel createMenuItem(String text, String page) {
@@ -75,6 +87,8 @@ public class Hub extends BaseFrame {
         item.setBackground(Color.WHITE);
         item.setMaximumSize(new Dimension(250, 45));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boolean current = page.equals("My Issues");
+        if (current) markCurrentPage(item);
 
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -84,11 +98,11 @@ public class Hub extends BaseFrame {
 
         item.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                item.setBackground(new Color(229, 231, 235));
+                if (!current) item.setBackground(new Color(229, 231, 235));
             }
 
             public void mouseExited(MouseEvent evt) {
-                item.setBackground(Color.WHITE);
+                if (!current) item.setBackground(Color.WHITE);
             }
 
             public void mouseClicked(MouseEvent evt) {
@@ -97,6 +111,11 @@ public class Hub extends BaseFrame {
         });
 
         return item;
+    }
+
+    private void markCurrentPage(JPanel item) {
+        item.setBackground(new Color(254, 242, 242));
+        item.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, new Color(220, 38, 38)));
     }
 
     private void navigate(String page) {
@@ -122,6 +141,7 @@ public class Hub extends BaseFrame {
             case "CreateProject":
                 next = new CreateProjectScreen();
                 break;
+            case "CreateUser": next = new CreateUserScreen(); break;
             case "ChooseProject":
                 next = new ChooseProjectScreen();
                 break;
@@ -333,25 +353,25 @@ public class Hub extends BaseFrame {
         infoPanel.add(assigneeInfo);
         infoPanel.add(typeLabel);
 
-        List<String> labels = issue.getLabels();
-        JPanel labelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 2));
-        labelsPanel.setBackground(Color.WHITE);
-        labelsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        if (labels != null) {
-            for (String l : labels) {
-                JLabel chip = new JLabel(l);
+        List<String> tags = issue.getTags();
+        JPanel tagsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 2));
+        tagsPanel.setBackground(Color.WHITE);
+        tagsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        if (tags != null) {
+            for (String tag : tags) {
+                JLabel chip = new JLabel(tag);
                 chip.setFont(new Font("Segoe UI", Font.PLAIN, 10));
                 chip.setForeground(new Color(55, 65, 81));
                 chip.setOpaque(true);
                 chip.setBackground(new Color(229, 231, 235));
                 chip.setBorder(BorderFactory.createEmptyBorder(1, 6, 1, 6));
-                labelsPanel.add(chip);
+                tagsPanel.add(chip);
             }
         }
 
         card.add(titleRow);
         card.add(infoPanel);
-        card.add(labelsPanel);
+        card.add(tagsPanel);
 
         return card;
     }

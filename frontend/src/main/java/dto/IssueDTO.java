@@ -23,10 +23,12 @@ public class IssueDTO {
     @Setter private UserDTO assignee;
 
     @JsonProperty("tags")
-    private List<String> labels = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 
-    public void setLabels(List<String> labels) {
-        this.labels = labels != null ? labels : new ArrayList<>();
+    public List<String> getTags() { return tags; }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags != null ? tags : new ArrayList<>();
     }
 
     public String getAssigneeEmail() {

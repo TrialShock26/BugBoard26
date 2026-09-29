@@ -27,7 +27,7 @@ public class NewIssueScreen extends BaseFrame {
     private JComboBox<String> typeCombo;
     private JComboBox<ProjectDTO> projectCombo;
     private JComboBox<String> priorityCombo;
-    private JTextField labelsField;
+    private JTextField tagsField;
     private JLabel imageStatusLabel;
     private File selectedImage;
     private JButton submitButton;
@@ -73,12 +73,14 @@ public class NewIssueScreen extends BaseFrame {
             menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
+            menuItems.add(new String[]{"Create User", "CreateUser"});
         }
         for (String[] item : menuItems) {
+            if (item[1].equals("Admin")) addAdminSectionDivider(sidebar);
             JPanel menuItem = createMenuItem(item[0], item[1]);
 
             if (item[1].equals("NewIssue")) {
-                menuItem.setBackground(new Color(254, 242, 242));
+                markCurrentPage(menuItem);
             }
 
             sidebar.add(menuItem);
@@ -92,11 +94,23 @@ public class NewIssueScreen extends BaseFrame {
         return sidebar;
     }
 
+    private void addAdminSectionDivider(JPanel sidebar) {
+        sidebar.add(Box.createVerticalStrut(6));
+        JSeparator divider = new JSeparator(SwingConstants.HORIZONTAL);
+        divider.setForeground(new Color(229, 231, 235));
+        divider.setMaximumSize(new Dimension(210, 1));
+        divider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(divider);
+        sidebar.add(Box.createVerticalStrut(6));
+    }
+
     private JPanel createMenuItem(String text, String page) {
         JPanel item = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 12));
         item.setBackground(Color.WHITE);
         item.setMaximumSize(new Dimension(250, 45));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boolean current = page.equals("NewIssue");
+        if (current) markCurrentPage(item);
 
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -105,11 +119,11 @@ public class NewIssueScreen extends BaseFrame {
 
         item.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                item.setBackground(new Color(229, 231, 235));
+                if (!current) item.setBackground(new Color(229, 231, 235));
             }
 
             public void mouseExited(MouseEvent evt) {
-                item.setBackground(Color.WHITE);
+                if (!current) item.setBackground(Color.WHITE);
             }
 
             public void mouseClicked(MouseEvent evt) {
@@ -118,6 +132,11 @@ public class NewIssueScreen extends BaseFrame {
         });
 
         return item;
+    }
+
+    private void markCurrentPage(JPanel item) {
+        item.setBackground(new Color(254, 242, 242));
+        item.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, new Color(220, 38, 38)));
     }
 
     private void handleNavigation(String page) {
@@ -146,6 +165,7 @@ public class NewIssueScreen extends BaseFrame {
             case "CreateProject":
                 next = new CreateProjectScreen();
                 break;
+            case "CreateUser": next = new CreateUserScreen(); break;
 
             case "ChooseProject":
                 next = new ChooseProjectScreen();
@@ -356,15 +376,15 @@ public class NewIssueScreen extends BaseFrame {
         formCard.add(priorityRow);
         formCard.add(Box.createVerticalStrut(18));
 
-        // LABELS
+        // TAGS
         formCard.add(fieldLabel(
                 "Tags (comma-separated, optional)"
         ));
 
-        labelsField = new JTextField();
-        styleTextComponent(labelsField);
+        tagsField = new JTextField();
+        styleTextComponent(tagsField);
 
-        formCard.add(labelsField);
+        formCard.add(tagsField);
         formCard.add(Box.createVerticalStrut(18));
 
         // IMAGE
@@ -548,15 +568,15 @@ public class NewIssueScreen extends BaseFrame {
                         (String) priorityCombo.getSelectedItem()
                 );
 
-        // LABELS
-        List<String> labels = new ArrayList<>();
+        // TAGS
+        List<String> tags = new ArrayList<>();
 
-        String labelsText = labelsField.getText().trim();
+        String tagsText = tagsField.getText().trim();
 
-        if (!labelsText.isEmpty()) {
-            for (String l : labelsText.split(",")) {
+        if (!tagsText.isEmpty()) {
+            for (String l : tagsText.split(",")) {
                 if (!l.trim().isEmpty()) {
-                    labels.add(l.trim());
+                    tags.add(l.trim());
                 }
             }
         }
@@ -599,7 +619,7 @@ public class NewIssueScreen extends BaseFrame {
                                 type,
                                 priority,
                                 projectId,
-                                labels,
+                                tags,
                                 finalImageBase64
                         );
                     }
