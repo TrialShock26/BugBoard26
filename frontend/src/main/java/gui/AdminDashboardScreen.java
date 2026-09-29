@@ -6,7 +6,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import controller.ReportController;
 import controller.Session;
 import controller.UserController;
@@ -17,9 +20,8 @@ import exception.ApiException;
 
 public class AdminDashboardScreen extends BaseFrame {
 
-    private JLabel openLabel, ongoingLabel, resolvedLabel, totalLabel, avgLabel;
+    private JLabel openLabel, ongoingLabel, doneLabel, totalLabel, avgLabel;
     private DefaultTableModel perUserModel;
-    private DefaultTableModel perTeamModel;
     private DefaultTableModel usersModel;
 
     public AdminDashboardScreen() {
@@ -212,14 +214,14 @@ public class AdminDashboardScreen extends BaseFrame {
 
         openLabel = valueLabel("0");
         ongoingLabel = valueLabel("0");
-        resolvedLabel = valueLabel("0");
+        doneLabel = valueLabel("0");
         totalLabel = valueLabel("0");
         avgLabel = valueLabel("N/A");
 
-        cards.add(statCard("Open bugs (todo)", openLabel, new Color(156, 163, 175)));
-        cards.add(statCard("Ongoing", ongoingLabel, new Color(59, 130, 246)));
-        cards.add(statCard("Resolved", resolvedLabel, new Color(34, 197, 94)));
-        cards.add(statCard("Total issues", totalLabel, new Color(75, 85, 99)));
+        cards.add(statCard("Open bugs", openLabel, new Color(156, 163, 175)));
+        cards.add(statCard("Ongoing bugs", ongoingLabel, new Color(59, 130, 246)));
+        cards.add(statCard("Done bugs", doneLabel, new Color(34, 197, 94)));
+        cards.add(statCard("Total bugs", totalLabel, new Color(75, 85, 99)));
         cards.add(statCard("Avg. resolution time (h)", avgLabel, new Color(220, 38, 38)));
 
         panel.add(cards, BorderLayout.NORTH);
@@ -228,7 +230,7 @@ public class AdminDashboardScreen extends BaseFrame {
         tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
         tablesPanel.setBackground(new Color(243, 244, 246));
 
-        String[] userColumns = {"User", "Email", "Assigned (total)", "Open now", "Avg. resolution time (h)"};
+        String[] userColumns = {"User email", "Assigned bugs", "Avg. resolution time (h)"};
         perUserModel = new DefaultTableModel(userColumns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
@@ -252,28 +254,9 @@ public class AdminDashboardScreen extends BaseFrame {
         userTableHeaderRow.add(userTableTitle, BorderLayout.WEST);
         userTableHeaderRow.add(refreshBtn, BorderLayout.EAST);
 
-        // Point 17 (extended): admin reports also broken down by Team
-        String[] teamColumns = {"Team", "Members", "Assigned (total)", "Open now", "Avg. resolution time (h)"};
-        perTeamModel = new DefaultTableModel(teamColumns, 0) {
-            @Override public boolean isCellEditable(int row, int col) { return false; }
-        };
-        JTable teamTable = new JTable(perTeamModel);
-        teamTable.setRowHeight(28);
-        teamTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        JScrollPane teamTableScroll = new JScrollPane(teamTable);
-        teamTableScroll.setBorder(BorderFactory.createLineBorder(new Color(229, 231, 235)));
-        teamTableScroll.setPreferredSize(new Dimension(0, 150));
-
-        JLabel teamTableTitle = new JLabel("Statistics per team");
-        teamTableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
         tablesPanel.add(userTableHeaderRow);
         tablesPanel.add(Box.createVerticalStrut(8));
         tablesPanel.add(userTableScroll);
-        tablesPanel.add(Box.createVerticalStrut(20));
-        tablesPanel.add(teamTableTitle);
-        tablesPanel.add(Box.createVerticalStrut(8));
-        tablesPanel.add(teamTableScroll);
 
         panel.add(tablesPanel, BorderLayout.CENTER);
         return panel;
@@ -312,29 +295,22 @@ public class AdminDashboardScreen extends BaseFrame {
             protected void done() {
                 try {
                     StatisticDTO stats = get();
-                    openLabel.setText(String.valueOf(stats.getOpenCount()));
-                    ongoingLabel.setText(String.valueOf(stats.getOngoingCount()));
-                    resolvedLabel.setText(String.valueOf(stats.getResolvedCount()));
-                    totalLabel.setText(String.valueOf(stats.getTotalCount()));
-                    Double avg = stats.getAvgResolutionHoursOverall();
+                    openLabel.setText(String.valueOf(countOrZero(stats.getOpenBugs())));
+                    ongoingLabel.setText(String.valueOf(countOrZero(stats.getOngoingBugs())));
+                    doneLabel.setText(String.valueOf(countOrZero(stats.getDoneBugs())));
+                    totalLabel.setText(String.valueOf(countOrZero(stats.getTotalBugs())));
+                    Double avg = stats.getAverageGlobalResolutionTime();
                     avgLabel.setText(avg == null ? "N/A" : String.valueOf(avg));
 
                     perUserModel.setRowCount(0);
-                    for (StatisticDTO.UserStat row : stats.getPerUser()) {
-                        Double userAvg = row.getAvgResolutionHours();
+                    Set<UserDTO> users = new HashSet<>(stats.getBugsPerUser().keySet());
+                    users.addAll(stats.getAverageResolutionTimePerUser().keySet());
+                    for (UserDTO user : users) {
+                        Integer assigned = stats.getBugsPerUser().get(user);
+                        Double userAvg = stats.getAverageResolutionTimePerUser().get(user);
                         perUserModel.addRow(new Object[]{
-                                row.getName(), row.getEmail(), row.getAssignedCount(),
-                                row.getOpenCount(), userAvg == null ? "N/A" : userAvg
-                        });
-                    }
-
-                    // Point 17 (extended): per-team breakdown
-                    perTeamModel.setRowCount(0);
-                    for (StatisticDTO.TeamStat row : stats.getPerTeam()) {
-                        Double teamAvg = row.getAvgResolutionHours();
-                        perTeamModel.addRow(new Object[]{
-                                row.getTeam(), row.getMemberCount(), row.getAssignedCount(),
-                                row.getOpenCount(), teamAvg == null ? "N/A" : teamAvg
+                                user == null ? "Unknown user" : user.getEmail(), countOrZero(assigned),
+                                userAvg == null ? "N/A" : userAvg
                         });
                     }
                 } catch (Exception e) {
@@ -346,6 +322,10 @@ public class AdminDashboardScreen extends BaseFrame {
             }
         };
         worker.execute();
+    }
+
+    private int countOrZero(Integer count) {
+        return count == null ? 0 : count;
     }
 
     // ================= USERS (point 1) =================
