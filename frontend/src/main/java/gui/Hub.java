@@ -375,7 +375,7 @@ public class Hub extends BaseFrame {
         card.add(tagsPanel);
 
         IssueStatus status = issue.getStatus();
-        if (Session.getEmail().equalsIgnoreCase(assignee) && status != IssueStatus.ONGOING) {
+        if (Session.getEmail().equalsIgnoreCase(assignee) && status == IssueStatus.ONGOING) {
             JButton resolveButton = new JButton("Resolve");
             resolveButton.setFont(new Font("Segoe UI", Font.PLAIN, 11));
             resolveButton.setFocusPainted(false);

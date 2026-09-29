@@ -352,6 +352,7 @@ public class IssuesListScreen extends BaseFrame {
         JLabel titleLabel = new JLabel(issue.getTitle() + "  (" + id + ")");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
         titleLabel.setForeground(new Color(31, 41, 55));
+        titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         JPanel tagsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         tagsPanel.setBackground(Color.WHITE);
@@ -365,8 +366,10 @@ public class IssuesListScreen extends BaseFrame {
 
         String description = String.valueOf(issue.getDescription());
         if (description.length() > 140) description = description.substring(0, 140) + "...";
-        JLabel descLabel = new JLabel("<html><body style='width:700px'>" + description + "</body></html>");
+        JLabel descLabel = new JLabel("<html><body style='margin:0px; padding:0px; width:700px'>"
+                + description + "</body></html>");
         descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        descLabel.setHorizontalAlignment(SwingConstants.LEFT);
         descLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         descLabel.setForeground(new Color(75, 85, 99));
         descLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
@@ -374,6 +377,7 @@ public class IssuesListScreen extends BaseFrame {
 
         JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         infoRow.setBackground(Color.WHITE);
+        infoRow.setAlignmentX(Component.LEFT_ALIGNMENT);
         JLabel assigneeLabel = new JLabel(assignee == null ? "Unassigned" : "Assigned to " + assignee);
         assigneeLabel.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         assigneeLabel.setForeground(new Color(107, 114, 128));
@@ -385,6 +389,7 @@ public class IssuesListScreen extends BaseFrame {
 
         JPanel actionsRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
         actionsRow.setBackground(Color.WHITE);
+        actionsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         boolean canHandle = assignee == null;
         if (canHandle) {
