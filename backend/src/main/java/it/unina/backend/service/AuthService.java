@@ -19,14 +19,14 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class AuthService {
     private UserDAO dao;
     private PasswordEncoder encoder;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    public UserService(UserDAO dao, PasswordEncoder encoder) {
+    public AuthService(UserDAO dao, PasswordEncoder encoder) {
         this.dao = dao;
         this.encoder = encoder;
     }

@@ -1,6 +1,6 @@
 package it.unina.backend.controller;
 
-import it.unina.backend.service.UserService;
+import it.unina.backend.service.AuthService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthController {
-    private UserService service;
+    private AuthService service;
 
-    public AuthController(UserService service) {
+    public AuthController(AuthService service) {
         this.service = service;
     }
 
@@ -32,7 +32,7 @@ public class AuthController {
         private String password;
     }
     @PostMapping("/auth/login")
-    public ResponseEntity<UserService.AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
+    public ResponseEntity<AuthService.AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         return ResponseEntity.ok(service.login(request.getEmail(), request.getPassword()));
     }
 }
