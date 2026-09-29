@@ -390,7 +390,7 @@ public class Hub extends BaseFrame {
     }
 
     private void resolveIssue(String issueId) {
-        int confirm = JOptionPane.showConfirmDialog(this, "Mark issue " + issueId + " as resolved?",
+        int confirm = JOptionPane.showConfirmDialog(this, "Mark issue as resolved?",
                 "Resolve issue", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
         try {

@@ -11,8 +11,11 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DashboardDTO {
+    private Integer openBugs;
+    private Integer ongoingBugs;
+    private Integer doneBugs;
     private Integer totalBugs;
-    private Map<UserDTO, Integer> bugsPerUser = new HashMap<>();
     private Double averageGlobalResolutionTime;
+    private Map<UserDTO, Integer> bugsPerUser = new HashMap<>();
     private Map<UserDTO, Double> averageResolutionTimePerUser = new HashMap<>();
 }

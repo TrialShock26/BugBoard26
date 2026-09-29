@@ -12,6 +12,9 @@ import java.util.TreeMap;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportDTO {
+    private Integer totalBugs;
+    private Integer totalHandledBugs;
+    private Double averageGlobalResolutionTime;
     private Map<TeamDTO, Integer> totalBugsPerTeam = new HashMap<>();
     private Map<TeamDTO, Integer> totalHandledBugsPerTeam = new HashMap<>();
     private Map<TeamDTO, Double> averageResolutionTimePerTeam = new HashMap<>();

@@ -22,7 +22,7 @@ public class UserJOOQ implements UserDAO {
     }
 
     @Override
-    public Optional<UserDTO> login(String email){
+    public Optional<UserDTO> login(String email) {
         return context.selectFrom(USER_)
                 .where(USER_.EMAIL.eq(email))
                 .fetchOptionalInto(UserDTO.class);
