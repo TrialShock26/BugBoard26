@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import controller.ProjectController;
 import controller.Session;
-import controller.TeamController;
 import dto.ProjectDTO;
 import dto.TeamDTO;
 import exception.ApiException;
@@ -20,6 +19,7 @@ public class ChooseProjectScreen extends BaseFrame {
     private JComboBox<ProjectItem> projectCombo;
     private JComboBox<TeamItem> teamCombo;
     private DefaultTableModel myProjectsModel;
+    private boolean updatingProjectCombo;
 
     public ChooseProjectScreen() {
         super("BugBoard26 - Choose Project");
@@ -225,7 +225,9 @@ public class ChooseProjectScreen extends BaseFrame {
         projectCombo.setPreferredSize(new Dimension(320, 34));
         projectCombo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         // Alla scelta del progetto, il secondo menu si ripopola con i team di quel progetto
-        projectCombo.addActionListener(e -> refreshTeamCombo());
+        projectCombo.addActionListener(e -> {
+            if (!updatingProjectCombo) refreshTeamCombo();
+        });
         form.add(projectCombo);
         form.add(Box.createVerticalStrut(16));
 
@@ -260,7 +262,7 @@ public class ChooseProjectScreen extends BaseFrame {
 
         JPanel tableHeader = new JPanel(new BorderLayout());
         tableHeader.setBackground(new Color(243, 244, 246));
-        JLabel tableTitle = new JLabel("My projects");
+        JLabel tableTitle = new JLabel("My projects and their teams");
         tableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tableHeader.add(tableTitle, BorderLayout.WEST);
         JButton refreshProjects = new JButton("↻");
@@ -269,7 +271,7 @@ public class ChooseProjectScreen extends BaseFrame {
         tableHeader.add(refreshProjects, BorderLayout.EAST);
         tablePanel.add(tableHeader, BorderLayout.NORTH);
 
-        String[] columns = {"Project", "Team"};
+        String[] columns = {"Project", "Teams in this project"};
         myProjectsModel = new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
@@ -288,20 +290,23 @@ public class ChooseProjectScreen extends BaseFrame {
 
     private void refreshTeamCombo() {
         ProjectItem selected = (ProjectItem) projectCombo.getSelectedItem();
+        teamCombo.removeAllItems();
         if (selected == null) {
-            teamCombo.removeAllItems();
             return;
         }
+        String projectId = selected.getId();
         SwingWorker<List<TeamDTO>, Void> worker = new SwingWorker<>() {
             @Override
             protected List<TeamDTO> doInBackground() {
-                return ProjectController.listTeams(selected.getId());
+                return ProjectController.listTeams(projectId);
             }
 
             @Override
             protected void done() {
                 try {
                     List<TeamDTO> teams = get();
+                    ProjectItem currentProject = (ProjectItem) projectCombo.getSelectedItem();
+                    if (currentProject == null || !currentProject.getId().equals(projectId)) return;
                     teamCombo.removeAllItems();
                     for (TeamDTO t : teams) teamCombo.addItem(new TeamItem(t));
                 } catch (Exception e) {
@@ -326,8 +331,13 @@ public class ChooseProjectScreen extends BaseFrame {
             protected void done() {
                 try {
                     List<ProjectDTO> projects = get();
-                    projectCombo.removeAllItems();
-                    for (ProjectDTO p : projects) projectCombo.addItem(new ProjectItem(p));
+                    updatingProjectCombo = true;
+                    try {
+                        projectCombo.removeAllItems();
+                        for (ProjectDTO p : projects) projectCombo.addItem(new ProjectItem(p));
+                    } finally {
+                        updatingProjectCombo = false;
+                    }
                     refreshTeamCombo();
                     loadMyProjects();
                 } catch (Exception e) {
@@ -342,22 +352,33 @@ public class ChooseProjectScreen extends BaseFrame {
     }
 
     private void loadMyProjects() {
-        SwingWorker<List<TeamDTO>, Void> worker = new SwingWorker<>() {
+        SwingWorker<List<ProjectMembershipRow>, Void> worker = new SwingWorker<>() {
             @Override
-            protected List<TeamDTO> doInBackground() {
-                return TeamController.myTeams();
+            protected List<ProjectMembershipRow> doInBackground() {
+                List<ProjectDTO> projects = ProjectController.listMyProjects();
+                List<ProjectMembershipRow> rows = new ArrayList<>();
+                for (ProjectDTO project : projects) {
+                    List<TeamDTO> teams = ProjectController.listTeams(project.getId());
+                    List<String> teamNames = new ArrayList<>();
+                    for (TeamDTO team : teams) teamNames.add(team.getName());
+                    rows.add(new ProjectMembershipRow(project.getName(), String.join(", ", teamNames)));
+                }
+                return rows;
             }
 
             @Override
             protected void done() {
                 try {
-                    List<TeamDTO> mine = get();
+                    List<ProjectMembershipRow> mine = get();
                     myProjectsModel.setRowCount(0);
-                    for (TeamDTO row : mine) {
-                        myProjectsModel.addRow(new Object[]{ row.getProject(), row.getName() });
+                    for (ProjectMembershipRow row : mine) {
+                        myProjectsModel.addRow(new Object[]{row.projectName, row.teamNames});
                     }
                 } catch (Exception e) {
-                    // informazione accessoria: se non disponibile non blocca la schermata
+                    Throwable cause = e.getCause() != null ? e.getCause() : e;
+                    JOptionPane.showMessageDialog(ChooseProjectScreen.this,
+                            "Could not load your projects and their teams. Details: " + cause.getMessage(),
+                            "Error loading memberships", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -397,6 +418,16 @@ public class ChooseProjectScreen extends BaseFrame {
         String getId() { return data.getId(); }
         String getName() { return data.getName(); }
         @Override public String toString() { return getName(); }
+    }
+
+    private static class ProjectMembershipRow {
+        final String projectName;
+        final String teamNames;
+
+        ProjectMembershipRow(String projectName, String teamNames) {
+            this.projectName = projectName;
+            this.teamNames = teamNames;
+        }
     }
 
     private static class ProjectItem {

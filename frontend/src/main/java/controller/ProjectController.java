@@ -19,6 +19,11 @@ public final class ProjectController {
         return ApiClient.callList(req, new TypeReference<List<ProjectDTO>>() { });
     }
 
+    public static List<ProjectDTO> listMyProjects() {
+        HttpRequest req = ApiClient.request(ApiPaths.PROJECTS + "?mine=true").GET().build();
+        return ApiClient.callList(req, new TypeReference<List<ProjectDTO>>() { });
+    }
+
     public static void createProject(String name, List<String> teamNames) {
         // POST /projects: crea sia il nuovo progetto sia i team indicati.
         HttpRequest req = ApiClient.request(ApiPaths.PROJECTS)
