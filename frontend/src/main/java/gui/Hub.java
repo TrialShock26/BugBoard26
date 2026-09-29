@@ -10,6 +10,7 @@ import controller.IssueController;
 import controller.Session;
 import dto.IssueDTO;
 import dto.IssuePriority;
+import dto.IssueStatus;
 import exception.ApiException;
 
 public class Hub extends BaseFrame {
@@ -373,7 +374,31 @@ public class Hub extends BaseFrame {
         card.add(infoPanel);
         card.add(tagsPanel);
 
+        IssueStatus status = issue.getStatus();
+        if (Session.getEmail().equalsIgnoreCase(assignee) && status != IssueStatus.ONGOING) {
+            JButton resolveButton = new JButton("Resolve");
+            resolveButton.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+            resolveButton.setFocusPainted(false);
+            resolveButton.setMargin(new Insets(3, 8, 3, 8));
+            resolveButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            resolveButton.addActionListener(e -> resolveIssue(issue.getId()));
+            card.add(Box.createVerticalStrut(6));
+            card.add(resolveButton);
+        }
+
         return card;
+    }
+
+    private void resolveIssue(String issueId) {
+        int confirm = JOptionPane.showConfirmDialog(this, "Mark issue " + issueId + " as resolved?",
+                "Resolve issue", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+        try {
+            IssueController.resolveIssue(issueId);
+            navigateTo(new Hub());
+        } catch (ApiException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private Color priorityColor(IssuePriority priority) {

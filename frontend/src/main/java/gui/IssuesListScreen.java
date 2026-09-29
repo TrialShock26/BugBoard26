@@ -347,6 +347,7 @@ public class IssuesListScreen extends BaseFrame {
         // Riga superiore: titolo + tag
         JPanel topRow = new JPanel(new BorderLayout());
         topRow.setBackground(Color.WHITE);
+        topRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel titleLabel = new JLabel(issue.getTitle() + "  (" + id + ")");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -365,6 +366,7 @@ public class IssuesListScreen extends BaseFrame {
         String description = String.valueOf(issue.getDescription());
         if (description.length() > 140) description = description.substring(0, 140) + "...";
         JLabel descLabel = new JLabel("<html><body style='width:700px'>" + description + "</body></html>");
+        descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         descLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         descLabel.setForeground(new Color(75, 85, 99));
         descLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
@@ -384,19 +386,11 @@ public class IssuesListScreen extends BaseFrame {
         JPanel actionsRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
         actionsRow.setBackground(Color.WHITE);
 
-        boolean canHandle = Session.isDev() && type == IssueType.BUG && assignee == null;
+        boolean canHandle = assignee == null;
         if (canHandle) {
             JButton handleBtn = smallButton("Handle");
             handleBtn.addActionListener(e -> handleIssue(id));
             actionsRow.add(handleBtn);
-        }
-
-        boolean canResolve = (Session.isAdmin() || Session.getEmail().equalsIgnoreCase(assignee))
-                && status != IssueStatus.DONE;
-        if (canResolve) {
-            JButton resolveBtn = smallButton("Resolve");
-            resolveBtn.addActionListener(e -> resolveIssue(id));
-            actionsRow.add(resolveBtn);
         }
 
         JButton imageBtn = smallButton("View image");
