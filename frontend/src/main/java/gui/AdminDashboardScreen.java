@@ -108,20 +108,20 @@ public class AdminDashboardScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
+            menuItems.add(new String[]{"Create User", "CreateUser"});
         }
-
         for (String[] item : menuItems) {
+            if (item[1].equals("Admin")) addAdminSectionDivider(sidebar);
             JPanel menuItem = createMenuItem(item[0], item[1]);
-            if (item[1].equals("Admin")) menuItem.setBackground(new Color(254, 242, 242));
+            if (item[1].equals("Admin")) markCurrentPage(menuItem);
             sidebar.add(menuItem);
             sidebar.add(Box.createVerticalStrut(5));
         }
@@ -133,11 +133,23 @@ public class AdminDashboardScreen extends BaseFrame {
         return sidebar;
     }
 
+    private void addAdminSectionDivider(JPanel sidebar) {
+        sidebar.add(Box.createVerticalStrut(6));
+        JSeparator divider = new JSeparator(SwingConstants.HORIZONTAL);
+        divider.setForeground(new Color(229, 231, 235));
+        divider.setMaximumSize(new Dimension(210, 1));
+        divider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(divider);
+        sidebar.add(Box.createVerticalStrut(6));
+    }
+
     private JPanel createMenuItem(String text, String page) {
         JPanel item = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 12));
         item.setBackground(Color.WHITE);
         item.setMaximumSize(new Dimension(250, 45));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boolean current = page.equals("Admin");
+        if (current) markCurrentPage(item);
 
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -145,23 +157,30 @@ public class AdminDashboardScreen extends BaseFrame {
         item.add(label);
 
         item.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) { item.setBackground(new Color(229, 231, 235)); }
-            public void mouseExited(MouseEvent evt) { item.setBackground(Color.WHITE); }
+            public void mouseEntered(MouseEvent evt) { if (!current) item.setBackground(new Color(229, 231, 235)); }
+            public void mouseExited(MouseEvent evt) { if (!current) item.setBackground(Color.WHITE); }
             public void mouseClicked(MouseEvent evt) { handleNavigation(page); }
         });
 
         return item;
     }
 
+    private void markCurrentPage(JPanel item) {
+        item.setBackground(new Color(254, 242, 242));
+        item.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, new Color(220, 38, 38)));
+    }
+
     private void handleNavigation(String page) {
         JFrame next = null;
         switch (page) {
-            case "Dashboard": next = new Hub(); break;
-            case "Issues": next = new IssuesListScreen(); break;
+            case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
+            case "My Issues": next = new Hub(); break;
+            case "List Issues": next = new IssuesListScreen(); break;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": return; // gia' qui
             case "Reports": next = new ReportsScreen(); break;
             case "CreateProject": next = new CreateProjectScreen(); break;
+            case "CreateUser": next = new CreateUserScreen(); break;
             case "ChooseProject": next = new ChooseProjectScreen(); break;
             case "Logout":
                 Session.clear();
@@ -222,7 +241,8 @@ public class AdminDashboardScreen extends BaseFrame {
 
         JLabel userTableTitle = new JLabel("Statistics per user");
         userTableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        JButton refreshBtn = new JButton("Refresh");
+        JButton refreshBtn = new JButton("↻");
+        refreshBtn.setToolTipText("Aggiorna");
         refreshBtn.setFocusPainted(false);
         refreshBtn.addActionListener(e -> loadDashboard());
 
@@ -387,6 +407,16 @@ public class AdminDashboardScreen extends BaseFrame {
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         JScrollPane tableScroll = new JScrollPane(table);
         tableScroll.setBorder(BorderFactory.createLineBorder(new Color(229, 231, 235)));
+        JPanel usersHeader = new JPanel(new BorderLayout());
+        usersHeader.setBackground(new Color(243, 244, 246));
+        JLabel usersTitle = new JLabel("Users");
+        usersTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        JButton refreshUsers = new JButton("↻");
+        refreshUsers.setToolTipText("Aggiorna");
+        refreshUsers.addActionListener(e -> loadUsers());
+        usersHeader.add(usersTitle, BorderLayout.WEST);
+        usersHeader.add(refreshUsers, BorderLayout.EAST);
+        panel.add(usersHeader, BorderLayout.NORTH);
         panel.add(tableScroll, BorderLayout.CENTER);
 
         return panel;
@@ -418,3 +448,8 @@ public class AdminDashboardScreen extends BaseFrame {
         worker.execute();
     }
 }
+
+
+
+
+

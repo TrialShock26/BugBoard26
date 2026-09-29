@@ -75,9 +75,4 @@ public final class IssueController {
         return ApiClient.call(req, SuggestionsDTO.class);
     }
 
-    public static IssueDTO addLabel(String issueId, String label) {
-        HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/" + issueId + "/labels")
-                .POST(ApiClient.json(Map.of("label", label))).build();
-        return ApiClient.call(req, IssueDTO.class);
-    }
 }

@@ -10,8 +10,6 @@ import controller.IssueController;
 import controller.Session;
 import dto.IssueDTO;
 import dto.IssuePriority;
-import dto.IssueStatus;
-import dto.SuggestionsDTO;
 import exception.ApiException;
 
 public class Hub extends BaseFrame {
@@ -47,20 +45,20 @@ public class Hub extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
-
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
+            menuItems.add(new String[]{"Create User", "CreateUser"});
         }
-
         for (String[] item : menuItems) {
+            if (item[1].equals("Admin")) addAdminSectionDivider(sidebar);
             JPanel menuItem = createMenuItem(item[0], item[1]);
+            if (item[1].equals("My Issues")) markCurrentPage(menuItem);
             sidebar.add(menuItem);
             sidebar.add(Box.createVerticalStrut(5));
         }
@@ -68,11 +66,20 @@ public class Hub extends BaseFrame {
         sidebar.add(Box.createVerticalGlue());
 
         JPanel logoutItem = createMenuItem("Logout", "Logout");
-        logoutItem.setBackground(new Color(254, 242, 242));
         sidebar.add(logoutItem);
         sidebar.add(Box.createVerticalStrut(20));
 
         return sidebar;
+    }
+
+    private void addAdminSectionDivider(JPanel sidebar) {
+        sidebar.add(Box.createVerticalStrut(6));
+        JSeparator divider = new JSeparator(SwingConstants.HORIZONTAL);
+        divider.setForeground(new Color(229, 231, 235));
+        divider.setMaximumSize(new Dimension(210, 1));
+        divider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(divider);
+        sidebar.add(Box.createVerticalStrut(6));
     }
 
     private JPanel createMenuItem(String text, String page) {
@@ -80,6 +87,8 @@ public class Hub extends BaseFrame {
         item.setBackground(Color.WHITE);
         item.setMaximumSize(new Dimension(250, 45));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boolean current = page.equals("My Issues");
+        if (current) markCurrentPage(item);
 
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -89,11 +98,11 @@ public class Hub extends BaseFrame {
 
         item.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                item.setBackground(new Color(229, 231, 235));
+                if (!current) item.setBackground(new Color(229, 231, 235));
             }
 
             public void mouseExited(MouseEvent evt) {
-                item.setBackground(Color.WHITE);
+                if (!current) item.setBackground(Color.WHITE);
             }
 
             public void mouseClicked(MouseEvent evt) {
@@ -104,6 +113,11 @@ public class Hub extends BaseFrame {
         return item;
     }
 
+    private void markCurrentPage(JPanel item) {
+        item.setBackground(new Color(254, 242, 242));
+        item.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, new Color(220, 38, 38)));
+    }
+
     private void navigate(String page) {
         JFrame next = null;
 
@@ -111,7 +125,8 @@ public class Hub extends BaseFrame {
             case "Dashboard":
                 next = new Hub();
                 break;
-            case "Issues":
+            case "My Issues": next = new Hub(); break;
+            case "List Issues":
                 next = new IssuesListScreen();
                 break;
             case "NewIssue":
@@ -126,6 +141,7 @@ public class Hub extends BaseFrame {
             case "CreateProject":
                 next = new CreateProjectScreen();
                 break;
+            case "CreateUser": next = new CreateUserScreen(); break;
             case "ChooseProject":
                 next = new ChooseProjectScreen();
                 break;
@@ -167,7 +183,9 @@ public class Hub extends BaseFrame {
             brand.setForeground(new Color(220, 38, 38));
         }
 
-        String name = Session.getName() != null ? Session.getName() : "User";
+        String name = Session.getName() != null
+                ? Session.getName().substring(0, Session.getName().indexOf("@"))
+                : "User";
         JLabel welcomeLabel = new JLabel("Hi, " + name + " - Today's overview");
         welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         welcomeLabel.setForeground(new Color(17, 24, 39));
@@ -175,6 +193,11 @@ public class Hub extends BaseFrame {
         titleWithLogo.add(brand);
         titleWithLogo.add(welcomeLabel);
         welcomeRow.add(titleWithLogo, BorderLayout.WEST);
+        JButton refreshHome = new JButton("↻");
+        refreshHome.setToolTipText("Aggiorna");
+        refreshHome.setFocusPainted(false);
+        refreshHome.addActionListener(e -> navigateTo(new Hub()));
+        welcomeRow.add(refreshHome, BorderLayout.EAST);
         header.add(welcomeRow);
 
         content.add(header, BorderLayout.NORTH);
@@ -184,13 +207,13 @@ public class Hub extends BaseFrame {
 
         List<IssueDTO> todoIssues;
         try {
-            todoIssues = IssueController.listIssues(null, IssueStatus.TODO, null, "createdAt");
+            todoIssues = IssueController.myAssignedIssues();
         } catch (ApiException ex) {
             todoIssues = List.of();
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
         }
 
-        boardPanel.add(createColumn("Todo", new Color(156, 163, 175), todoIssues));
+        boardPanel.add(createColumn("My issues", new Color(59, 130, 246), todoIssues));
         content.add(boardPanel, BorderLayout.CENTER);
 
         JPanel suggestionBanner = buildSuggestionBanner();
@@ -205,8 +228,8 @@ public class Hub extends BaseFrame {
         if (!Session.isDev()) return null;
 
         try {
-            SuggestionsDTO result = IssueController.mySuggestions();
-            if (!result.isEligible()) return null;
+            boolean result = IssueController.mySuggestions();
+            if (!result) return null;
 
             JPanel banner = new JPanel(new BorderLayout(10, 0));
             banner.setBackground(new Color(254, 242, 242));
@@ -216,13 +239,13 @@ public class Hub extends BaseFrame {
             banner.setAlignmentX(Component.LEFT_ALIGNMENT);
             banner.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
 
-            JLabel text = new JLabel("<html><body style='width: 100%'>You have the lowest workload on the team: "
-                    + "go to the Issues screen and take on more issues to balance the team's overall "
+            JLabel text = new JLabel("<html><body style='width: 100%'>You have one of the lowest workload on the team: "
+                    + "go to the List Issues screen and take on more issues to balance the team's overall "
                     + "workload.</body></html>");
             text.setFont(new Font("Segoe UI", Font.PLAIN, 13));
             text.setForeground(new Color(185, 28, 28));
 
-            JButton goBtn = new JButton("Go to Issues");
+            JButton goBtn = new JButton("Go to List Issues");
             goBtn.setBackground(new Color(220, 38, 38));
             goBtn.setForeground(Color.WHITE);
             goBtn.setFocusPainted(false);
@@ -330,25 +353,25 @@ public class Hub extends BaseFrame {
         infoPanel.add(assigneeInfo);
         infoPanel.add(typeLabel);
 
-        List<String> labels = issue.getLabels();
-        JPanel labelsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 2));
-        labelsPanel.setBackground(Color.WHITE);
-        labelsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        if (labels != null) {
-            for (String l : labels) {
-                JLabel chip = new JLabel(l);
+        List<String> tags = issue.getTags();
+        JPanel tagsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 2));
+        tagsPanel.setBackground(Color.WHITE);
+        tagsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        if (tags != null) {
+            for (String tag : tags) {
+                JLabel chip = new JLabel(tag);
                 chip.setFont(new Font("Segoe UI", Font.PLAIN, 10));
                 chip.setForeground(new Color(55, 65, 81));
                 chip.setOpaque(true);
                 chip.setBackground(new Color(229, 231, 235));
                 chip.setBorder(BorderFactory.createEmptyBorder(1, 6, 1, 6));
-                labelsPanel.add(chip);
+                tagsPanel.add(chip);
             }
         }
 
         card.add(titleRow);
         card.add(infoPanel);
-        card.add(labelsPanel);
+        card.add(tagsPanel);
 
         return card;
     }
@@ -365,3 +388,11 @@ public class Hub extends BaseFrame {
         }
     }
 }
+
+
+
+
+
+
+
+

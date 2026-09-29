@@ -20,8 +20,6 @@ public class ChooseProjectScreen extends BaseFrame {
     private JComboBox<ProjectItem> projectCombo;
     private JComboBox<TeamItem> teamCombo;
     private DefaultTableModel myProjectsModel;
-    private JTable myProjectsTable;
-    private final List<String> myTeamIds = new ArrayList<>();
 
     public ChooseProjectScreen() {
         super("BugBoard26 - Choose Project");
@@ -30,12 +28,8 @@ public class ChooseProjectScreen extends BaseFrame {
         add(createSidebar(), BorderLayout.WEST);
         add(createTopBar(), BorderLayout.NORTH);
 
-        if (Session.isAdmin()) {
-            add(adminNotApplicablePanel(), BorderLayout.CENTER);
-        } else {
-            add(createContent(), BorderLayout.CENTER);
-            loadProjects();
-        }
+        add(createContent(), BorderLayout.CENTER);
+        loadProjects();
     }
 
     private JPanel createTopBar() {
@@ -106,20 +100,20 @@ public class ChooseProjectScreen extends BaseFrame {
         sidebar.add(logo);
 
         List<String[]> menuItems = new ArrayList<>();
-        menuItems.add(new String[]{"Dashboard", "Dashboard"});
-        menuItems.add(new String[]{"Issues", "Issues"});
+        menuItems.add(new String[]{"My Issues", "My Issues"});
+        menuItems.add(new String[]{"List Issues", "List Issues"});
         menuItems.add(new String[]{"New Issue", "NewIssue"});
+        menuItems.add(new String[]{"Choose Project", "ChooseProject"});
         if (Session.isAdmin()) {
-            menuItems.add(new String[]{"Admin Dashboard", "Admin"});
+            menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
-        } else {
-            menuItems.add(new String[]{"Choose Project", "ChooseProject"});
+            menuItems.add(new String[]{"Create User", "CreateUser"});
         }
-
         for (String[] item : menuItems) {
+            if (item[1].equals("Admin")) addAdminSectionDivider(sidebar);
             JPanel menuItem = createMenuItem(item[0], item[1]);
-            if (item[1].equals("ChooseProject")) menuItem.setBackground(new Color(229, 231, 235));
+            if (item[1].equals("ChooseProject")) markCurrentPage(menuItem);
             sidebar.add(menuItem);
             sidebar.add(Box.createVerticalStrut(5));
         }
@@ -131,11 +125,23 @@ public class ChooseProjectScreen extends BaseFrame {
         return sidebar;
     }
 
+    private void addAdminSectionDivider(JPanel sidebar) {
+        sidebar.add(Box.createVerticalStrut(6));
+        JSeparator divider = new JSeparator(SwingConstants.HORIZONTAL);
+        divider.setForeground(new Color(229, 231, 235));
+        divider.setMaximumSize(new Dimension(210, 1));
+        divider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(divider);
+        sidebar.add(Box.createVerticalStrut(6));
+    }
+
     private JPanel createMenuItem(String text, String page) {
         JPanel item = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 12));
         item.setBackground(Color.WHITE);
         item.setMaximumSize(new Dimension(250, 45));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boolean current = page.equals("ChooseProject");
+        if (current) markCurrentPage(item);
 
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -143,9 +149,9 @@ public class ChooseProjectScreen extends BaseFrame {
         item.add(label);
 
         item.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) { item.setBackground(new Color(229, 231, 235)); }
+            public void mouseEntered(MouseEvent evt) { if (!current) item.setBackground(new Color(229, 231, 235)); }
             public void mouseExited(MouseEvent evt) {
-                item.setBackground(page.equals("ChooseProject") ? new Color(229, 231, 235) : Color.WHITE);
+                if (!current) item.setBackground(Color.WHITE);
             }
             public void mouseClicked(MouseEvent evt) { handleNavigation(page); }
         });
@@ -153,15 +159,22 @@ public class ChooseProjectScreen extends BaseFrame {
         return item;
     }
 
+    private void markCurrentPage(JPanel item) {
+        item.setBackground(new Color(254, 242, 242));
+        item.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, new Color(220, 38, 38)));
+    }
+
     private void handleNavigation(String page) {
         JFrame next = null;
         switch (page) {
-            case "Dashboard": next = new Hub(); break;
-            case "Issues": next = new IssuesListScreen(); break;
+            case "Dashboard": next = Session.isAdmin() ? new AdminDashboardScreen() : new Hub(); break;
+            case "My Issues": next = new Hub(); break;
+            case "List Issues": next = new IssuesListScreen(); break;
             case "NewIssue": next = new NewIssueScreen(); break;
             case "Admin": next = new AdminDashboardScreen(); break;
             case "Reports": next = new ReportsScreen(); break;
             case "CreateProject": next = new CreateProjectScreen(); break;
+            case "CreateUser": next = new CreateUserScreen(); break;
             case "ChooseProject": return; // already here
             case "Logout":
                 Session.clear();
@@ -250,18 +263,17 @@ public class ChooseProjectScreen extends BaseFrame {
         JLabel tableTitle = new JLabel("My projects");
         tableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tableHeader.add(tableTitle, BorderLayout.WEST);
-
-        JButton leaveBtn = new JButton("Leave selected");
-        leaveBtn.setFocusPainted(false);
-        leaveBtn.addActionListener(e -> leaveSelected());
-        tableHeader.add(leaveBtn, BorderLayout.EAST);
+        JButton refreshProjects = new JButton("↻");
+        refreshProjects.setToolTipText("Aggiorna");
+        refreshProjects.addActionListener(e -> loadProjects());
+        tableHeader.add(refreshProjects, BorderLayout.EAST);
         tablePanel.add(tableHeader, BorderLayout.NORTH);
 
         String[] columns = {"Project", "Team"};
         myProjectsModel = new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
-        myProjectsTable = new JTable(myProjectsModel);
+        JTable myProjectsTable = new JTable(myProjectsModel);
         myProjectsTable.setRowHeight(28);
         myProjectsTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         myProjectsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -344,10 +356,6 @@ public class ChooseProjectScreen extends BaseFrame {
                     for (TeamDTO row : mine) {
                         myProjectsModel.addRow(new Object[]{ row.getProject(), row.getName() });
                     }
-                    myTeamIds.clear();
-                    for (TeamDTO row : mine) {
-                        myTeamIds.add(row.getId());
-                    }
                 } catch (Exception e) {
                     // informazione accessoria: se non disponibile non blocca la schermata
                 }
@@ -383,21 +391,6 @@ public class ChooseProjectScreen extends BaseFrame {
         }
     }
 
-    private void leaveSelected() {
-        int row = myProjectsTable.getSelectedRow();
-        if (row < 0 || row >= myTeamIds.size()) {
-            JOptionPane.showMessageDialog(this, "Select a project from the table first.",
-                    "No selection", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        try {
-            TeamController.leaveTeam(myTeamIds.get(row));
-            loadMyProjects();
-        } catch (ApiException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     private static class TeamItem {
         final TeamDTO data;
         TeamItem(TeamDTO data) { this.data = data; }
@@ -414,3 +407,11 @@ public class ChooseProjectScreen extends BaseFrame {
         @Override public String toString() { return getName(); }
     }
 }
+
+
+
+
+
+
+
+
