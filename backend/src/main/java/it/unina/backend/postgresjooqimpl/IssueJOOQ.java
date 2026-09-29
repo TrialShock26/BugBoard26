@@ -113,13 +113,14 @@ public class IssueJOOQ implements IssueDAO {
 
     @Override
     public boolean handleIssue(int id, String email) {
-        IssueDTO issue = context.selectFrom(ISSUE).where(ISSUE.ISSUE_ID.eq(id)).fetchOneInto(IssueDTO.class);
-        if (issue.getStatus() != Status.TODO) return false;
-        context.update(ISSUE)
+        int affected = context.update(ISSUE)
                 .set(ISSUE.ASSIGNEE_ID, context.select(USER_.USER_ID).from(USER_).where(USER_.EMAIL.eq(email)))
                 .set(ISSUE.STATUS, it.unina.backend.jooq.enums.Status.ONGOING)
                 .where(ISSUE.ISSUE_ID.eq(id))
+                .and(ISSUE.STATUS.eq(it.unina.backend.jooq.enums.Status.TODO))
+                .and(ISSUE.ASSIGNEE_ID.isNull())
                 .execute();
+        if (affected == 0) return false;
         return true;
     }
 

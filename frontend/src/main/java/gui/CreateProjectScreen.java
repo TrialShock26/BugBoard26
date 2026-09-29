@@ -114,10 +114,12 @@ public class CreateProjectScreen extends BaseFrame {
             menuItems.add(new String[]{"Dashboard", "Admin"});
             menuItems.add(new String[]{"Reports", "Reports"});
             menuItems.add(new String[]{"Create Project", "CreateProject"});
+            menuItems.add(new String[]{"Create User", "CreateUser"});
         }
         for (String[] item : menuItems) {
+            if (item[1].equals("Admin")) addAdminSectionDivider(sidebar);
             JPanel menuItem = createMenuItem(item[0], item[1]);
-            if (item[1].equals("CreateProject")) menuItem.setBackground(new Color(254, 242, 242));
+            if (item[1].equals("CreateProject")) markCurrentPage(menuItem);
             sidebar.add(menuItem);
             sidebar.add(Box.createVerticalStrut(5));
         }
@@ -129,11 +131,23 @@ public class CreateProjectScreen extends BaseFrame {
         return sidebar;
     }
 
+    private void addAdminSectionDivider(JPanel sidebar) {
+        sidebar.add(Box.createVerticalStrut(6));
+        JSeparator divider = new JSeparator(SwingConstants.HORIZONTAL);
+        divider.setForeground(new Color(229, 231, 235));
+        divider.setMaximumSize(new Dimension(210, 1));
+        divider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(divider);
+        sidebar.add(Box.createVerticalStrut(6));
+    }
+
     private JPanel createMenuItem(String text, String page) {
         JPanel item = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 12));
         item.setBackground(Color.WHITE);
         item.setMaximumSize(new Dimension(250, 45));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boolean current = page.equals("CreateProject");
+        if (current) markCurrentPage(item);
 
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -141,12 +155,19 @@ public class CreateProjectScreen extends BaseFrame {
         item.add(label);
 
         item.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) { item.setBackground(new Color(229, 231, 235)); }
-            public void mouseExited(MouseEvent evt) { item.setBackground(Color.WHITE); }
+            public void mouseEntered(MouseEvent evt) { if (!current) item.setBackground(new Color(229, 231, 235)); }
+            public void mouseExited(MouseEvent evt) { if (!current) item.setBackground(Color.WHITE); }
             public void mouseClicked(MouseEvent evt) { handleNavigation(page); }
         });
 
         return item;
+    }
+
+    private void markCurrentPage(JPanel item) {
+        item.setBackground(new Color(254, 242, 242));
+        item.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 3, 0, 0, new Color(220, 38, 38)),
+                BorderFactory.createEmptyBorder(0, 0, 0, 0)));
     }
 
     private void handleNavigation(String page) {
@@ -159,6 +180,7 @@ public class CreateProjectScreen extends BaseFrame {
             case "Admin": next = new AdminDashboardScreen(); break;
             case "Reports": next = new ReportsScreen(); break;
             case "CreateProject": return; // already here
+            case "CreateUser": next = new CreateUserScreen(); break;
             case "ChooseProject": next = new ChooseProjectScreen(); break;
             case "Logout":
                 Session.clear();
@@ -346,7 +368,7 @@ public class CreateProjectScreen extends BaseFrame {
             nameField.setText("");
             teamFields.clear();
             addTeamRow();
-            loadProjects();
+            loadProjects(true);
             JOptionPane.showMessageDialog(this, "Project created successfully.",
                     "Project created", JOptionPane.INFORMATION_MESSAGE);
         } catch (ApiException ex) {
@@ -364,7 +386,9 @@ public class CreateProjectScreen extends BaseFrame {
         }
     }
 
-    private void loadProjects() {
+    private void loadProjects() { loadProjects(false); }
+
+    private void loadProjects(boolean afterCreate) {
         SwingWorker<List<ProjectRow>, Void> worker = new SwingWorker<>() {
             @Override
             protected List<ProjectRow> doInBackground() {
@@ -390,8 +414,13 @@ public class CreateProjectScreen extends BaseFrame {
                     }
                 } catch (Exception e) {
                     Throwable cause = e.getCause() != null ? e.getCause() : e;
+                    String message = afterCreate
+                            ? "Project created successfully, but the project list could not be refreshed. "
+                                    + "Use Refresh to try again. Details: " + cause.getMessage()
+                            : "Could not load the project list. Check your connection and try Refresh again. Details: "
+                                    + cause.getMessage();
                     JOptionPane.showMessageDialog(CreateProjectScreen.this,
-                            "Error loading projects: " + cause.getMessage(),
+                            message,
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }

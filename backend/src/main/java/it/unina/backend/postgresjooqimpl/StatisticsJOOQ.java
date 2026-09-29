@@ -6,8 +6,6 @@ import it.unina.backend.jooq.enums.Status;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static it.unina.backend.jooq.Tables.*;
