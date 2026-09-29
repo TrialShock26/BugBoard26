@@ -11,6 +11,7 @@ public final class AuthController {
     private AuthController() { }
 
     public static LoginResponseDTO login(String email, String password) {
+
         HttpRequest req = ApiClient.request(ApiPaths.LOGIN)
                 .POST(ApiClient.json(Map.of("email", email, "password", password))).build();
         return ApiClient.call(req, LoginResponseDTO.class);

@@ -5,13 +5,14 @@ import java.awt.*;
 import controller.AuthController;
 import controller.Session;
 import dto.LoginResponseDTO;
+import exception.ApiException;
 
 public class LoginScreen extends JFrame {
 
     public LoginScreen() {
         setTitle("BugBoard26 - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(430, 700);
+        setSize(450, 600);
         setLocationRelativeTo(null);
         setResizable(false);
         JPanel mainPanel = new JPanel();
@@ -75,6 +76,7 @@ public class LoginScreen extends JFrame {
         loginButton.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
         loginButton.setFocusPainted(false);
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -115,9 +117,13 @@ public class LoginScreen extends JFrame {
                         dispose();
                     } catch (Exception e) {
                         Throwable cause = e.getCause() != null ? e.getCause() : e;
+                        String message = cause instanceof ApiException
+                                && (((ApiException) cause).status == 401 || ((ApiException) cause).status == 403)
+                                ? "Credentials are wrong, please check email and password."
+                                : cause.getMessage() != null ? cause.getMessage() : "Unexpected login error.";
                         JOptionPane.showMessageDialog(
                                 LoginScreen.this,
-                                cause.getMessage() != null ? cause.getMessage() : "Invalid credentials!",
+                                message,
                                 "Login Error",
                                 JOptionPane.ERROR_MESSAGE
                         );

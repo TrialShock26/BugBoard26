@@ -14,7 +14,7 @@ public final class TeamController {
 
     public static List<TeamDTO> myTeams() {
         HttpRequest req = ApiClient.request(ApiPaths.MY_TEAM).GET().build();
-        return ApiClient.call(req, new TypeReference<List<TeamDTO>>() { });
+        return ApiClient.callList(req, new TypeReference<List<TeamDTO>>() { });
     }
 
     public static void leaveTeam(String teamId) {
@@ -23,3 +23,4 @@ public final class TeamController {
         ApiClient.call(req);
     }
 }
+

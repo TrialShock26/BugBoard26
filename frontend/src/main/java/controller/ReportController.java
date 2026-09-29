@@ -2,9 +2,13 @@ package controller;
 
 import config.ApiPaths;
 import dto.ReportDTO;
+import dto.ProjectDTO;
 import dto.StatisticDTO;
 
 import java.net.http.HttpRequest;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public final class ReportController {
 
@@ -15,9 +19,15 @@ public final class ReportController {
         return ApiClient.call(req, StatisticDTO.class);
     }
 
-    public static ReportDTO monthlyReport(int year, int month) {
-        HttpRequest req = ApiClient.request(ApiPaths.REPORTS + "?month=" + month + "&year=" + year)
+    public static List<ProjectDTO> projectsForAdmin() {
+        return ProjectController.listProjects();
+    }
+
+    public static ReportDTO monthlyReport(int year, int month, String projectName) {
+        String project = URLEncoder.encode(projectName, StandardCharsets.UTF_8);
+        HttpRequest req = ApiClient.request(ApiPaths.REPORTS + "?month=" + month + "&year=" + year + "&project=" + project)
                 .GET().build();
         return ApiClient.call(req, ReportDTO.class);
     }
 }
+

@@ -16,13 +16,14 @@ public final class UserController {
 
     public static List<UserDTO> listUsers() {
         HttpRequest req = ApiClient.request(ApiPaths.USERS).GET().build();
-        return ApiClient.call(req, new TypeReference<List<UserDTO>>() { });
+        return ApiClient.callList(req, new TypeReference<List<UserDTO>>() { });
     }
 
-    public static UserDTO createUser(String email, String password, UserRole role) {
+    public static void createUser(String email, String password, UserRole role) {
         HttpRequest req = ApiClient.request(ApiPaths.USERS)
-                .POST(ApiClient.json(Map.of("email", email, "password", password, "role", role)))
+                .POST(ApiClient.json(Map.of("email", email, "password", password, "type", role)))
                 .build();
-        return ApiClient.call(req, UserDTO.class);
+        ApiClient.call(req);
     }
 }
+
