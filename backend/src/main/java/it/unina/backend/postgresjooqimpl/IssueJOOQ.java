@@ -1,11 +1,11 @@
 package it.unina.backend.postgresjooqimpl;
 
+import it.unina.backend.controller.IssueController;
 import it.unina.backend.dao.IssueDAO;
 import it.unina.backend.dto.*;
 import org.jooq.DSLContext;
 import org.jooq.ResultQuery;
 import org.jooq.SelectConditionStep;
-import org.jooq.SelectSeekStep1;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
@@ -88,13 +88,13 @@ public class IssueJOOQ implements IssueDAO {
     }
 
     @Override
-    public void newIssue(IssueDTO dto, String email) {
+    public void newIssue(IssueController.NewIssueDTO dto, String email) {
         Integer userId = context.select(USER_.USER_ID).from(USER_).where(USER_.EMAIL.eq(email)).fetchOneInto(Integer.class);
 
         Integer issueId = context.insertInto(ISSUE, ISSUE.TITLE, ISSUE.DESCRIPTION, ISSUE.TYPE,
                         ISSUE.CREATED_AT, ISSUE.CREATOR_ID, ISSUE.PROJECT_ID)
                 .values(dto.getTitle(), dto.getDescription(), it.unina.backend.jooq.enums.IssueType.valueOf(dto.getType().name()),
-                        OffsetDateTime.now(), userId, dto.getProject().getProjectId())
+                        OffsetDateTime.now(), userId, dto.getProjectId())
                 .returning(ISSUE.ISSUE_ID).fetchOneInto(Integer.class);
 
         if (dto.getPriority() != null) {
@@ -139,13 +139,13 @@ public class IssueJOOQ implements IssueDAO {
     }
 
     @Override
-    public List<UserDTO> getSuggestion() {
+    public List<UserDTO> getSuggestion(int topN) {
         return context.select(USER_.USER_ID, USER_.EMAIL, count(ISSUE.ISSUE_ID).as("workload"))
                 .from(USER_).leftJoin(ISSUE).on(USER_.USER_ID.eq(ISSUE.ASSIGNEE_ID))
                 .and(ISSUE.STATUS.eq(it.unina.backend.jooq.enums.Status.ONGOING))
                 .where(USER_.USER_ID.ne(0))
                 .groupBy(USER_.USER_ID, USER_.EMAIL)
-                .orderBy(field("workload")).limit(3)
+                .orderBy(field("workload")).limit(topN)
                 .fetch(dataRecord -> new UserDTO(
                         dataRecord.get(USER_.USER_ID),
                         dataRecord.get(USER_.EMAIL),

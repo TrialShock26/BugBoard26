@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -12,12 +13,10 @@ import java.util.List;
 import java.util.Set;
 import controller.ReportController;
 import controller.Session;
-import dto.ReportDTO;
-import dto.ProjectDTO;
+import dto.*;
 
 
 public class ReportsScreen extends BaseFrame {
-
     private JComboBox<String> monthCombo;
     private JComboBox<ProjectDTO> projectCombo;
     private JSpinner yearSpinner;
@@ -346,32 +345,81 @@ public class ReportsScreen extends BaseFrame {
                     totalBugsLabel.setText(String.valueOf(countOrZero(report.getTotalBugs())));
                     handledBugsLabel.setText(String.valueOf(countOrZero(report.getTotalHandledBugs())));
                     Double avg = report.getAverageGlobalResolutionTime();
-                    avgLabel.setText(avg == null ? "N/A" : String.valueOf(avg));
+                    avgLabel.setText(avg == null ? "N/A" : String.valueOf(new DecimalFormat("#.##").format(avg)));
 
                     perUserModel.setRowCount(0);
-                    Set<dto.UserDTO> users = new HashSet<>(report.getTotalBugsPerUser().keySet());
-                    users.addAll(report.getTotalHandledBugsPerUser().keySet());
-                    users.addAll(report.getAverageResolutionTimePerUser().keySet());
-                    for (dto.UserDTO user : users) {
-                        Double userAvg = report.getAverageResolutionTimePerUser().get(user);
+                    perTeamModel.setRowCount(0);
+
+                    Set<UserDTO> users = new HashSet<>();
+                    for (UserBugsDTO ub : report.getTotalBugsPerUser()) {
+                        users.add(ub.getUser());
+                    }
+
+                    for (UserDTO user : users) {
+                        Integer opened = null;
+                        for (UserBugsDTO ub : report.getTotalBugsPerUser()) {
+                            if (ub.getUser().equals(user)) {
+                                opened = ub.getBugs();
+                                break;
+                            }
+                        }
+                        Integer handled = null;
+                        for (UserBugsDTO ub : report.getTotalHandledBugsPerUser()) {
+                            if (ub.getUser().equals(user)) {
+                                handled = ub.getBugs();
+                                break;
+                            }
+                        }
+
+                        Double userAvg = null;
+                        for (UserTimeDTO ut : report.getAverageResolutionTimePerUser()) {
+                            if (ut.getUser().equals(user)) {
+                                userAvg = ut.getTime();
+                                break;
+                            }
+                        }
+
                         perUserModel.addRow(new Object[]{
                                 user == null ? "Unknown user" : user.getEmail(),
-                                countOrZero(report.getTotalBugsPerUser().get(user)),
-                                countOrZero(report.getTotalHandledBugsPerUser().get(user)),
+                                countOrZero(opened),
+                                countOrZero(handled),
                                 userAvg == null ? "N/A" : userAvg
                         });
                     }
 
-                    perTeamModel.setRowCount(0);
-                    Set<dto.TeamDTO> teams = new HashSet<>(report.getTotalBugsPerTeam().keySet());
-                    teams.addAll(report.getTotalHandledBugsPerTeam().keySet());
-                    teams.addAll(report.getAverageResolutionTimePerTeam().keySet());
-                    for (dto.TeamDTO team : teams) {
-                        Double teamAvg = report.getAverageResolutionTimePerTeam().get(team);
+                    Set<TeamDTO> teams = new HashSet<>();
+                    for (TeamBugsDTO ub : report.getTotalBugsPerTeam()) {
+                        teams.add(ub.getTeam());
+                    }
+
+                    for (TeamDTO team : teams) {
+                        Integer opened = null;
+                        for (TeamBugsDTO ub : report.getTotalBugsPerTeam()) {
+                            if (ub.getTeam().equals(team)) {
+                                opened = ub.getBugs();
+                                break;
+                            }
+                        }
+                        Integer handled = null;
+                        for (TeamBugsDTO ub : report.getTotalHandledBugsPerTeam()) {
+                            if (ub.getTeam().equals(team)) {
+                                handled = ub.getBugs();
+                                break;
+                            }
+                        }
+
+                        Double teamAvg = null;
+                        for (TeamTimeDTO ut : report.getAverageResolutionTimePerTeam()) {
+                            if (ut.getTeam().equals(team)) {
+                                teamAvg = ut.getTime();
+                                break;
+                            }
+                        }
+
                         perTeamModel.addRow(new Object[]{
                                 team == null ? "Unknown team" : team.getName(),
-                                countOrZero(report.getTotalBugsPerTeam().get(team)),
-                                countOrZero(report.getTotalHandledBugsPerTeam().get(team)),
+                                countOrZero(opened),
+                                countOrZero(handled),
                                 teamAvg == null ? "N/A" : teamAvg
                         });
                     }

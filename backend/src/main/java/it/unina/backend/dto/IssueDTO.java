@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 @Data
@@ -27,7 +28,7 @@ public class IssueDTO {
     private ProjectDTO project;
 
     public IssueDTO(Integer id, String title, String description, Priority priority,
-                    Status status, IssueType type, byte[] image, String tags,
+                    Status status, IssueType type, String imageBase64, String tags,
                     OffsetDateTime createdAt, OffsetDateTime doneAt, UserDTO creator,
                     UserDTO assignee, ProjectDTO project) {
         this.id = id;
@@ -36,7 +37,7 @@ public class IssueDTO {
         this.priority = priority;
         this.status = status;
         this.type = type;
-        this.image = image;
+        this.image = imageBase64 == null ? null : Base64.getDecoder().decode(imageBase64);
         this.tags = Arrays.asList(tags.split(","));
         this.createdAt = createdAt;
         this.doneAt = doneAt;

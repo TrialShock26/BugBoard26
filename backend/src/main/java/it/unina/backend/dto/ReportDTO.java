@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -15,10 +13,10 @@ public class ReportDTO {
     private Integer totalBugs;
     private Integer totalHandledBugs;
     private Double averageGlobalResolutionTime;
-    private Map<TeamDTO, Integer> totalBugsPerTeam = new HashMap<>();
-    private Map<TeamDTO, Integer> totalHandledBugsPerTeam = new HashMap<>();
-    private Map<TeamDTO, Double> averageResolutionTimePerTeam = new HashMap<>();
-    private Map<UserDTO, Integer> totalBugsPerUser = new HashMap<>();
-    private Map<UserDTO, Integer> totalHandledBugsPerUser = new HashMap<>();
-    private Map<UserDTO, Double> averageResolutionTimePerUser = new HashMap<>();
+    private List<TeamBugsDTO> totalBugsPerTeam = new ArrayList<>();
+    private List<TeamBugsDTO> totalHandledBugsPerTeam = new ArrayList<>();
+    private List<TeamTimeDTO> averageResolutionTimePerTeam = new ArrayList<>();
+    private List<UserBugsDTO> totalBugsPerUser = new ArrayList<>();
+    private List<UserBugsDTO> totalHandledBugsPerUser = new ArrayList<>();
+    private List<UserTimeDTO> averageResolutionTimePerUser = new ArrayList<>();
 }

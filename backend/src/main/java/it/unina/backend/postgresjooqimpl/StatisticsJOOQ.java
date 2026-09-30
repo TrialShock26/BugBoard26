@@ -58,14 +58,13 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(ISSUE.STATUS.ne(Status.DONE))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.PROJECT_ID.in(myProjects))
                 .groupBy(USER_.EMAIL, USER_.TYPE)
-                .fetchMap(
-                        dataRecord -> {
-                            UserDTO dto = new UserDTO();
-                            dto.setEmail(dataRecord.get(USER_.EMAIL));
-                            dto.setType(dataRecord.get(USER_.TYPE, UserType.class));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("total"), Integer.class)
+                .fetch(
+                        dataRecord -> new UserBugsDTO(
+                                new UserDTO(
+                                        null, dataRecord.get(USER_.EMAIL),
+                                        null, dataRecord.get(USER_.TYPE, UserType.class)
+                                ), dataRecord.get(field("total"), Integer.class)
+                        )
                 ));
 
         result.setAverageResolutionTimePerUser(context.select(USER_.EMAIL, USER_.TYPE,
@@ -80,14 +79,13 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(ISSUE.STATUS.eq(Status.DONE))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.PROJECT_ID.in(myProjects))
                 .groupBy(USER_.EMAIL, USER_.TYPE)
-                .fetchMap(
-                        dataRecord -> {
-                            UserDTO dto = new UserDTO();
-                            dto.setEmail(dataRecord.get(USER_.EMAIL));
-                            dto.setType(dataRecord.get(USER_.TYPE, UserType.class));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("avg_time"), Double.class)
+                .fetch(
+                        dataRecord -> new UserTimeDTO(
+                                new UserDTO(
+                                        null, dataRecord.get(USER_.EMAIL),
+                                        null, dataRecord.get(USER_.TYPE, UserType.class)
+                                ), dataRecord.get(field("avg_time"), Double.class)
+                        )
                 ));
 
         return result;
@@ -128,13 +126,11 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(year(ISSUE.CREATED_AT).eq(year))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.NAME.eq(project))
                 .groupBy(TEAM.NAME)
-                .fetchMap(
-                        dataRecord -> {
-                            TeamDTO dto = new TeamDTO();
-                            dto.setName(dataRecord.get(TEAM.NAME));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("total"), Integer.class)
+                .fetch(
+                        dataRecord -> new TeamBugsDTO(
+                                new TeamDTO(null, dataRecord.get(TEAM.NAME), null),
+                                dataRecord.get(field("total"), Integer.class)
+                        )
                 ));
 
         result.setTotalHandledBugsPerTeam(context.select(TEAM.NAME, count(ISSUE.ISSUE_ID).as("total"))
@@ -146,13 +142,11 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(year(ISSUE.CREATED_AT).eq(year))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.NAME.eq(project))
                 .groupBy(TEAM.NAME)
-                .fetchMap(
-                        dataRecord -> {
-                            TeamDTO dto = new TeamDTO();
-                            dto.setName(dataRecord.get(TEAM.NAME));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("total"), Integer.class)
+                .fetch(
+                        dataRecord -> new TeamBugsDTO(
+                                new TeamDTO(null, dataRecord.get(TEAM.NAME), null),
+                                dataRecord.get(field("total"), Integer.class)
+                        )
                 ));
 
         result.setAverageResolutionTimePerTeam(context.select(TEAM.NAME,
@@ -168,13 +162,11 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(year(ISSUE.CREATED_AT).eq(year))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.NAME.eq(project))
                 .groupBy(TEAM.NAME)
-                .fetchMap(
-                        dataRecord -> {
-                            TeamDTO dto = new TeamDTO();
-                            dto.setName(dataRecord.get(TEAM.NAME));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("avg_time"), Double.class)
+                .fetch(
+                        dataRecord -> new TeamTimeDTO(
+                                new TeamDTO(null, dataRecord.get(TEAM.NAME), null),
+                                dataRecord.get(field("avg_time"), Double.class)
+                        )
                 ));
 
         result.setTotalBugsPerUser(context.select(USER_.EMAIL, USER_.TYPE, count(ISSUE.ISSUE_ID).as("total"))
@@ -186,14 +178,13 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(year(ISSUE.CREATED_AT).eq(year))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.NAME.eq(project))
                 .groupBy(USER_.EMAIL, USER_.TYPE)
-                .fetchMap(
-                        dataRecord -> {
-                            UserDTO dto = new UserDTO();
-                            dto.setEmail(dataRecord.get(USER_.EMAIL));
-                            dto.setType(dataRecord.get(USER_.TYPE, UserType.class));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("total"), Integer.class)
+                .fetch(
+                        dataRecord -> new UserBugsDTO(
+                                new UserDTO(
+                                        null, dataRecord.get(USER_.EMAIL),
+                                        null, dataRecord.get(USER_.TYPE, UserType.class)
+                                ), dataRecord.get(field("total"), Integer.class)
+                        )
                 ));
 
         result.setTotalHandledBugsPerUser(context.select(USER_.EMAIL, USER_.TYPE, count(ISSUE.ISSUE_ID).as("total"))
@@ -205,14 +196,13 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(year(ISSUE.CREATED_AT).eq(year))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.NAME.eq(project))
                 .groupBy(USER_.EMAIL, USER_.TYPE)
-                .fetchMap(
-                        dataRecord -> {
-                            UserDTO dto = new UserDTO();
-                            dto.setEmail(dataRecord.get(USER_.EMAIL));
-                            dto.setType(dataRecord.get(USER_.TYPE, UserType.class));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("total"), Integer.class)
+                .fetch(
+                        dataRecord -> new UserBugsDTO(
+                                new UserDTO(
+                                        null, dataRecord.get(USER_.EMAIL),
+                                        null, dataRecord.get(USER_.TYPE, UserType.class)
+                                ), dataRecord.get(field("total"), Integer.class)
+                        )
                 ));
 
         result.setAverageResolutionTimePerUser(context.select(USER_.EMAIL, USER_.TYPE,
@@ -229,14 +219,13 @@ public class StatisticsJOOQ implements StatisticsDAO {
                 .and(year(ISSUE.CREATED_AT).eq(year))
                 .where(USER_.USER_ID.ne(0)).and(PROJECT.NAME.eq(project))
                 .groupBy(USER_.EMAIL, USER_.TYPE)
-                .fetchMap(
-                        dataRecord -> {
-                            UserDTO dto = new UserDTO();
-                            dto.setEmail(dataRecord.get(USER_.EMAIL));
-                            dto.setType(dataRecord.get(USER_.TYPE, UserType.class));
-                            return dto;
-                        },
-                        dataRecord -> dataRecord.get(field("avg_time"), Double.class)
+                .fetch(
+                        dataRecord -> new UserTimeDTO(
+                                new UserDTO(
+                                        null, dataRecord.get(USER_.EMAIL),
+                                        null, dataRecord.get(USER_.TYPE, UserType.class)
+                                ), dataRecord.get(field("avg_time"), Double.class)
+                        )
                 ));
 
         return result;

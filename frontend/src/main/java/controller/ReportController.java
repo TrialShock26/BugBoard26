@@ -20,14 +20,13 @@ public final class ReportController {
     }
 
     public static List<ProjectDTO> projectsForAdmin() {
-        return ProjectController.listProjects();
+        return ProjectController.listMyProjects();
     }
 
     public static ReportDTO monthlyReport(int year, int month, String projectName) {
         String project = URLEncoder.encode(projectName, StandardCharsets.UTF_8);
         HttpRequest req = ApiClient.request(ApiPaths.REPORTS + "?month=" + month + "&year=" + year + "&project=" + project)
                 .GET().build();
-        System.err.println(req);
         return ApiClient.call(req, ReportDTO.class);
     }
 }

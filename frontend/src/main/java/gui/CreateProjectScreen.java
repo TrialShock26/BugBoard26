@@ -267,7 +267,7 @@ public class CreateProjectScreen extends BaseFrame {
         tableHeader.setBackground(new Color(243, 244, 246));
         tableHeader.add(tableTitle, BorderLayout.WEST);
         JButton refreshProjects = new JButton("↻");
-        refreshProjects.setToolTipText("Aggiorna");
+        refreshProjects.setToolTipText("Refresh");
         refreshProjects.addActionListener(e -> loadProjects());
         tableHeader.add(refreshProjects, BorderLayout.EAST);
         tablePanel.add(tableHeader, BorderLayout.NORTH);

@@ -341,7 +341,7 @@ public class NewIssueScreen extends BaseFrame {
         projectSelection.setBackground(Color.WHITE);
         projectSelection.add(projectCombo, BorderLayout.CENTER);
         JButton refreshProjects = new JButton("↻");
-        refreshProjects.setToolTipText("Aggiorna");
+        refreshProjects.setToolTipText("Refresh");
         refreshProjects.addActionListener(e -> {
             projectCombo.removeAllItems();
             loadProjects();

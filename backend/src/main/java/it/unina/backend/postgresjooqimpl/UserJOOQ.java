@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static it.unina.backend.jooq.Tables.*;
-import static org.jooq.impl.DSL.count;
-import static org.jooq.impl.DSL.field;
 
 @Repository
 public class UserJOOQ implements UserDAO {

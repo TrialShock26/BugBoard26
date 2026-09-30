@@ -2,10 +2,7 @@ package controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import config.ApiPaths;
-import dto.IssueDTO;
-import dto.IssuePriority;
-import dto.IssueStatus;
-import dto.IssueType;
+import dto.*;
 import exception.ApiException;
 
 import java.net.http.HttpRequest;
@@ -44,9 +41,9 @@ public final class IssueController {
         body.put("description", description);
         body.put("type", type);
         body.put("priority", priority);
-        body.put("projectId", projectId);
+        body.put("project", Integer.valueOf(projectId));
         body.put("tags", tags);
-        body.put("imageBase64", imageBase64);
+        body.put("image", imageBase64);
 
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES)
                 .POST(ApiClient.json(body))
