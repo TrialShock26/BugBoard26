@@ -1,25 +1,31 @@
 package it.unina.backend.controller;
 
 import it.unina.backend.dao.IssueDAO;
-import it.unina.backend.dto.IssueDTO;
-import it.unina.backend.dto.UserDTO;
-import lombok.AllArgsConstructor;
+import it.unina.backend.dto.*;
+import it.unina.backend.dto.IssueType;
+import org.springframework.beans.factory.annotation.Value;
+import it.unina.backend.service.IssueService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/issues")
 public class IssueController {
     private IssueDAO dao;
+    private IssueService service;
 
-    public IssueController(IssueDAO dao) {
+    @Value("${top.n}")
+    private int topN;
+
+    public IssueController(IssueDAO dao, IssueService service) {
         this.dao = dao;
+        this.service = service;
     }
 
     @GetMapping
@@ -29,8 +35,23 @@ public class IssueController {
         return ResponseEntity.ok(result);
     }
 
+    @Data
+    @NoArgsConstructor
+    public static class NewIssueDTO {
+        private String title;
+        private String description;
+        private IssueType type;
+        private Priority priority;
+        private Integer projectId;
+        private List<String> tags;
+        private String image;
+
+        public byte[] getDecodedImage() {
+            return (image == null || image.isEmpty()) ? null : Base64.getDecoder().decode(image);
+        }
+    }
     @PostMapping
-    public ResponseEntity<Void> newIssue(@RequestBody IssueDTO dto) {
+    public ResponseEntity<Void> newIssue(@RequestBody NewIssueDTO dto) {
         dao.newIssue(dto, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok().build();
     }
@@ -47,25 +68,19 @@ public class IssueController {
         return ResponseEntity.ok().build();
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ImageDTO {
-        byte[] image;
-    }
+
     @GetMapping("/{id}/image")
-    public ResponseEntity<ImageDTO> getIssueImage(@PathVariable int id) {
-        return ResponseEntity.ok(new ImageDTO(dao.getImage(id)));
+    public ResponseEntity<byte[]> getIssueImage(@PathVariable int id) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(dao.getImage(id));
     }
 
     @GetMapping("/suggestion")
     public ResponseEntity<Boolean> calculateSuggestions() {
-        List<UserDTO> result = dao.getSuggestion();
-        for (UserDTO user : result) {
-            if (user.getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
-                return ResponseEntity.ok(true);
-            }
-        }
-        return ResponseEntity.ok(false);
+        return ResponseEntity.ok(service.getSuggestion(
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                topN
+        ));
     }
 }

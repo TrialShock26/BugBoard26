@@ -4,15 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DashboardDTO {
+    private Integer openBugs;
+    private Integer ongoingBugs;
+    private Integer doneBugs;
     private Integer totalBugs;
-    private Map<UserDTO, Integer> bugsPerUser = new HashMap<>();
     private Double averageGlobalResolutionTime;
-    private Map<UserDTO, Double> averageResolutionTimePerUser = new HashMap<>();
+    private List<UserBugsDTO> bugsPerUser = new ArrayList<>();
+    private List<UserTimeDTO> averageResolutionTimePerUser = new ArrayList<>();
 }

@@ -195,7 +195,7 @@ public class Hub extends BaseFrame {
         titleWithLogo.add(welcomeLabel);
         welcomeRow.add(titleWithLogo, BorderLayout.WEST);
         JButton refreshHome = new JButton("↻");
-        refreshHome.setToolTipText("Aggiorna");
+        refreshHome.setToolTipText("Refresh");
         refreshHome.setFocusPainted(false);
         refreshHome.addActionListener(e -> navigateTo(new Hub()));
         welcomeRow.add(refreshHome, BorderLayout.EAST);
@@ -390,7 +390,7 @@ public class Hub extends BaseFrame {
     }
 
     private void resolveIssue(String issueId) {
-        int confirm = JOptionPane.showConfirmDialog(this, "Mark issue " + issueId + " as resolved?",
+        int confirm = JOptionPane.showConfirmDialog(this, "Mark issue as resolved?",
                 "Resolve issue", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
         try {

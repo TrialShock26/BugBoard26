@@ -5,22 +5,22 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import controller.ReportController;
 import controller.Session;
 import controller.UserController;
-import dto.StatisticDTO;
-import dto.UserDTO;
-import dto.UserRole;
+import dto.*;
 import exception.ApiException;
 
 public class AdminDashboardScreen extends BaseFrame {
 
-    private JLabel openLabel, ongoingLabel, resolvedLabel, totalLabel, avgLabel;
+    private JLabel openLabel, ongoingLabel, doneLabel, totalLabel, avgLabel;
     private DefaultTableModel perUserModel;
-    private DefaultTableModel perTeamModel;
-    private DefaultTableModel usersModel;
 
     public AdminDashboardScreen() {
         super("BugBoard26 - Admin Dashboard");
@@ -34,7 +34,6 @@ public class AdminDashboardScreen extends BaseFrame {
         } else {
             add(createTabs(), BorderLayout.CENTER);
             loadDashboard();
-            loadUsers();
         }
     }
 
@@ -197,7 +196,6 @@ public class AdminDashboardScreen extends BaseFrame {
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         tabs.addTab("Overview", createOverviewPanel());
-        tabs.addTab("Users", createUsersPanel());
         return tabs;
     }
 
@@ -212,14 +210,14 @@ public class AdminDashboardScreen extends BaseFrame {
 
         openLabel = valueLabel("0");
         ongoingLabel = valueLabel("0");
-        resolvedLabel = valueLabel("0");
+        doneLabel = valueLabel("0");
         totalLabel = valueLabel("0");
         avgLabel = valueLabel("N/A");
 
-        cards.add(statCard("Open bugs (todo)", openLabel, new Color(156, 163, 175)));
-        cards.add(statCard("Ongoing", ongoingLabel, new Color(59, 130, 246)));
-        cards.add(statCard("Resolved", resolvedLabel, new Color(34, 197, 94)));
-        cards.add(statCard("Total issues", totalLabel, new Color(75, 85, 99)));
+        cards.add(statCard("Open bugs", openLabel, new Color(156, 163, 175)));
+        cards.add(statCard("Ongoing bugs", ongoingLabel, new Color(59, 130, 246)));
+        cards.add(statCard("Done bugs", doneLabel, new Color(34, 197, 94)));
+        cards.add(statCard("Total bugs", totalLabel, new Color(75, 85, 99)));
         cards.add(statCard("Avg. resolution time (h)", avgLabel, new Color(220, 38, 38)));
 
         panel.add(cards, BorderLayout.NORTH);
@@ -228,7 +226,7 @@ public class AdminDashboardScreen extends BaseFrame {
         tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
         tablesPanel.setBackground(new Color(243, 244, 246));
 
-        String[] userColumns = {"User", "Email", "Assigned (total)", "Open now", "Avg. resolution time (h)"};
+        String[] userColumns = {"User email", "Assigned bugs", "Avg. resolution time (h)"};
         perUserModel = new DefaultTableModel(userColumns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
@@ -242,7 +240,7 @@ public class AdminDashboardScreen extends BaseFrame {
         JLabel userTableTitle = new JLabel("Statistics per user");
         userTableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
         JButton refreshBtn = new JButton("↻");
-        refreshBtn.setToolTipText("Aggiorna");
+        refreshBtn.setToolTipText("Refresh");
         refreshBtn.setFocusPainted(false);
         refreshBtn.addActionListener(e -> loadDashboard());
 
@@ -252,28 +250,9 @@ public class AdminDashboardScreen extends BaseFrame {
         userTableHeaderRow.add(userTableTitle, BorderLayout.WEST);
         userTableHeaderRow.add(refreshBtn, BorderLayout.EAST);
 
-        // Point 17 (extended): admin reports also broken down by Team
-        String[] teamColumns = {"Team", "Members", "Assigned (total)", "Open now", "Avg. resolution time (h)"};
-        perTeamModel = new DefaultTableModel(teamColumns, 0) {
-            @Override public boolean isCellEditable(int row, int col) { return false; }
-        };
-        JTable teamTable = new JTable(perTeamModel);
-        teamTable.setRowHeight(28);
-        teamTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        JScrollPane teamTableScroll = new JScrollPane(teamTable);
-        teamTableScroll.setBorder(BorderFactory.createLineBorder(new Color(229, 231, 235)));
-        teamTableScroll.setPreferredSize(new Dimension(0, 150));
-
-        JLabel teamTableTitle = new JLabel("Statistics per team");
-        teamTableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
         tablesPanel.add(userTableHeaderRow);
         tablesPanel.add(Box.createVerticalStrut(8));
         tablesPanel.add(userTableScroll);
-        tablesPanel.add(Box.createVerticalStrut(20));
-        tablesPanel.add(teamTableTitle);
-        tablesPanel.add(Box.createVerticalStrut(8));
-        tablesPanel.add(teamTableScroll);
 
         panel.add(tablesPanel, BorderLayout.CENTER);
         return panel;
@@ -312,29 +291,40 @@ public class AdminDashboardScreen extends BaseFrame {
             protected void done() {
                 try {
                     StatisticDTO stats = get();
-                    openLabel.setText(String.valueOf(stats.getOpenCount()));
-                    ongoingLabel.setText(String.valueOf(stats.getOngoingCount()));
-                    resolvedLabel.setText(String.valueOf(stats.getResolvedCount()));
-                    totalLabel.setText(String.valueOf(stats.getTotalCount()));
-                    Double avg = stats.getAvgResolutionHoursOverall();
-                    avgLabel.setText(avg == null ? "N/A" : String.valueOf(avg));
+                    openLabel.setText(String.valueOf(countOrZero(stats.getOpenBugs())));
+                    ongoingLabel.setText(String.valueOf(countOrZero(stats.getOngoingBugs())));
+                    doneLabel.setText(String.valueOf(countOrZero(stats.getDoneBugs())));
+                    totalLabel.setText(String.valueOf(countOrZero(stats.getTotalBugs())));
+                    Double avg = stats.getAverageGlobalResolutionTime();
+                    avgLabel.setText(avg == null ? "N/A" : String.valueOf(new DecimalFormat("#.##").format(avg)));
 
                     perUserModel.setRowCount(0);
-                    for (StatisticDTO.UserStat row : stats.getPerUser()) {
-                        Double userAvg = row.getAvgResolutionHours();
-                        perUserModel.addRow(new Object[]{
-                                row.getName(), row.getEmail(), row.getAssignedCount(),
-                                row.getOpenCount(), userAvg == null ? "N/A" : userAvg
-                        });
+                    Set<UserDTO> users = new HashSet<>();
+                    for (UserBugsDTO ub : stats.getBugsPerUser()) {
+                        users.add(ub.getUser());
                     }
 
-                    // Point 17 (extended): per-team breakdown
-                    perTeamModel.setRowCount(0);
-                    for (StatisticDTO.TeamStat row : stats.getPerTeam()) {
-                        Double teamAvg = row.getAvgResolutionHours();
-                        perTeamModel.addRow(new Object[]{
-                                row.getTeam(), row.getMemberCount(), row.getAssignedCount(),
-                                row.getOpenCount(), teamAvg == null ? "N/A" : teamAvg
+                    for (UserDTO user : users) {
+                        Integer assigned = null;
+                        for (UserBugsDTO ub : stats.getBugsPerUser()) {
+                            if (ub.getUser().equals(user)) {
+                                assigned = ub.getBugs();
+                                break;
+                            }
+                        }
+
+                        Double userAvg = null;
+                        for (UserTimeDTO ut : stats.getAverageResolutionTimePerUser()) {
+                            if (ut.getUser().equals(user)) {
+                                userAvg = ut.getTime();
+                                break;
+                            }
+                        }
+
+                        perUserModel.addRow(new Object[]{
+                                user == null ? "Unknown user" : user.getEmail(),
+                                countOrZero(assigned),
+                                userAvg == null ? "N/A" : userAvg
                         });
                     }
                 } catch (Exception e) {
@@ -348,104 +338,8 @@ public class AdminDashboardScreen extends BaseFrame {
         worker.execute();
     }
 
-    // ================= USERS (point 1) =================
-    private JPanel createUsersPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 20));
-        panel.setBackground(new Color(243, 244, 246));
-        panel.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));
-
-        // User creation form
-        JPanel form = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        form.setBackground(Color.WHITE);
-        form.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(229, 231, 235)),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)));
-
-        JTextField emailField = new JTextField(16);
-        JPasswordField passwordField = new JPasswordField(10);
-        JComboBox<String> roleCombo = new JComboBox<>(new String[]{"DEV", "ADMIN"});
-        JButton createBtn = new JButton("Create user");
-        createBtn.setBackground(new Color(220, 38, 38));
-        createBtn.setForeground(Color.WHITE);
-        createBtn.setFocusPainted(false);
-
-        form.add(new JLabel("Email:")); form.add(emailField);
-        form.add(new JLabel("Password:")); form.add(passwordField);
-        form.add(new JLabel("Role:")); form.add(roleCombo);
-        form.add(createBtn);
-
-        createBtn.addActionListener(e -> {
-            String email = emailField.getText().trim();
-            String password = new String(passwordField.getPassword());
-            String role = (String) roleCombo.getSelectedItem();
-
-            if (email.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Email and password are required.",
-                        "Missing fields", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            try {
-                UserController.createUser(email, password, UserRole.valueOf(role));
-                emailField.setText(""); passwordField.setText("");
-                loadUsers();
-                JOptionPane.showMessageDialog(this, "User created successfully.",
-                        "User created", JOptionPane.INFORMATION_MESSAGE);
-            } catch (ApiException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        panel.add(form, BorderLayout.NORTH);
-
-        String[] columns = {"ID", "Email", "Role"};
-        usersModel = new DefaultTableModel(columns, 0) {
-            @Override public boolean isCellEditable(int row, int col) { return false; }
-        };
-        JTable table = new JTable(usersModel);
-        table.setRowHeight(28);
-        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        JScrollPane tableScroll = new JScrollPane(table);
-        tableScroll.setBorder(BorderFactory.createLineBorder(new Color(229, 231, 235)));
-        JPanel usersHeader = new JPanel(new BorderLayout());
-        usersHeader.setBackground(new Color(243, 244, 246));
-        JLabel usersTitle = new JLabel("Users");
-        usersTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        JButton refreshUsers = new JButton("↻");
-        refreshUsers.setToolTipText("Aggiorna");
-        refreshUsers.addActionListener(e -> loadUsers());
-        usersHeader.add(usersTitle, BorderLayout.WEST);
-        usersHeader.add(refreshUsers, BorderLayout.EAST);
-        panel.add(usersHeader, BorderLayout.NORTH);
-        panel.add(tableScroll, BorderLayout.CENTER);
-
-        return panel;
-    }
-
-    private void loadUsers() {
-        SwingWorker<List<UserDTO>, Void> worker = new SwingWorker<>() {
-            @Override
-            protected List<UserDTO> doInBackground() {
-                return UserController.listUsers();
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    List<UserDTO> users = get();
-                    usersModel.setRowCount(0);
-                    for (UserDTO u : users) {
-                        usersModel.addRow(new Object[]{u.getId(), u.getEmail(), u.getRole()});
-                    }
-                } catch (Exception e) {
-                    Throwable cause = e.getCause() != null ? e.getCause() : e;
-                    JOptionPane.showMessageDialog(AdminDashboardScreen.this,
-                            "Error loading users: " + cause.getMessage(),
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        };
-        worker.execute();
+    private int countOrZero(Integer count) {
+        return count == null ? 0 : count;
     }
 }
 

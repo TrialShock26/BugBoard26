@@ -1,44 +1,23 @@
 package dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@Getter
+@Data
+@NoArgsConstructor
 public class ReportDTO {
-
-    @Setter private int opened;
-    @Setter private int resolved;
-    @Setter private Double avgResolutionHours;
-    private List<UserReportStat> perUser = new ArrayList<>();
-    private List<TeamReportStat> perTeam = new ArrayList<>();
-
-    public void setPerUser(List<UserReportStat> perUser) {
-        this.perUser = perUser != null ? perUser : new ArrayList<>();
-    }
-
-    public void setPerTeam(List<TeamReportStat> perTeam) {
-        this.perTeam = perTeam != null ? perTeam : new ArrayList<>();
-    }
-
-    /** Numero di issue aperte/risolte nel mese da un singolo utente. */
-    @Data
-    public static class UserReportStat {
-        private String email;
-        private int opened;
-        private int resolved;
-        private Double avgResolutionHours;
-    }
-
-    /** Numero di issue aperte/risolte nel mese da un singolo team. */
-    @Data
-    public static class TeamReportStat {
-        private String team;
-        private int opened;
-        private int resolved;
-        private Double avgResolutionHours;
-    }
+    private Integer totalBugs;
+    private Integer totalHandledBugs;
+    private Double averageGlobalResolutionTime;
+    private List<TeamBugsDTO> totalBugsPerTeam = new ArrayList<>();
+    private List<TeamBugsDTO> totalHandledBugsPerTeam = new ArrayList<>();
+    private List<TeamTimeDTO> averageResolutionTimePerTeam = new ArrayList<>();
+    private List<UserBugsDTO> totalBugsPerUser = new ArrayList<>();
+    private List<UserBugsDTO> totalHandledBugsPerUser = new ArrayList<>();
+    private List<UserTimeDTO> averageResolutionTimePerUser = new ArrayList<>();
 }

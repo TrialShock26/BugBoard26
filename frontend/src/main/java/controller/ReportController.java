@@ -20,7 +20,7 @@ public final class ReportController {
     }
 
     public static List<ProjectDTO> projectsForAdmin() {
-        return ProjectController.listProjects();
+        return ProjectController.listMyProjects();
     }
 
     public static ReportDTO monthlyReport(int year, int month, String projectName) {

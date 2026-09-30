@@ -234,7 +234,7 @@ public class IssuesListScreen extends BaseFrame {
         applyBtn.addActionListener(e -> reloadIssues());
 
         JButton refreshBtn = new JButton("↻");
-        refreshBtn.setToolTipText("Aggiorna");
+        refreshBtn.setToolTipText("Refresh");
         refreshBtn.setFocusPainted(false);
         refreshBtn.addActionListener(e -> reloadIssues());
 
@@ -313,7 +313,7 @@ public class IssuesListScreen extends BaseFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (bytes == null) {
+        if (bytes == null || bytes.length == 0) {
             JOptionPane.showMessageDialog(this, "This issue has no attached image.",
                     "No image", JOptionPane.INFORMATION_MESSAGE);
             return;
@@ -349,7 +349,7 @@ public class IssuesListScreen extends BaseFrame {
         topRow.setBackground(Color.WHITE);
         topRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel titleLabel = new JLabel(issue.getTitle() + "  (" + id + ")");
+        JLabel titleLabel = new JLabel(issue.getTitle());
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
         titleLabel.setForeground(new Color(31, 41, 55));
         titleLabel.setHorizontalAlignment(SwingConstants.LEFT);

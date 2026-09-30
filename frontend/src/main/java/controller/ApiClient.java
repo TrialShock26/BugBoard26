@@ -47,7 +47,7 @@ public final class ApiClient {
         try {
             return MAPPER.readValue(body, type);
         } catch (JsonProcessingException e) {
-            throw new ApiException(0, "Risposta del server non valida.");
+            throw new ApiException(0, "Invalid server answer.");
         }
     }
 
@@ -56,7 +56,7 @@ public final class ApiClient {
         try {
             return MAPPER.readValue(body, type);
         } catch (JsonProcessingException e) {
-            throw new ApiException(0, "Risposta del server non valida.");
+            throw new ApiException(0, "Invalid server answer.");
         }
     }
 

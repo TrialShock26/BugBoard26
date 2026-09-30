@@ -266,7 +266,7 @@ public class ChooseProjectScreen extends BaseFrame {
         tableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tableHeader.add(tableTitle, BorderLayout.WEST);
         JButton refreshProjects = new JButton("↻");
-        refreshProjects.setToolTipText("Aggiorna");
+        refreshProjects.setToolTipText("Refresh");
         refreshProjects.addActionListener(e -> loadProjects());
         tableHeader.add(refreshProjects, BorderLayout.EAST);
         tablePanel.add(tableHeader, BorderLayout.NORTH);

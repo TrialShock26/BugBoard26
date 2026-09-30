@@ -5,21 +5,22 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import controller.ReportController;
 import controller.Session;
-import dto.ReportDTO;
-import dto.ProjectDTO;
+import dto.*;
 
 
 public class ReportsScreen extends BaseFrame {
-
     private JComboBox<String> monthCombo;
     private JComboBox<ProjectDTO> projectCombo;
     private JSpinner yearSpinner;
-    private JLabel openedLabel, resolvedLabel, avgLabel;
+    private JLabel totalBugsLabel, handledBugsLabel, avgLabel;
     private DefaultTableModel perUserModel;
     private DefaultTableModel perTeamModel;
 
@@ -244,11 +245,11 @@ public class ReportsScreen extends BaseFrame {
 
         JPanel cards = new JPanel(new GridLayout(1, 3, 15, 0));
         cards.setBackground(new Color(243, 244, 246));
-        openedLabel = valueLabel("0");
-        resolvedLabel = valueLabel("0");
+        totalBugsLabel = valueLabel("0");
+        handledBugsLabel = valueLabel("0");
         avgLabel = valueLabel("N/A");
-        cards.add(statCard("Issues opened this month", openedLabel, new Color(59, 130, 246)));
-        cards.add(statCard("Issues resolved this month", resolvedLabel, new Color(34, 197, 94)));
+        cards.add(statCard("Total bugs", totalBugsLabel, new Color(59, 130, 246)));
+        cards.add(statCard("Handled bugs", handledBugsLabel, new Color(34, 197, 94)));
         cards.add(statCard("Avg. resolution time (h)", avgLabel, new Color(220, 38, 38)));
         middle.add(cards, BorderLayout.NORTH);
 
@@ -256,7 +257,7 @@ public class ReportsScreen extends BaseFrame {
         tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
         tablesPanel.setBackground(new Color(243, 244, 246));
 
-        String[] userColumns = {"User email", "Opened (by them)", "Resolved (assigned to them)", "Avg. resolution time (h)"};
+        String[] userColumns = {"User email", "Total bugs", "Handled bugs", "Avg. resolution time (h)"};
         perUserModel = new DefaultTableModel(userColumns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
@@ -270,7 +271,7 @@ public class ReportsScreen extends BaseFrame {
         JLabel userTableTitle = new JLabel("Statistics per user");
         userTableTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        String[] teamColumns = {"Team", "Opened", "Resolved", "Avg. resolution time (h)"};
+        String[] teamColumns = {"Team", "Total bugs", "Handled bugs", "Avg. resolution time (h)"};
         perTeamModel = new DefaultTableModel(teamColumns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
@@ -341,25 +342,84 @@ public class ReportsScreen extends BaseFrame {
             protected void done() {
                 try {
                     ReportDTO report = get();
-                    openedLabel.setText(String.valueOf(report.getOpened()));
-                    resolvedLabel.setText(String.valueOf(report.getResolved()));
-                    Double avg = report.getAvgResolutionHours();
-                    avgLabel.setText(avg == null ? "N/A" : String.valueOf(avg));
+                    totalBugsLabel.setText(String.valueOf(countOrZero(report.getTotalBugs())));
+                    handledBugsLabel.setText(String.valueOf(countOrZero(report.getTotalHandledBugs())));
+                    Double avg = report.getAverageGlobalResolutionTime();
+                    avgLabel.setText(avg == null ? "N/A" : String.valueOf(new DecimalFormat("#.##").format(avg)));
 
                     perUserModel.setRowCount(0);
-                    for (ReportDTO.UserReportStat row : report.getPerUser()) {
-                        Double userAvg = row.getAvgResolutionHours();
+                    perTeamModel.setRowCount(0);
+
+                    Set<UserDTO> users = new HashSet<>();
+                    for (UserBugsDTO ub : report.getTotalBugsPerUser()) {
+                        users.add(ub.getUser());
+                    }
+
+                    for (UserDTO user : users) {
+                        Integer opened = null;
+                        for (UserBugsDTO ub : report.getTotalBugsPerUser()) {
+                            if (ub.getUser().equals(user)) {
+                                opened = ub.getBugs();
+                                break;
+                            }
+                        }
+                        Integer handled = null;
+                        for (UserBugsDTO ub : report.getTotalHandledBugsPerUser()) {
+                            if (ub.getUser().equals(user)) {
+                                handled = ub.getBugs();
+                                break;
+                            }
+                        }
+
+                        Double userAvg = null;
+                        for (UserTimeDTO ut : report.getAverageResolutionTimePerUser()) {
+                            if (ut.getUser().equals(user)) {
+                                userAvg = ut.getTime();
+                                break;
+                            }
+                        }
+
                         perUserModel.addRow(new Object[]{
-                                row.getEmail(), row.getOpened(), row.getResolved(),
+                                user == null ? "Unknown user" : user.getEmail(),
+                                countOrZero(opened),
+                                countOrZero(handled),
                                 userAvg == null ? "N/A" : userAvg
                         });
                     }
 
-                    perTeamModel.setRowCount(0);
-                    for (ReportDTO.TeamReportStat row : report.getPerTeam()) {
-                        Double teamAvg = row.getAvgResolutionHours();
+                    Set<TeamDTO> teams = new HashSet<>();
+                    for (TeamBugsDTO ub : report.getTotalBugsPerTeam()) {
+                        teams.add(ub.getTeam());
+                    }
+
+                    for (TeamDTO team : teams) {
+                        Integer opened = null;
+                        for (TeamBugsDTO ub : report.getTotalBugsPerTeam()) {
+                            if (ub.getTeam().equals(team)) {
+                                opened = ub.getBugs();
+                                break;
+                            }
+                        }
+                        Integer handled = null;
+                        for (TeamBugsDTO ub : report.getTotalHandledBugsPerTeam()) {
+                            if (ub.getTeam().equals(team)) {
+                                handled = ub.getBugs();
+                                break;
+                            }
+                        }
+
+                        Double teamAvg = null;
+                        for (TeamTimeDTO ut : report.getAverageResolutionTimePerTeam()) {
+                            if (ut.getTeam().equals(team)) {
+                                teamAvg = ut.getTime();
+                                break;
+                            }
+                        }
+
                         perTeamModel.addRow(new Object[]{
-                                row.getTeam(), row.getOpened(), row.getResolved(),
+                                team == null ? "Unknown team" : team.getName(),
+                                countOrZero(opened),
+                                countOrZero(handled),
                                 teamAvg == null ? "N/A" : teamAvg
                         });
                     }
@@ -372,6 +432,10 @@ public class ReportsScreen extends BaseFrame {
             }
         };
         worker.execute();
+    }
+
+    private int countOrZero(Integer count) {
+        return count == null ? 0 : count;
     }
 
     private void loadProjects() {

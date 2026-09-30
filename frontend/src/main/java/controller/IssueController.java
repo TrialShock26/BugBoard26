@@ -2,10 +2,7 @@ package controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import config.ApiPaths;
-import dto.IssueDTO;
-import dto.IssuePriority;
-import dto.IssueStatus;
-import dto.IssueType;
+import dto.*;
 import exception.ApiException;
 
 import java.net.http.HttpRequest;
@@ -30,7 +27,6 @@ public final class IssueController {
         return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
     }
 
-
     public static List<IssueDTO> myAssignedIssues() {
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES).GET().build();
         return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
@@ -46,7 +42,7 @@ public final class IssueController {
         body.put("priority", priority);
         body.put("projectId", projectId);
         body.put("tags", tags);
-        body.put("imageBase64", imageBase64);
+        body.put("image", imageBase64);
 
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES)
                 .POST(ApiClient.json(body))
@@ -77,12 +73,8 @@ public final class IssueController {
         }
     }
 
-
     public static boolean mySuggestions() {
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/suggestion").GET().build();
         return ApiClient.call(req, Boolean.class);
     }
-
 }
-
-
