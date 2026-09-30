@@ -313,7 +313,7 @@ public class IssuesListScreen extends BaseFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (bytes == null) {
+        if (bytes == null || bytes.length == 0) {
             JOptionPane.showMessageDialog(this, "This issue has no attached image.",
                     "No image", JOptionPane.INFORMATION_MESSAGE);
             return;

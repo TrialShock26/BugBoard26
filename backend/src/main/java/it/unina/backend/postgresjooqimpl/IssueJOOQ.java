@@ -95,14 +95,14 @@ public class IssueJOOQ implements IssueDAO {
                         ISSUE.CREATED_AT, ISSUE.CREATOR_ID, ISSUE.PROJECT_ID)
                 .values(dto.getTitle(), dto.getDescription(), it.unina.backend.jooq.enums.IssueType.valueOf(dto.getType().name()),
                         OffsetDateTime.now(), userId, dto.getProjectId())
-                .returning(ISSUE.ISSUE_ID).fetchOneInto(Integer.class);
+                .returning(ISSUE.ISSUE_ID).fetchOne(ISSUE.ISSUE_ID);
 
         if (dto.getPriority() != null) {
             context.update(ISSUE).set(ISSUE.PRIORITY, it.unina.backend.jooq.enums.Priority.valueOf(dto.getPriority().name()))
                     .where(ISSUE.ISSUE_ID.eq(issueId)).execute();
         }
         if (dto.getImage() != null) {
-            context.update(ISSUE).set(ISSUE.IMAGE, dto.getImage())
+            context.update(ISSUE).set(ISSUE.IMAGE, dto.getDecodedImage())
                     .where(ISSUE.ISSUE_ID.eq(issueId)).execute();
         }
         if (dto.getTags() != null) {
@@ -135,7 +135,7 @@ public class IssueJOOQ implements IssueDAO {
 
     @Override
     public byte[] getImage(int id) {
-        return context.select(ISSUE.IMAGE).from(ISSUE).where(ISSUE.ISSUE_ID.eq(id)).fetchOneInto(byte[].class);
+        return context.select(ISSUE.IMAGE).from(ISSUE).where(ISSUE.ISSUE_ID.eq(id)).fetchOne().value1();
     }
 
     @Override

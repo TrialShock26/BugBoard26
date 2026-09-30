@@ -5,9 +5,9 @@ import it.unina.backend.dto.*;
 import it.unina.backend.dto.IssueType;
 import org.springframework.beans.factory.annotation.Value;
 import it.unina.backend.service.IssueService;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -44,17 +44,10 @@ public class IssueController {
         private Priority priority;
         private Integer projectId;
         private List<String> tags;
-        private byte[] image;
+        private String image;
 
-        public NewIssueDTO(String title, String description, IssueType type,
-                           Priority priority, Integer projectId, List<String> tags) {
-            this.title = title;
-            this.description = description;
-            this.priority = priority;
-            this.type = type;
-            this.image = image == null ? null : Base64.getDecoder().decode(image);
-            this.tags = tags;
-            this.projectId = projectId;
+        public byte[] getDecodedImage() {
+            return (image == null || image.isEmpty()) ? null : Base64.getDecoder().decode(image);
         }
     }
     @PostMapping
@@ -75,15 +68,12 @@ public class IssueController {
         return ResponseEntity.ok().build();
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ImageDTO {
-        byte[] image;
-    }
+
     @GetMapping("/{id}/image")
-    public ResponseEntity<ImageDTO> getIssueImage(@PathVariable int id) {
-        return ResponseEntity.ok(new ImageDTO(dao.getImage(id)));
+    public ResponseEntity<byte[]> getIssueImage(@PathVariable int id) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(dao.getImage(id));
     }
 
     @GetMapping("/suggestion")

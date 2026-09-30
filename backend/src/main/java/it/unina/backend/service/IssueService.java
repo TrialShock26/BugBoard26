@@ -2,10 +2,6 @@ package it.unina.backend.service;
 
 import it.unina.backend.dao.IssueDAO;
 import it.unina.backend.dto.UserDTO;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

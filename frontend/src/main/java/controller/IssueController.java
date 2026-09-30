@@ -27,7 +27,6 @@ public final class IssueController {
         return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
     }
 
-
     public static List<IssueDTO> myAssignedIssues() {
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES).GET().build();
         return ApiClient.callList(req, new TypeReference<List<IssueDTO>>() { });
@@ -41,7 +40,7 @@ public final class IssueController {
         body.put("description", description);
         body.put("type", type);
         body.put("priority", priority);
-        body.put("project", Integer.valueOf(projectId));
+        body.put("projectId", projectId);
         body.put("tags", tags);
         body.put("image", imageBase64);
 
@@ -74,12 +73,8 @@ public final class IssueController {
         }
     }
 
-
     public static boolean mySuggestions() {
         HttpRequest req = ApiClient.request(ApiPaths.ISSUES + "/suggestion").GET().build();
         return ApiClient.call(req, Boolean.class);
     }
-
 }
-
-

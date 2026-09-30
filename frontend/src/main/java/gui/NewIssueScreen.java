@@ -630,12 +630,10 @@ public class NewIssueScreen extends BaseFrame {
                         submitButton.setText("Create Issue");
 
                         try {
-                            IssueDTO created = get();
-
                             JOptionPane.showMessageDialog(
                                     NewIssueScreen.this,
-                                    "Issue " + created.getId()
-                                            + " created successfully "
+                                    "Issue "
+                                            + "created successfully "
                                             + "(status: TODO).",
                                     "Issue created",
                                     JOptionPane.INFORMATION_MESSAGE

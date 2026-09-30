@@ -3,9 +3,7 @@ package it.unina.backend.postgresjooqimpl;
 import it.unina.backend.controller.IssueController.NewIssueDTO;
 import it.unina.backend.dto.IssueType;
 import it.unina.backend.dto.Priority;
-import it.unina.backend.dto.ProjectDTO;
 import lombok.Getter;
-import lombok.Setter;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
@@ -104,7 +102,7 @@ class TestIssueJOOQ {
         @Test
         void newIssue_withImage_updateImage() {
             NewIssueDTO dto = baseDto();
-            dto.setImage(new byte[] {1, 2, 3});
+            dto.setImage("imageBase64String");
 
             repository.newIssue(dto, "a@b.it");
 
@@ -128,7 +126,7 @@ class TestIssueJOOQ {
         void newIssue_allFields_allUpdates() {
             NewIssueDTO dto = baseDto();
             dto.setPriority(Priority.LOW);
-            dto.setImage(new byte[] {1});
+            dto.setImage("imageBase64String");
             dto.setTags(List.of("x"));
 
             repository.newIssue(dto, "a@b.it");
