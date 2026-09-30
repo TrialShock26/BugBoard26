@@ -1,44 +1,45 @@
 package dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-@Getter
+@Data
+@NoArgsConstructor
 public class ReportDTO {
+    private Integer totalBugs;
+    private Integer totalHandledBugs;
+    private Double averageGlobalResolutionTime;
+    private Map<TeamDTO, Integer> totalBugsPerTeam = new HashMap<>();
+    private Map<TeamDTO, Integer> totalHandledBugsPerTeam = new HashMap<>();
+    private Map<TeamDTO, Double> averageResolutionTimePerTeam = new HashMap<>();
+    private Map<UserDTO, Integer> totalBugsPerUser = new HashMap<>();
+    private Map<UserDTO, Integer> totalHandledBugsPerUser = new HashMap<>();
+    private Map<UserDTO, Double> averageResolutionTimePerUser = new HashMap<>();
 
-    @Setter private int opened;
-    @Setter private int resolved;
-    @Setter private Double avgResolutionHours;
-    private List<UserReportStat> perUser = new ArrayList<>();
-    private List<TeamReportStat> perTeam = new ArrayList<>();
-
-    public void setPerUser(List<UserReportStat> perUser) {
-        this.perUser = perUser != null ? perUser : new ArrayList<>();
+    public void setTotalBugsPerTeam(Map<TeamDTO, Integer> value) {
+        totalBugsPerTeam = value == null ? new HashMap<>() : value;
     }
 
-    public void setPerTeam(List<TeamReportStat> perTeam) {
-        this.perTeam = perTeam != null ? perTeam : new ArrayList<>();
+    public void setTotalHandledBugsPerTeam(Map<TeamDTO, Integer> value) {
+        totalHandledBugsPerTeam = value == null ? new HashMap<>() : value;
     }
 
-    /** Numero di issue aperte/risolte nel mese da un singolo utente. */
-    @Data
-    public static class UserReportStat {
-        private String email;
-        private int opened;
-        private int resolved;
-        private Double avgResolutionHours;
+    public void setAverageResolutionTimePerTeam(Map<TeamDTO, Double> value) {
+        averageResolutionTimePerTeam = value == null ? new HashMap<>() : value;
     }
 
-    /** Numero di issue aperte/risolte nel mese da un singolo team. */
-    @Data
-    public static class TeamReportStat {
-        private String team;
-        private int opened;
-        private int resolved;
-        private Double avgResolutionHours;
+    public void setTotalBugsPerUser(Map<UserDTO, Integer> value) {
+        totalBugsPerUser = value == null ? new HashMap<>() : value;
+    }
+
+    public void setTotalHandledBugsPerUser(Map<UserDTO, Integer> value) {
+        totalHandledBugsPerUser = value == null ? new HashMap<>() : value;
+    }
+
+    public void setAverageResolutionTimePerUser(Map<UserDTO, Double> value) {
+        averageResolutionTimePerUser = value == null ? new HashMap<>() : value;
     }
 }

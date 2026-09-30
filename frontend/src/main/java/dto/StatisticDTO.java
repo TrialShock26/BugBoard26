@@ -1,48 +1,28 @@
 package dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-@Getter
+@Data
+@NoArgsConstructor
 public class StatisticDTO {
+    private Integer openBugs;
+    private Integer ongoingBugs;
+    private Integer doneBugs;
+    private Integer totalBugs;
+    private Double averageGlobalResolutionTime;
+    private Map<UserDTO, Integer> bugsPerUser = new HashMap<>();
+    private Map<UserDTO, Double> averageResolutionTimePerUser = new HashMap<>();
 
-    @Setter private int openCount;
-    @Setter private int ongoingCount;
-    @Setter private int resolvedCount;
-    @Setter private int totalCount;
-    @Setter private Double avgResolutionHoursOverall;
-    private List<UserStat> perUser = new ArrayList<>();
-    private List<TeamStat> perTeam = new ArrayList<>();
-
-    public void setPerUser(List<UserStat> perUser) {
-        this.perUser = perUser != null ? perUser : new ArrayList<>();
+    public void setBugsPerUser(Map<UserDTO, Integer> bugsPerUser) {
+        this.bugsPerUser = bugsPerUser == null ? new HashMap<>() : bugsPerUser;
     }
 
-    public void setPerTeam(List<TeamStat> perTeam) {
-        this.perTeam = perTeam != null ? perTeam : new ArrayList<>();
-    }
-
-    /** Carico di lavoro di un singolo utente, come mostrato nella dashboard. */
-    @Data
-    public static class UserStat {
-        private String name;
-        private String email;
-        private int assignedCount;
-        private int openCount;
-        private Double avgResolutionHours;
-    }
-
-    /** Carico di lavoro di un singolo team, come mostrato nella dashboard. */
-    @Data
-    public static class TeamStat {
-        private String team;
-        private int memberCount;
-        private int assignedCount;
-        private int openCount;
-        private Double avgResolutionHours;
+    public void setAverageResolutionTimePerUser(Map<UserDTO, Double> averageResolutionTimePerUser) {
+        this.averageResolutionTimePerUser = averageResolutionTimePerUser == null
+                ? new HashMap<>() : averageResolutionTimePerUser;
     }
 }
