@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @RestController
@@ -48,7 +49,7 @@ public class UserController {
     public ResponseEntity<List<ProjectDTO>> getProjects(@RequestParam(required = false) String mine) {
         List<ProjectDTO> result;
         if (mine != null && mine.equals("true")) {
-            result = dao.getProjects(SecurityContextHolder.getContext().getAuthentication().getName());
+            result = dao.getProjects(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
         }
         else result = dao.getProjects();
         if (result.isEmpty()) return ResponseEntity.noContent().build();
@@ -64,7 +65,7 @@ public class UserController {
 
     @PutMapping("/projects/{projectId}/teams/{teamId}")
     public ResponseEntity<Void> joinTeam(@PathVariable("teamId") int teamId) {
-        dao.joinTeam(teamId, SecurityContextHolder.getContext().getAuthentication().getName());
+        dao.joinTeam(teamId, Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
         return ResponseEntity.ok().build();
     }
 

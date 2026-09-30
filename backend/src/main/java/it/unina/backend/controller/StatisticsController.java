@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Year;
+import java.util.Objects;
 
 @RestController
 public class StatisticsController {
@@ -23,7 +24,7 @@ public class StatisticsController {
     @GetMapping("/dashboard")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DashboardDTO> getDashboardData() {
-        return ResponseEntity.ok(dao.getDashboardData(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return ResponseEntity.ok(dao.getDashboardData(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName()));
     }
 
     @GetMapping("/reports")

@@ -13,14 +13,12 @@ import java.time.OffsetDateTime;
 public class GlobalExceptionHandler {
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponse> handleJooqException(DataAccessException ex) {
-        if (ex.getCause() instanceof PSQLException psqlEx) {
-            if ("P0001".equals(psqlEx.getSQLState())) {
-                ErrorResponse error = new ErrorResponse(
-                        psqlEx.getServerErrorMessage().getMessage(),
-                        OffsetDateTime.now()
-                );
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-            }
+        if (ex.getCause() instanceof PSQLException psqlEx && "P0001".equals(psqlEx.getSQLState())) {
+            ErrorResponse error = new ErrorResponse(
+                    psqlEx.getServerErrorMessage().getMessage(),
+                    OffsetDateTime.now()
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
 
         ErrorResponse genericError = new ErrorResponse(

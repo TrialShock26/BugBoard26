@@ -30,7 +30,7 @@ public class IssueController {
 
     @GetMapping
     public ResponseEntity<List<IssueDTO>> getAllIssues(@RequestParam Map<String, String> requestParams) {
-        List<IssueDTO> result = dao.getAllIssues(SecurityContextHolder.getContext().getAuthentication().getName(), requestParams);
+        List<IssueDTO> result = dao.getAllIssues(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName(), requestParams);
         if (result.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(result);
     }
@@ -52,13 +52,13 @@ public class IssueController {
     }
     @PostMapping
     public ResponseEntity<Void> newIssue(@RequestBody NewIssueDTO dto) {
-        dao.newIssue(dto, SecurityContextHolder.getContext().getAuthentication().getName());
+        dao.newIssue(dto, Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}/handle")
     public ResponseEntity<Void> handleIssue(@PathVariable int id) {
-        if (!dao.handleIssue(id, SecurityContextHolder.getContext().getAuthentication().getName())) return ResponseEntity.badRequest().build();
+        if (!dao.handleIssue(id, Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName())) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok().build();
     }
 
@@ -79,7 +79,7 @@ public class IssueController {
     @GetMapping("/suggestion")
     public ResponseEntity<Boolean> calculateSuggestions() {
         return ResponseEntity.ok(service.getSuggestion(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
+                Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName(),
                 topN
         ));
     }
